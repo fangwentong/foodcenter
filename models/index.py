@@ -8,8 +8,8 @@ render = setting.render
 
 class index:
     def GET(self):
-        return render.index('index')
+        return render.index()
 
 class err404:
 	def GET(self):
-		return render.err404('err404')
+		return render.err404()

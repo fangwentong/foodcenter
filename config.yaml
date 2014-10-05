@@ -16,3 +16,5 @@ handlers:
   static_path: robots.txt
 - url: /favicon.ico
   static_path: favicon.ico
+- url: /baidu_verify_ptTobbEluZ.html
+  static_path: static/baidu_verify_ptTobbEluZ.html

@@ -10,7 +10,7 @@ web.config.debug = True
 
 site = web.storage (
         title = U"哈工大饮食中心",
-
+        brand = U"哈工大饮食中心",
 
         author = web.storage (
             name     = "fangwentong",
@@ -21,6 +21,7 @@ site = web.storage (
             ),
 
         )
+
 login = web.storage (
         title = U"饮食中心后台管理系统--登陆",
         )
