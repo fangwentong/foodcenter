@@ -1,4 +1,15 @@
+/*修改container默认宽度， 使布局‘变瘦’*/
+@media (min-width:1200px){
+    .container{
+  width: 970px;
+    }
+}
+
+
+
 /* 网站整体布局 */
+
+
 
 html,
 body {

@@ -1,6 +1,61 @@
-$def with(page_name)
+$def with(page_name, page_title)
 
-$:render.widgets.header(page_name)
+$:render.widgets.header(page_name, page_title)
+
+<div class="row">
+	<div class="bar bar-header bar-orange">
+		<div class="h1 title t_head">联系我们</div>
+	</div>
+</div>
+<div class="content has-header">
+	<div class="list card">
+		<div class="item item-avatar">
+			<img src="../images/shitang.jpg">
+			<p class="t_title">各餐厅负责人及联系方式</p>
+		</div>
+
+		<div class="item item-body">
+
+			<ul class="f-14">一校区</ul>
+			<li class="t_list">学士楼</li>
+			<p class="t_contact">学士餐厅　  联系人：于风雷　联系电话：86413865 </p>
+			<p class="t_contact">百味佳餐厅  联系人：王永红　联系电话：86417309 </p>
+			<p class="t_contact">友来餐厅　  联系人：刘　健　联系电话：86414364</p>
+			<p class="t_contact">回味斋餐厅  联系人：王黎明　联系电话：86413865 </p>
+			<li class="t_list">学子楼</li>
+			<p class="t_contact">真味饺子园  联系人：王振鹏　联系电话：86413988 </p>
+			<p class="t_contact">学子餐厅　  联系人：王丽红　联系电话：86413988</p>
+			<li class="t_list">学苑楼</li>
+			<p class="t_contact">学苑餐厅　  联系人：魏忆宁　联系电话：86418702</p>
+			<p class="t_contact">美食林餐厅  联系人：马真蛟　联系电话：86418703</p>
+			<p class="t_contact">阳光餐厅　  联系人：米　蓉　联系电话：86414265</p>
+			<li class="t_list">科学园</li>
+			<p class="t_contact">南苑餐厅　  联系人：张玉杰　联系电话：86402952</p>
+			<li class="t_list">土木楼</li>
+			<p class="t_contact">丁香餐厅　  联系人：王　宁　联系电话：86281071</p>
+			<ul class="f-14">二校区</ul>
+			<p class="t_contact">清泽餐厅　  联系人：朱大亮　联系电话：86282806</p>
+			<p class="t_contact">清泽饺子园  联系人：黄　娟　联系电话：86282806</p>
+			<p class="t_contact">清真餐厅　  联系人：马　杰　联系电话：86282806</p>	
+			<p class="t_contact">锦绣餐厅　  联系人：姜守信　联系电话：86282048</p>
+			<p class="t_contact">天香餐厅　  联系人：张振东　联系电话：86283689</p>
+		</div>
+	</div>
+	
+	<div class="list card">
+		<div class="item item-avatar">
+			<img src="../images/email.png">
+			<p class="t_title">
+				联系我们 <br />
+			</p>
+		</div>
+
+		<div class="item item-body">
+			<li class="t_list">饮食中心邮箱: yinshi@hit.edu.cn</li>
+			<li class="t_list">服务监督电话: 86403090</li>
+		</div>
+	</div>
+</div>
 
 
 $:render.widgets.footer()

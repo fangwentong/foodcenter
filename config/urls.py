@@ -4,11 +4,17 @@
 prefix = 'models.'
 
 urls = (
-        r"/", prefix + "index.index",
-        r"/index", prefix +"index.index",
+        r"/",                          prefix + "home.index",
+        r"/index",                     prefix + "home.index",
+        r"/about",                     prefix + "home.about",
+        r"/contact",                   prefix + "home.contact",
+        r"/help",                      prefix + "home.help",
+        r"/canteen",                   prefix + "home.canteen",
+
+        r"/order",                     prefix + "order.index",
 
 
-        r"/test", prefix + "index.test",
-        
-        r"/(.*)",  prefix + "index.err404",
+
+        r"/test",                      prefix + "home.test",
+        r"/(.*)",                      prefix + "home.err404",
         )
