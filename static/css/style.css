@@ -1,0 +1,18 @@
+/* 网站整体布局 */
+
+html,
+body {
+	height: 100%;
+	/*background: #22132d;*/
+}
+
+#topLine {
+	border-top: 7px solid #5c307d;
+}
+
+
+footer {
+
+}
+
+

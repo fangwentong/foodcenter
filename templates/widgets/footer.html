@@ -1,0 +1,27 @@
+		</article>
+		<footer>
+			<!-- 回到顶部按钮 -->
+			<div id="back-top">
+				<a href="#topLine" title="回到顶部"></a>
+			</div>
+			<!-- 尾部链接 -->
+			<section class="container footer-links">
+			</section>
+
+			<!-- 版权声明 -->
+			<section class="container copyright">
+				<div class="row">
+					<p class="pull-right text-muted">&copy; $site.date.year $site.owner.name</p>
+					<div class="clearfix"></div>
+					<p class="pull-right text-muted">Powered by <a href="$site.author.org_site">$site.author.org</a></p>
+				</div>
+			</section>
+		</footer>
+
+		<script src="$asset_path/js/jquery.min.js"></script>
+		<script src="$asset_path/js/bootstrap.min.js"></script>
+		<script src="$asset_path/js/style.js"></script>
+		<!-- Baidu Analytics -->
+		$:render.widgets.analytics()
+	</body>
+</html>
