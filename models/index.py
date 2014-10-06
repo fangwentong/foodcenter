@@ -8,8 +8,12 @@ render = setting.render
 
 class index:
     def GET(self):
-        return render.index()
+        return render.index("index", U"哈尔滨工业大学饮食中心")
 
 class err404:
+	def GET(self, url):
+		return render.err404("err404", U"链接不存在")
+
+class test:
 	def GET(self):
-		return render.err404()
+		return render.test("test", U"测试页面")

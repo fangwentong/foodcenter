@@ -1,1 +1,7 @@
-<h1>Error 404</h1>
+$def with(page_name, page_title)
+
+$:render.widgets.header(page_name, page_title)
+
+<p class="h3">对不起, 您访问的链接不存在 :-( </p>
+
+$:render.widgets.footer()

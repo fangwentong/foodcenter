@@ -16,3 +16,11 @@ footer {
 }
 
 
+/**/
+.carousel-control .fa-chevron-left,
+.carousel-control .fa-chevron-right {
+	position: absolute;
+	top: 50%;
+	z-index: 5;
+	display: inline-block;
+}
