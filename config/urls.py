@@ -10,6 +10,7 @@ urls = (
         r"/contact",                   prefix + "home.contact",
         r"/help",                      prefix + "home.help",
         r"/canteen",                   prefix + "home.canteen",
+        r"/feedback",                  prefix + "home.feedback",
 
         r"/order",                     prefix + "order.index",
 

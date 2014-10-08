@@ -8,7 +8,7 @@ render = setting.render
 
 class index:
     def GET(self):
-        return render.index("home", U"哈尔滨工业大学饮食中心")
+        return render.index("home", U"哈工大饮食中心")
 
 class err404:
 	def GET(self, url):
@@ -32,3 +32,7 @@ class help:
 class canteen:
 	def GET(self):
 		return render.pages.canteen("canteen", U"餐厅特色")
+
+class feedback:
+	def GET(self):
+		return	render.pages.feedback("feedback", U"意见反馈")

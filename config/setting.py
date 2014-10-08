@@ -41,7 +41,8 @@ login = web.storage (
 
 if 'SERVER_SOFTWARE' in os.environ:
     asset_path = "/static"
-    image_url = "http://hitfoodcenter.qiniudn.com/image"
+    # image_url = "http://hitfoodcenter.qiniudn.com/image"
+    image_url = "/static/image"
 else:
     asset_path = "/static"
     image_url = "/static/image"
