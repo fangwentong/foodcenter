@@ -18,3 +18,5 @@ handlers:
   static_path: favicon.ico
 - url: /baidu_verify_ptTobbEluZ.html
   static_path: static/baidu_verify_ptTobbEluZ.html
+- url: /sitemap.txt
+  static_path: static/sitemap.txt

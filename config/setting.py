@@ -4,6 +4,7 @@
 import web
 import os
 import time
+from secret import secrets
 
 render = web.template.render('templates/', cache=False)
 
