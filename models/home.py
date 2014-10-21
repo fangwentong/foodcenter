@@ -35,4 +35,6 @@ class canteen:
 
 class feedback:
 	def GET(self):
-		return	render.pages.feedback("feedback", U"意见反馈")
+		return render.pages.feedback("feedback", U"意见反馈")
+	def POST(self):
+		return render.pages.feedback_success("feedback", U"意见反馈")

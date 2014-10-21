@@ -2,6 +2,40 @@ $def with(page_name, page_title)
 
 $:render.widgets.header(page_name, page_title)
 
-<h1>反馈表单,待建设</h1>
+<div class="content">
+	<div class="col-md-8 col-md-offset-2">
+		<form class="form-horizontal" role="form" action="feedback" method="post">
+			<div class="form-group">
+				<label for="username" class="col-sm-2 control-label">您的姓名</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="username" name="username" placeholder="Tony" autofocus>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">您的邮箱</label>
+				<div class="col-sm-10">
+					<input type="eamil" class="form-control" id="email" name="email" placeholder="tony@domain.com">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">您的手机</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="phone" name="phone" placeholder="18000000000">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="feedback" class="col-sm-2 control-label">*您的建议</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" rows="3" id="feedback" name="feedback" placeholder="在这里写出您的意见或建议" required></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6 col-sm-offset-3">
+					<button type="submit" class="btn btn-lg btn-primary btn-block">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
 $:render.widgets.footer()

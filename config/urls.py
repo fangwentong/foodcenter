@@ -13,6 +13,9 @@ urls = (
         r"/feedback",                  prefix + "home.feedback",
 
         r"/order",                     prefix + "order.index",
+        r"/order/signup",              prefix + "order.signup",
+        r"/order/add",                 prefix + "order.add_order",
+        r"/order/info",                prefix + "order.get_info",
 
 
 
