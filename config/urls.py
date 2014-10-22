@@ -5,6 +5,7 @@ prefix = 'models.'
 
 urls = (
         r"/",                          prefix + "home.index",
+        r"/(.*)/",                     prefix + "home.redirect",
         r"/index",                     prefix + "home.index",
         r"/about",                     prefix + "home.about",
         r"/contact",                   prefix + "home.contact",
@@ -14,6 +15,7 @@ urls = (
 
         r"/order",                     prefix + "order.index",
         r"/order/signup",              prefix + "order.signup",
+        r"/order/signin",              prefix + "order.signin",
         r"/order/add",                 prefix + "order.add_order",
         r"/order/info",                prefix + "order.get_info",
 

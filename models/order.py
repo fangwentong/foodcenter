@@ -18,8 +18,10 @@ class signup:
 
 class add_order:
 	def GET(self):
-		return render
+		return render.order.add_order("order", U"添加订单")
+	def POST(self):
+		web.seeother("/order/info")
 
 class get_info:
 	def GET(self):
-		return render
+		return render.order.orderinfo("order", "订单信息")

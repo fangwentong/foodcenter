@@ -4,7 +4,9 @@
 import web
 import os
 import time
+import secret
 
+db = secret.db
 render = web.template.render('templates/', cache=False)
 
 web.config.debug = True
