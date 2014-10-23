@@ -9,12 +9,21 @@ render = setting.render
 class index:
 	def GET(self):
 		return render.order.index("order", U"欢迎使用订餐系统")
+	def POST(self):
+		pass
+		#
 
 class signup:
 	def GET(self):
-		return render
+		return render.order.signup("order", U"注册")
 	def POST(self):
-		info = web.data()
+		info = web.input()
+
+class signin:
+	def GET(self):
+		return render.order.signin("order", U"用户登陆")
+	def POST(self):
+		raise web.seeother("/order/info")
 
 class add_order:
 	def GET(self):
