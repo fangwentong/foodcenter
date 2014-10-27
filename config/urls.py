@@ -20,6 +20,9 @@ urls = (
         r"/order/info",                prefix + "order.get_info",
 
 
+        r"/we/webchat/port",           prefix + "webchat.verify.WeixinInterface",
+
+
 
         r"/test",                      prefix + "home.test",
         r"/(.*)",                      prefix + "home.err404",

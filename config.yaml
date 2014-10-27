@@ -1,4 +1,4 @@
-name: hitfood
+name: foodcenter
 worker: wsgi
 version: 1
 
@@ -13,9 +13,7 @@ handlers:
   static_path: static
   gzip: on
 - url: /robots.txt
-  static_path: robots.txt
-- url: /favicon.ico
-  static_path: favicon.ico
+  static_path: static/robots.txt
 - url: /baidu_verify_ptTobbEluZ.html
   static_path: static/baidu_verify_ptTobbEluZ.html
 - url: /sitemap.txt
