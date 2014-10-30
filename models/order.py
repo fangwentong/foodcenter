@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #coding=utf-8
 
 from config import setting
@@ -27,7 +27,7 @@ class signin:
 
 class add_order:
 	def GET(self):
-		return render.order.add_order("order", U"添加订单")
+		return render.order.addorder("order", U"添加订单")
 	def POST(self):
 		web.seeother("/order/info")
 
