@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
+from models import admin, webchat
+
 prefix = 'models.'
 
 urls = (
@@ -19,12 +21,9 @@ urls = (
         r"/order/add",                 prefix + "order.add_order",
         r"/order/info",                prefix + "order.get_info",
 
-        r"/admin/signin",              prefix + "admin.admin.signin",
-        r"/admin",                     prefix + "admin.admin.index",
+        r"/admin",                     admin.management_app,
 
-        r"/we/webchat/port",           prefix + "webchat.verify.WeixinInterface",
-
-
+        r"/we/WeixinInterface",        webchat.WeixinInterface,
 
         r"/test",                      prefix + "home.test",
         r"/(.*)",                      prefix + "home.err404",
