@@ -5,6 +5,7 @@ import web
 import sys, os
 
 from config.urls import urls
+import models.home
 
 default_encoding = 'utf-8'
 if sys.getdefaultencoding() != default_encoding:
@@ -12,6 +13,7 @@ if sys.getdefaultencoding() != default_encoding:
     sys.setdefaultencoding(default_encoding)
 
 app = web.application(urls, globals())
+app.notfound = models.home.notfound
 
 
 if __name__ == "__main__":
