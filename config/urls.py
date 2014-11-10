@@ -23,7 +23,7 @@ urls = (
 
         r"/admin",                     admin.management_app,
 
-        r"/we/WeixinInterface",        webchat.WeixinInterface,
+        r"/we/WeixinInterface",        webchat.app_robot,
 
         r"/test",                      prefix + "home.test",
         )

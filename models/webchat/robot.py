@@ -14,12 +14,12 @@ import werobot
 
 TOKEN = weconf.token
 
-robot = werobot.WeRoBot(token = TOKEN, enable_session = False)
+app_robot = werobot.WeRoBot(token = TOKEN, enable_session = False)
 
 
 if __name__ == '__main__':
-    if 'SERVER+SOFTWARE' in os.environ:
+    if 'SERVER_SOFTWARE' in os.environ:
         import sae
-        application = sae.create_wsgi_app(robot.wsgi)
+        application = sae.create_wsgi_app(app_robot.wsgi)
     else:
-        robot.run()
+        app_robot.run()
