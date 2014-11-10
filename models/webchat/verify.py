@@ -3,8 +3,9 @@
 
 import hashlib
 import web
+from config.setting import weconf
 
-TOKEN = "fangwentong"
+TOKEN = weconf.token
 
 # 微信接口认证类 WeixinInterface
 class WeixinInterface:

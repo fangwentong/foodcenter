@@ -1,6 +1,25 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
-import web
-import wecore
+import os
+import sys
 
+import hashlib
+import web
+from config.setting import weconf
+
+app_root = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(app_root, 'virtualenv.bundle.zip'))
+import werobot
+
+TOKEN = weconf.token
+
+robot = werobot.WeRoBot(token = TOKEN, enable_session = False)
+
+
+if __name__ == '__main__':
+    if 'SERVER+SOFTWARE' in os.environ:
+        import sae
+        application = sae.create_wsgi_app(robot.wsgi)
+    else:
+        robot.run()

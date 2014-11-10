@@ -7,6 +7,7 @@ import time
 import secret
 
 db = secret.db
+weconf = secret.webchat
 render = web.template.render('templates/', cache=False)
 
 web.config.debug = True
