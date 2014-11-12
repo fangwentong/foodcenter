@@ -4,6 +4,7 @@
 prefix = "models.admin."
 
 urls = (
+        r"",                    prefix + "admin.index",
         r"/",                   prefix + "admin.index",
         r"/signin",             prefix + "admin.signin",
         )

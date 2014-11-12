@@ -6,6 +6,7 @@ from models import admin, webchat
 prefix = 'models.'
 
 urls = (
+        r"",                           prefix + "home.index",
         r"/",                          prefix + "home.index",
         r"/(.*)/",                     prefix + "home.redirect",
         r"/index",                     prefix + "home.index",

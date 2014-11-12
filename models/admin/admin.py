@@ -13,13 +13,26 @@ class signin:
         return render.admin.login("", setting.admin.title)
     def POST(self):
         data = web.input()
+        #print data
+
+        try:
+            result = db.query("SELECT * FROM foodcenter_admins WHERE username=$username",
+                    vars = {'username' : data.username})
+            print result
+
+        except Exception as err:
+            print err
+
+        if hasattr(data, "remeber"):
+            print "Remeber Login State"
+
         #raise web.seeother
         pass
 
 
 class index:
     def GET(self):
-        return render.admin.login("", setting.admin.title)
+        return render.admin.index("widgets", setting.admin.title, "")
         #pass
     def POST(self):
         pass
