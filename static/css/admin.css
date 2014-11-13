@@ -144,7 +144,14 @@ h3, h4 {
 .sidebar {
 	background-color: #fff;
 	padding: 0;
-    display: none;
+}
+
+.sidebar.collapse {
+	display:none;
+}
+
+.sidebar.collapse.in {
+	display: block;
 }
 
 .sidebar form {
@@ -154,13 +161,14 @@ h3, h4 {
 }
 
 @media (min-width: 768px) {
-	.sidebar {
+	.sidebar.collapse {
   		position: fixed;
 		top: 50px;
 		bottom: 0;
 		left: 0;
 		z-index: 1000;
 		display: block;
+		height: auto !important;
 		margin: 0;
 		padding: 0;
 		overflow-x: hidden;
