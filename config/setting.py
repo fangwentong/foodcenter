@@ -38,7 +38,7 @@ site = web.storage (
         )
 
 admin = web.storage (
-        title = U"饮食中心",
+        title = U"foodcenter",
         tagline = U"Admin",
         )
 

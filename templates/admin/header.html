@@ -30,22 +30,22 @@ $def if_active(name="index"):
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>	
-					<a class="navbar-brand" href="/admin"><span>$admin.title</span>$admin.tagline</a>
+					<a class="navbar-brand" href=""><span>$admin.title</span> $admin.tagline</a>
 					<ul class="user-menu">
 						<li class="dropdown pull-right">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span>Admin<span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user fa-fw"></span>Admin<span class="caret"></span></a>
 							<!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-user"></span>session.username<span class="caret"></span></a> -->
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="/"><span class="fa fa-user"></span> 资料</a></li>
-								<li><a href="/"><span class="fa fa-cog"></span> 设置</a></li>
-								<li><a href="/"><span class="fa fa-sign-out"></span> 退出登录</a></li>
+								<li><a href="/"><span class="fa fa-user fa-fw"></span> 资料</a></li>
+								<li><a href="/"><span class="fa fa-cog fa-fw"></span> 设置</a></li>
+								<li><a href="/"><span class="fa fa-sign-out fa-fw"></span> 退出登录</a></li>
 							</ul>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</nav>
-		<div id="sidebar-collapse" class="col-sm-3 col-lg-3 sidebar">
+		<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 			<form role="search">
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Search">
@@ -53,12 +53,12 @@ $def if_active(name="index"):
 			</form>
 
 			<ul class="nav menu">
-				<li class="if_active('dashboard')"><a href=""><span class="fa fa-dashboard"></span> Dashboard</a></li>
-				<li class="if_active('widgets')"><a href=""><span class="fa fa-th"></span> Widgets</a></li>
-				<li class="if_active('')"><a href=""><span class="fa fa-stats"></span> Charts</a></li>
-				<li class="if_active('')"><a href=""><span class="fa fa-list-alt"></span> Tables</a></li>
-				<li class="if_active('')"><a href=""><span class="fa fa-info-sign"></span> Forms</a></li>
-				<li class="if_active('')"><a href=""><span class="fa fa-list"></span>Dropdown</a></li>
+				<li class="$if_active('dashboard')"><a href="dashboard"><span class="fa fa-dashboard fa-fw"></span> Dashboard</a></li>
+				<li class="$if_active('widgets')"><a href=""><span class="fa fa-th fa-fw"></span> Widgets</a></li>
+				<li class="$if_active('')"><a href=""><span class="fa fa-bar-chart fa-fw"></span> Charts</a></li>
+				<li class="$if_active('')"><a href=""><span class="fa fa-list-alt fa-fw"></span> Tables</a></li>
+				<li class="$if_active('')"><a href=""><span class="fa fa-check-square fa-fw"></span> Forms</a></li>
+				<li class="$if_active('')"><a href=""><span class="fa fa-list fa-fw"></span>Dropdown</a></li>
 			</ul>
 		</div>
 	</header>
@@ -66,7 +66,7 @@ $def if_active(name="index"):
 	<article class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="#"><span class="fa fa-home"></span></a></li>
+				<li><a href=""><span class="fa fa-home"></span></a></li>
 				<li class="active">Dashboard</li>
 			</ol>
 		</div>
