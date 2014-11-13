@@ -8,7 +8,7 @@ from config import setting
 render = setting.render
 db = setting.db
 
-class signin:
+class login:
     def GET(self):
         return render.admin.login("", setting.admin.title)
     def POST(self):
@@ -32,7 +32,7 @@ class signin:
 
 class index:
     def GET(self):
-        return render.admin.index("widgets", setting.admin.title, "")
+        return render.admin.index("widgets", "饮食中心后台管理系统", "")
         #pass
     def POST(self):
         pass

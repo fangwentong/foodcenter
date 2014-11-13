@@ -38,8 +38,8 @@ site = web.storage (
         )
 
 admin = web.storage (
-        title = U"foodcenter",
-        tagline = U"Admin",
+        title = U"Food",
+        tagline = U"Center",
         )
 
 if 'SERVER_SOFTWARE' in os.environ:

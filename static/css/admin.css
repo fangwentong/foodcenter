@@ -141,10 +141,12 @@ h3, h4 {
 
 /* Sidebar */
 
-
-.sidebar.collapse {
+.sidebar {
 	background-color: #fff;
 	padding: 0;
+}
+
+.sidebar.collapse {
 	display:none;
 }
 
