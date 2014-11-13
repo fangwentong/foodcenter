@@ -197,7 +197,7 @@
 
 
     | Field         | Type          | Null | Key | Default | Extra          |
-    +---------------+---------------+------+-----+---------+----------------+
+    |:-------------:|:-------------:|:----:|:---:|:-------:|:--------------:|
     | id            | int(11)       | NO   | PRI | NULL    | auto_increment |
     | name          | varchar(50)   | NO   |     | NULL    |                |
     | picture       | varchar(100)  | YES  |     | NULL    |                |
@@ -249,7 +249,5 @@
     ```
 
 ---
-
-9. foodcenter
 
 

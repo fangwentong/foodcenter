@@ -13,9 +13,9 @@ $def if_active(name="index"):
 	<title>$page_title</title>
 	<meta name="author" content="$site.author.name -- $site.author.email">
 	<link rel="chorcut icon" href="/static/favicon.ico">
-	
+
 	<link href="$asset_path/css/bootstrap.min.css" rel="stylesheet">
-    <link href="$asset_path/css/font-awesome.min.css" rel="stylesheet"> 
+    <link href="$asset_path/css/font-awesome.min.css" rel="stylesheet">
 	<link href="$asset_path/css/admin.css" rel="stylesheet">
 </head>
 
@@ -29,7 +29,7 @@ $def if_active(name="index"):
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-					</button>	
+					</button>
 					<a class="navbar-brand" href="/admin"><span>$admin.title</span> $admin.tagline</a>
 					<ul class="user-menu">
 						<li class="dropdown pull-right">
@@ -53,16 +53,41 @@ $def if_active(name="index"):
 			</form>
 
 			<ul class="nav menu">
-				<li class="$if_active('dashboard')"><a href="/admin/dashboard"><span class="fa fa-dashboard fa-fw"></span> DashBoard</a></li>
-				<li class="$if_active('widgets')"><a href="/admin/"><span class="fa fa-th fa-fw"></span> Widgets</a></li>
-				<li class="$if_active('')"><a href="/admin/"><span class="fa fa-bar-chart fa-fw"></span> Charts</a></li>
-				<li class="$if_active('')"><a href="/admin/"><span class="fa fa-list-alt fa-fw"></span> Tables</a></li>
-				<li class="$if_active('')"><a href="/admin/"><span class="fa fa-check-square fa-fw"></span> Forms</a></li>
-				<li class="$if_active('')"><a href="/admin/"><span class="fa fa-list fa-fw"></span>Dropdown</a></li>
+				<li class="$if_active('dashboard')"><a href="/admin/dashboard"><span class="fa fa-dashboard fa-fw"></span> 仪表盘</a></li>
+				<li class="$if_active('orderings')"><a href="/admin/orderings"><span class="fa fa-th fa-fw"></span> 订单管理</a></li>
+				<li class="$if_active('meals')"><a href="/admin/meals"><span class="fa fa-bar-chart fa-fw"></span> 套餐管理</a></li>
+				<li class="$if_active('feedback')"><a href="/admin/feedback"><span class="fa fa-list-alt fa-fw"></span> 反馈管理</a></li>
+				<li class="$if_active('users')"><a href="/admin/users"><span class="fa fa-check-square fa-fw"></span> 用户管理</a></li>
+				<!-- <li class="$if_active('')"><a href=""><span class="fa fa-list fa-fw"></span>Dropdown</a></li> -->
+				<li class="parent">
+					<a href="#">
+						<span class="fa fa-fw fa-list"></span> 工具<span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-s fa-plus fa-fw"></em></span>
+					</a>
+					<ul class="children collapse" id="sub-item-1">
+						<li>
+							<a href="#" class="">
+							<span class="fa fa-fw fa-gavel"></span>
+							随机抽奖
+							</a>
+						</li>
+						<li>
+							<a href="#" class="">
+								<span class="fa fa-fw fa-plus"></span>
+								添加订单
+							</a>
+						</li>
+						<li>
+							<a href="#" class="">
+								<span class="fa fa-fw fa-search"></span>
+								查询订单
+							</a>
+						</li>
+					</ul>
+				</li>
 			</ul>
 		</div>
 	</header>
-	
+
 	<article class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">

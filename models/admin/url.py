@@ -4,13 +4,20 @@
 prefix = "models.admin."
 
 urls = (
-        r"",                    prefix + "admin.index",
-        r"/",                   prefix + "admin.index",
+        r"",                    prefix + "admin.Index",
+        r"/",                   prefix + "admin.Index",
 
-        r"/login",              prefix + "admin.login",
-        r"/logout",             prefix + "admin.logout",
+        r"/login",              prefix + "admin.LogIn",
+        r"/logout",             prefix + "admin.LogOut",
         r"/profile",            prefix + "admin.GetProfile",
-        r"/settings",           prefix + "admin.",
+        r"/settings",           prefix + "admin.ChgPasswd",
 
-        
+        r"/dashboard",          prefix + "admin.DashBoard",
+        r"/orderings",          prefix + "admin.Orderings",
+        r"/meals",              prefix + "admin.GetMeals",
+        r"/addmeal",            prefix + "admin.AddMeal",
+        r"/feedback",           prefix + "admin.Feedback",
+        r"/users",              prefix + "admin.Users",
+        r"/adduser",            prefix + "admin.AddUser"
+
         )
