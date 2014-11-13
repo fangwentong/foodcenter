@@ -10,16 +10,16 @@ CREATE TABLE IF NOT EXISTS `foodcenter_admins` (
 
 -- 2. foodcenter_feedbacks
 
-    CREATE TABLE IF NOT EXISTS `foodcenter_feedbacks` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-      `email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-      `phone` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-      `content` varchar(2500) COLLATE utf8_unicode_ci DEFAULT NULL,
-      `solved` int(1) DEFAULT '0',
-      `addTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `foodcenter_feedbacks` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `phone` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `content` varchar(2500) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `solved` int(1) DEFAULT '0',
+    `addTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- 3. foodcenter_orders
 
@@ -66,7 +66,8 @@ CREATE TABLE IF NOT EXISTS `foodcenter_users` (
   `phone` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `short_message` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
   `avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `weixinId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `openId` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `nickname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `last_order_time` date NOT NULL,
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lock` int(1) NOT NULL DEFAULT '0',

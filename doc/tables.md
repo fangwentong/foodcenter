@@ -140,7 +140,8 @@
     | phone           | varchar(64)  | YES  |     | NULL              |                |
     | short_message   | varchar(500) | YES  |     | NULL              |                |
     | avatar          | varchar(255) | YES  |     | NULL              |                |
-    | weixinId        | varchar(255) | NO   |     | NULL              |                |
+    | openId          | varchar(255) | YES  |     | NULL              |                |
+    | nickname        | varchar(255) | YES  |     | NULL              |                |
     | last_order_time | date         | NO   |     | NULL              |                |
     | addTime         | timestamp    | NO   |     | CURRENT_TIMESTAMP |                |
     | lock            | int(1)       | NO   |     | 0                 |                |
@@ -155,7 +156,8 @@
       `phone` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
       `short_message` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
       `avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-      `weixinId` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+      `weixinId` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+      `nickname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
       `last_order_time` date NOT NULL,
       `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
       `lock` int(1) NOT NULL DEFAULT '0',
