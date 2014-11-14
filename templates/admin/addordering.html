@@ -1,0 +1,23 @@
+$def with(page_name, page_title, session)
+
+$:render.admin.header(page_name, page_title, session)
+
+
+<div class="row">
+	<ol class="breadcrumb">
+		<li><a href="/admin"><span class="fa fa-home"></span></a></li>
+        <li><a href="/admin/tools"> Tools</a></li>
+		<li class="active">Add ordering</li>
+	</ol>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">添加订单</h1>
+	</div>
+</div>
+
+<div class="row">
+</div>
+
+$:render.admin.footer()

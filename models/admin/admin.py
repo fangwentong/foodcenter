@@ -10,7 +10,7 @@ db = setting.db
 
 class Index:
     def GET(self):
-        return render.admin.index("widgets", "饮食中心后台管理系统", "")
+        return render.admin.index("index", "饮食中心后台管理系统", "")
         #pass
     def POST(self):
         pass
@@ -43,55 +43,55 @@ class LogOut:
 
 class GetProfile:
     def GET(self):
-        pass
+        return render.admin.profiles("profile", "个人资料", "")
     def POST(self):
         pass
 
 class ChgPasswd:
     def GET(self):
-        pass
+        return render.admin.settings("setting", "设置", "")
     def POST(self):
         pass
 
 class DashBoard:
     def GET(self):
-        pass
+        return render.admin.dashboard("dashboard", "仪表盘", "")
     def POST(self):
         pass
 
 class Orderings:
     def GET(self):
-        pass
+        return render.admin.orderings("orderings", "订单管理", "")
     def POST(self):
         pass
 
 class GetMeals:
     def GET(self):
-        pass
+        return render.admin.meals("orderings", "套餐管理", "")
     def POST(self):
         pass
 
 class AddMeal:
     def GET(self):
-        pass
+        return render.admin.meals("orderings", "添加套餐", "")
     def POST(self):
         pass
 
 class Feedback:
     def GET(self):
-        pass
+        return render.admin.feedback("feedback", "反馈处理", "")
     def POST(self):
         pass
 
 class Users:
     def GET(self):
-        pass
+        return render.admin.users("users", "用户管理", "")
     def POST(self):
         pass
 
 class AddUser:
     def GET(self):
-        pass
+        return render.admin.users("users", "添加用户", "")
     def POST(self):
         pass
 

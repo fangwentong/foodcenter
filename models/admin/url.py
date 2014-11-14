@@ -4,8 +4,8 @@
 prefix = "models.admin."
 
 urls = (
-        r"",                    prefix + "admin.Index",
-        r"/",                   prefix + "admin.Index",
+        r"",                    prefix + "admin.DashBoard",
+        r"/",                   prefix + "admin.DashBoard",
 
         r"/login",              prefix + "admin.LogIn",
         r"/logout",             prefix + "admin.LogOut",
@@ -18,6 +18,8 @@ urls = (
         r"/addmeal",            prefix + "admin.AddMeal",
         r"/feedback",           prefix + "admin.Feedback",
         r"/users",              prefix + "admin.Users",
-        r"/adduser",            prefix + "admin.AddUser"
+        r"/adduser",            prefix + "admin.AddUser",
+
+        r"/tools",              prefix + "admin."
 
         )
