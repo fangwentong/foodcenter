@@ -47,9 +47,76 @@ ul.list-narrow>ul.list-unstyled {
 }
 
 .footer section.footerExtra {
-	background-color: #F8F7F4;
+	background-color: #f8f7f4;
 	padding: 40px 0;
 }
+
+.footer .footerExtra ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.footer .footerExtra h2
+{
+	font-size:18px;
+	color:#22132d;
+	border-bottom:1px solid #ccc;
+	padding-bottom:15px;
+	margin-bottom:15px;
+	margin-right:10%;
+}
+
+.footer .footerExtra .link li
+{
+	float:left;
+	margin-right:5px;
+	list-style-type: none;
+}
+
+.footer .footerExtra .link li a
+{
+	display:block;
+}
+
+.footer .footerExtra  li.commlink
+{
+	/*width:480px;*/
+	margin:0 0 0 20px;
+}
+
+.footer .footerExtra  li.commlink li
+{
+	margin:0;
+	width:33.3%;
+	line-height:24px;
+}
+
+.footer .footerExtra  li.commlink li a
+{
+	color:#444;
+	font-size: 14px;
+}
+
+.footer .footerExtra  li.commlink li a:hover
+{
+	color:#4F608C;
+	text-decoration: none;
+}
+
+.footer .footerExtra  li.commlink li i
+{
+	margin-left:10px;
+}
+
+.footer .footerExtra  li.commlink .line
+{
+	height:0;
+	border-bottom:1px solid #dfdfdf;
+	width:130px;
+	margin:8px 0;
+	overflow:hidden;
+}
+
 
 .footer section.footer-links {
 	background: #e0e0e0;
@@ -115,16 +182,25 @@ img {
 /*修改container默认宽度*/
 @media (min-width:1200px){
     .container{
-  width: 970px;
+		width: 970px;
     }
 }
 
 @media (max-width:768px) {
-	.footer .footer-links a{
+	.footer .footerExtra  li.commlink li a {
+		font-size: 12px;
+	}
+
+	.footer .footerExtra  li.commlink li i
+	{
+		margin-left:4px;
+	}
+
+	.footer .footer-links a {
 		display: none;
 	}
 
-	.footer .footer-links h4 a{
+	.footer .footer-links h4 a {
 		font-size: 14px;
 	}
 
