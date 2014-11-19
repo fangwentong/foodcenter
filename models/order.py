@@ -7,18 +7,27 @@ import web
 render = setting.render
 db     = setting.db
 
-class index:
-    def GET(self):
+def sessionChecker(func):
+    def _sessionChecker(*args, **kwargs):
+        print ("Before {} is called.".format(func.__name__))
         try:
             #尚未登录
-            if web.config._session.logged == False:
-                return web.seeother('/order/signin')
+            if web.config._session.logged == False or web.config._session.role != "student":
+                raise web.seeother('/order/signin')
             #已经登录且为学生
             elif web.config._session.logged == True and web.config._session.role == "student":
-                return web.seeother('/order/info')
+                ret = func(*args, **kwargs)
         except Exception as err:
             print err
             return render.errinfo("order", U"出错啦", err)
+        print ("After {} is called".format(func.__name__))
+        return ret
+    return _sessionChecker
+
+class index:
+    @sessionChecker
+    def GET(self):
+        raise web.seeother('/order/info')
     def POST(self):
         pass
 
@@ -102,6 +111,7 @@ class signin:
 
 
 class add_order:
+    @sessionChecker
     def GET(self):
         return render.order.addorder("order", U"添加订单", "")
     def POST(self):
@@ -109,26 +119,20 @@ class add_order:
         pass
 
 class get_info:
+    @sessionChecker
     def GET(self):
-        try:
-            #尚未登录
-            if web.config._session.logged == False or web.config._session != "student":
-                return web.seeother('/order/signin')
-            #已经登录且为学生
-            elif web.config._session.logged == True and web.config._session.role == "student":
-                sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
-                stu_info   = list(db.query(sql, vars={'sid' : web.config._session.sid, 'name' : web.config._session.name}))
-                sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active=1"
-                order_info = list(db.query(sql, vars={'sid' : web.config._session.sid}))
+        # 获取用户信息
+        sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
+        stu_info   = list(db.query(sql, vars={'sid' : web.config._session.sid, 'name' : web.config._session.name}))
+        # 获取订单信息
+        sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active=1"
+        order_info = list(db.query(sql, vars={'sid' : web.config._session.sid}))
 
-                data = web.storage (
-                        user  = stu_info[0],
-                        order = order_info
-                        )
-                return render.order.orderinfo("order", "订单信息", data)
-        except Exception as err:
-            print err
-            return render.errinfo("order", U"出错啦", err)
+        data = web.storage (
+                user  = stu_info[0],
+                order = order_info
+                )
+        return render.order.orderinfo("order", U"订单信息", data)
     def POST(self):
         pass
 

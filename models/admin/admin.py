@@ -8,18 +8,31 @@ from config import setting
 render = setting.render
 db = setting.db
 
-class Index:
-    def GET(self):
+
+#创建session检查装饰器
+def sessionChecker(func):
+    def _sessionChecker(*args, **kwargs):
+        # print("Before {} is called".format(func.__name__))
         try:
             #管理员尚未登录
             if web.config._session.logged == False or web.config._session.role != "admin":
                 raise web.seeother('/login')
             #已经登录且为管理员
             elif web.config._session.logged == True and web.config._session.role == "admin":
-                raise web.seeother('/dashboard')
+                ret = func(*args, **kwargs)
         except Exception as err:
             print err
             return render.errinfo("order", U"出错啦", err)
+
+        # print("After {} is called".format(func.__name__))
+        return ret
+    return _sessionChecker
+
+
+class Index:
+    @sessionChecker
+    def GET(self):
+        raise web.seeother('/dashboard')
     def POST(self):
         pass
 
@@ -35,7 +48,7 @@ class LogIn:
             result = list(db.query(sql, vars={'username' : data.username, 'password' : hashlib.new("md5", data.password).hexdigest()}))
 
             if len(result) <= 0:    #身份验证失败
-                errinfo = "您输入的学号和姓名不匹配，请检查后重试."
+                errinfo = "您输入的用户名和密码不匹配，请检查后重试."
                 print errinfo
                 return render.admin.login("admin", U"管理员登录", errinfo)
             else:
@@ -50,9 +63,6 @@ class LogIn:
             print err
             return render.errinfo("order", U"出错啦", err)
 
-        if hasattr(data, "remeber"):
-            print "Remeber Login State"
-
 
 class LogOut:
     def GET(self):
@@ -62,54 +72,63 @@ class LogOut:
         pass
 
 class GetProfile:
+    @sessionChecker
     def GET(self):
         return render.admin.profiles("profile", "个人资料", "")
     def POST(self):
         pass
 
 class ChgPasswd:
+    @sessionChecker
     def GET(self):
         return render.admin.settings("setting", "设置", "")
     def POST(self):
         pass
 
 class DashBoard:
+    @sessionChecker
     def GET(self):
         return render.admin.dashboard("dashboard", "仪表盘", "")
     def POST(self):
         pass
 
 class Orderings:
+    @sessionChecker
     def GET(self):
         return render.admin.orderings("orderings", "订单管理", "")
     def POST(self):
         pass
 
 class GetMeals:
+    @sessionChecker
     def GET(self):
         return render.admin.meals("meals", "套餐管理", "")
     def POST(self):
         pass
 
 class AddMeal:
+    @sessionChecker
     def GET(self):
         return render.admin.meals("meals", "添加套餐", "")
     def POST(self):
         pass
 
 class Feedback:
+    @sessionChecker
     def GET(self):
         return render.admin.feedback("feedback", "反馈处理", "")
     def POST(self):
         pass
 
 class Users:
+    @sessionChecker
     def GET(self):
         return render.admin.users("users", "用户管理", "")
     def POST(self):
         pass
 
 class AddUser:
+    @sessionChecker
     def GET(self):
         return render.admin.users("users", "添加用户", "")
     def POST(self):
