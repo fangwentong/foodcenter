@@ -103,7 +103,7 @@ class signin:
 
 class add_order:
     def GET(self):
-        return render.order.addorder("order", U"添加订单")
+        return render.order.addorder("order", U"添加订单", "")
     def POST(self):
         #raise web.seeother("/order/info")
         pass
@@ -112,7 +112,7 @@ class get_info:
     def GET(self):
         try:
             #尚未登录
-            if web.config._session.logged == False:
+            if web.config._session.logged == False or web.config._session != "student":
                 return web.seeother('/order/signin')
             #已经登录且为学生
             elif web.config._session.logged == True and web.config._session.role == "student":

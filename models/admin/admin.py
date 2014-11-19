@@ -11,12 +11,12 @@ db = setting.db
 class Index:
     def GET(self):
         try:
-            #尚未登录
-            if web.config._session.logged == False:
-                return web.seeother('/login')
+            #管理员尚未登录
+            if web.config._session.logged == False or web.config._session.role != "admin":
+                raise web.seeother('/login')
             #已经登录且为管理员
             elif web.config._session.logged == True and web.config._session.role == "admin":
-                return web.seeother('/dashboard')
+                raise web.seeother('/dashboard')
         except Exception as err:
             print err
             return render.errinfo("order", U"出错啦", err)
