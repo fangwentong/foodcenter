@@ -1,16 +1,84 @@
-$def with(page_name, page_title)
+$def with(page_name, page_title, errinfo)
 
 $:render.widgets.header(page_name, page_title)
 
 <div class="content">
 
 	<div class="col-md-8 col-md-offset-2">
-		<h3 class="text-center text-primary">生日订餐</h3>
-		<div class="form-horizontal" role="form" action="order/add" method="post">
+		<h3 class="text-center text-primary">添加订单</h3>
+		<form class="form-horizontal" role="form" action="" method="post">
 			<div class="form-group">
-
+				<label for="student-id" class="col-sm-2 control-label">* 学号</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="student-id" name="sid" placeholder="1110100101" autofocus required>
+				</div>
 			</div>
-		</div>
+			<div class="form-group">
+				<label for="student-name" class="col-sm-2 control-label">* 姓名</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="student-name" name="name" placeholder="姓名" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="birthday" class="col-sm-2 control-label">* 生日</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="birthday" name="birthday" placeholder="1990-10-04" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="phone" class="col-sm-2 control-label">* 手机号码</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="phone" name="phone" placeholder="18056050000" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="sex" class="col-sm-2 control-label">* 性别</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="sex" name="sex">
+						<option value="boy" selected>帅哥</option>
+						<option value="girl">美女</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="location" class="col-sm-2 control-label">* 选择校区</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="location" name="location">
+						<option value="first" selected>一校区</option>
+						<option value="second">二校区</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="canteen" class="col-sm-2 control-label">* 就餐地点</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="canteen" name="canteen">
+						<option value="" selected>阳光餐厅</option>
+						<option value="">百味佳餐厅</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="package" class="col-sm-2 control-label">* 生日餐选择</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="package" name="package">
+						<option value="" selected>蔬菜面</option>
+						<option value="">牛肉面</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="message" class="col-sm-2 control-label">生日祝福语</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" rows="5" id="message" name="message" placeholder="写下您的生日祝福"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-6 col-sm-offset-3">
+					<button type="submit" class="btn btn-lg btn-primary btn-block">提交订单</button>
+				</div>
+			</div>
+		</form>
 	</div>
 
 </div>

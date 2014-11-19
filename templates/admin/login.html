@@ -1,10 +1,17 @@
-$def with(page_name, page_title)
+$def with(page_name, page_title, errinfo)
 
 $:render.widgets.header(page_name, page_title)
 
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
 		<h3 class="text-center text-primary">管理员登陆</h3>
+        $if errinfo:
+            <div class="alert alert-danger fade in">
+                <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
+                <strong>$errinfo</strong>
+            </div>
+
+        $if 1:
 		<form class="form-horizontal" role="form" action="" method="post">
 			<div class="form-group">
 				<label for="username" class="col-sm-2 control-label">用户名</label>
