@@ -17,9 +17,24 @@ $def if_active(name="index"):
 	<link href="$asset_path/css/bootstrap.min.css" rel="stylesheet">
     <link href="$asset_path/css/font-awesome.min.css" rel="stylesheet">
 	<link href="$asset_path/css/admin.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
+    <!--[if lt IE 9]>
+    <div class="alert alert-danger">
+    	<a class="close" data-dismiss="alert" href="#" aria-hidden="true">x</a>
+      <div style="text-align:center;">
+        为了获得更好的浏览体验，建议您升级IE浏览器或安装<a style="color:blue;" href="http://www.google.cn/intl/zh-CN/chrome/browser/"><strong>Google Chrome</strong></a>、<a style="color:blue;" href="http://firefox.com.cn/"><strong>Firefox</strong></a>等现代浏览器，否则网站某些功能可能无法正常使用.
+      </div>
+    </div>
+    <![endif]-->
+
 	<header class="header">
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
