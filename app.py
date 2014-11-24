@@ -13,13 +13,13 @@ if sys.getdefaultencoding() != default_encoding:
     reload(sys)
     sys.setdefaultencoding(default_encoding)
 
-app = web.application(urls, globals())
+app = web.application(urls, globals(), autoreload=True)
 app.notfound = models.home.notfound
 
 # Session
-store = web.session.DBStore(db, 'foodcenter_sessions')
-session = web.session.Session(app, store, initializer={'logged':False})
-web.config._session = session
+if web.config.get('_session') is None:
+    store = web.session.DBStore(db, 'foodcenter_sessions')
+    web.config._session = web.session.Session(app, store, initializer={'logged':False})
 
 if __name__ == "__main__":
     if 'SERVER_SOFTWARE' in os.environ:

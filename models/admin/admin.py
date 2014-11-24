@@ -13,12 +13,13 @@ db = setting.db
 def sessionChecker(func):
     def _sessionChecker(*args, **kwargs):
         # print("Before {} is called".format(func.__name__))
+        session = web.config._session
         try:
             #管理员尚未登录
-            if web.config._session.logged == False or web.config._session.role != "admin":
+            if not session.logged or session.role is not "admin":
                 raise web.seeother('/login')
             #已经登录且为管理员
-            elif web.config._session.logged == True and web.config._session.role == "admin":
+            elif session.logged and session.role is "admin":
                 ret = func(*args, **kwargs)
         except Exception as err:
             print err

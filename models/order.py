@@ -9,18 +9,19 @@ db     = setting.db
 
 def sessionChecker(func):
     def _sessionChecker(*args, **kwargs):
-        print ("Before {} is called.".format(func.__name__))
+        # print ("Before {} is called.".format(func.__name__))
+        session = web.config._session
         try:
             #尚未登录
-            if web.config._session.logged == False or web.config._session.role != "student":
+            if not session.logged or session.role is not "student":
                 raise web.seeother('/order/signin')
             #已经登录且为学生
-            elif web.config._session.logged == True and web.config._session.role == "student":
+            elif session.logged and session.role is"student":
                 ret = func(*args, **kwargs)
         except Exception as err:
             print err
             return render.errinfo("order", U"出错啦", err)
-        print ("After {} is called".format(func.__name__))
+        # print ("After {} is called".format(func.__name__))
         return ret
     return _sessionChecker
 
