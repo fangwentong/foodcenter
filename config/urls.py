@@ -21,6 +21,7 @@ urls = (
         r"/order/signin",              prefix + "order.signin",
         r"/order/add",                 prefix + "order.add_order",
         r"/order/info",                prefix + "order.get_info",
+        r"/order/help",                prefix + "order.get_help",
 
         r"/admin",                     admin.management_app,
 

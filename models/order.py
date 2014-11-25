@@ -26,9 +26,8 @@ def sessionChecker(func):
     return _sessionChecker
 
 class index:
-    @sessionChecker
     def GET(self):
-        raise web.seeother('/order/info')
+        return render.order.index("order", "生日餐预定", web.config._session)
     def POST(self):
         pass
 
@@ -54,7 +53,7 @@ class signup:
             result = list(db.query(sql, vars={'sid':user_info.sid, 'name':user_info.name}))
 
             if len(result) <= 0:          #学生身份验证
-                errinfo = "您输入的学号和姓名不匹配，请检查后重试."
+                errinfo = "学生身份验证出错，请输入正确的学生信息."
                 print errinfo
                 return render.order.signup("order", U"注册", errinfo)
 
@@ -137,3 +136,8 @@ class get_info:
     def POST(self):
         pass
 
+class get_help:
+    def GET(self):
+        return render.order.orderhelp("order", U"订餐帮助")
+    def POST(self):
+        pass

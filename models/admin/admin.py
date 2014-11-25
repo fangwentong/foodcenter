@@ -72,6 +72,7 @@ class LogOut:
     def POST(self):
         pass
 
+
 class GetProfile:
     @sessionChecker
     def GET(self):
@@ -135,3 +136,23 @@ class AddUser:
     def POST(self):
         pass
 
+class DrawPrize:
+    @sessionChecker
+    def GET(self):
+        return render.admin
+    def POST():
+        pass
+
+class AddOrder:
+    @sessionChecker
+    def GET(self):
+        return render.admin
+    def POST():
+        pass
+
+class SearchOrder:
+    @sessionChecker
+    def GET(self):
+        return render.admin
+    def POST():
+        pass
