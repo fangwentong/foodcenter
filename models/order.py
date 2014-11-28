@@ -2,36 +2,36 @@
 #coding=utf-8
 
 from config import setting
+from StuAuth import StuAuth
 import web
 
 render = setting.render
 db     = setting.db
 
-def sessionChecker(func):
-    def _sessionChecker(*args, **kwargs):
-        # print ("Before {} is called.".format(func.__name__))
-        session = web.config._session
-        try:
-            #尚未登录
-            if not session.logged or session.role is not "student":
-                raise web.seeother('/order/signin')
-            #已经登录且为学生
-            elif session.logged and session.role is"student":
-                ret = func(*args, **kwargs)
-        except Exception as err:
-            print err
-            return render.errinfo("order", U"出错啦", err)
-        # print ("After {} is called".format(func.__name__))
-        return ret
-    return _sessionChecker
 
-class index:
+class index(StuAuth):
+    """
+    订餐导航
+    """
+    def __init__(self):
+        StuAuth.__init__(self)
+
+    @StuAuth.decoder
     def GET(self):
-        return render.order.index("order", "生日餐预定", web.config._session)
+        return render.order.index("order", "生日餐预定", self.session)
+
     def POST(self):
         pass
 
-class signup:
+
+class signup(StuAuth):
+    """
+    用户注册
+    """
+    def __init__(self):
+        StuAuth.__init__(self)
+
+    @StuAuth.decoder
     def GET(self):
         return render.order.signup("order", U"注册", "")
 
@@ -83,9 +83,18 @@ class signup:
             print ("Invalid Sex!\n")
             return -1
 
-class signin:
+
+class signin(StuAuth):
+    """
+    登陆类
+    """
+    def __init__(self):
+        StuAuth.__init__(self)
+
+    @StuAuth.decoder
     def GET(self):
         return render.order.signin("order", U"用户登陆", "")
+
     def POST(self):
         info = web.input()  #sid & name
         print info.sid
@@ -109,34 +118,58 @@ class signin:
             print err
             return render.errinfo("order", U"出错啦", err)
 
+class add_order(StuAuth):
+    """
+    添加订单
+    """
+    def __init__(self):
+        StuAuth.__init__(self)
 
-class add_order:
-    @sessionChecker
+    @StuAuth.decoder
+    @StuAuth.sessionChecker
     def GET(self):
         return render.order.addorder("order", U"添加订单", "")
+
+    @StuAuth.sessionChecker
     def POST(self):
         #raise web.seeother("/order/info")
         pass
 
-class get_info:
-    @sessionChecker
+
+class get_info(StuAuth):
+    """
+    获取用户信息
+    """
+    def __init__(self):
+        StuAuth.__init__(self)
+
+    @StuAuth.decoder
+    @StuAuth.sessionChecker
     def GET(self):
         # 获取用户信息
-        sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
-        stu_info   = list(db.query(sql, vars={'sid' : web.config._session.sid, 'name' : web.config._session.name}))
-        # 获取订单信息
-        sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active=1"
-        order_info = list(db.query(sql, vars={'sid' : web.config._session.sid}))
+        try:
+            sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
+            stu_info   = list(db.query(sql, vars={'sid' : self.session.sid, 'name' : self.session.name}))
+            # 获取订单信息
+            sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active=1"
+            order_info = list(db.query(sql, vars={'sid' : self.session.sid}))
 
-        data = web.storage (
-                user  = stu_info[0],
-                order = order_info
-                )
-        return render.order.orderinfo("order", U"订单信息", data)
+            data = web.storage (
+                    user  = stu_info[0],
+                    order = order_info
+                    )
+            return render.order.orderinfo("order", U"订单信息", data)
+        except Exception as err:
+            return self.error(err)
+
+    @StuAuth.sessionChecker
     def POST(self):
         pass
 
 class get_help:
+    """
+    订餐帮助
+    """
     def GET(self):
         return render.order.orderhelp("order", U"订餐帮助")
     def POST(self):

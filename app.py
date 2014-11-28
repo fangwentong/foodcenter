@@ -14,6 +14,8 @@ if sys.getdefaultencoding() != default_encoding:
     sys.setdefaultencoding(default_encoding)
 
 abspath = os.path.dirname(__file__)
+if abspath == "":
+    abspath = "."
 sys.path.append(abspath)
 os.chdir(abspath)
 
@@ -24,7 +26,7 @@ app.notfound = models.home.notfound
 if web.config.get('_session') is None:
     web.config.session_parameters['cookie_name'] = 'foodcenter_sid'
     web.config.session_parameters['cookie_domain'] = None
-    web.config.session_parameters['timeout'] = 86400
+    web.config.session_parameters['timeout'] = 7200
     web.config.session_parameters['ignore_expiry'] = False
     web.config.session_parameters['ignore_change_ip'] = True
     web.config.session_parameters['secret_key'] = 'Jfadfsajk139wagistviwt2'

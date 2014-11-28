@@ -22,10 +22,10 @@ $:render.widgets.header(page_name, page_title)
 				</div>
 			</div>
 
-	        $if not session.logged or session.role is not "student":
+	        $if not session.logged or session.role != "student":
 	            <p class="h5 text-warnning">* 系统检测到您尚未登陆</p>
 	            <a href="/order/signin"><button class="btn btn-lg btn-primary btn-block">点击登陆</button></a>
-	        $elif session.logged and session.role is 'student':
+	        $else:
 	            <p class="h5 text-success">系统检测到您已经登陆</p>
 	            <a href="/order/add"><button class="btn btn-lg btn-primary btn-block">马上订餐</button></a>
 		</div>
