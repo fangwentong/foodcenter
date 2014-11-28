@@ -39,7 +39,7 @@ class AdminAuth:
         return _sessionChecker
 
     @staticmethod
-    def error(self, msg):
+    def error(msg):
         """
         返回错误页面
         """
@@ -47,7 +47,7 @@ class AdminAuth:
         return render.errinfo("feedback", U"出错啦", msg)
 
     @staticmethod
-    def success(self, msg):
+    def success(msg):
         """
         返回成功页面
         """
