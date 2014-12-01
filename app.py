@@ -30,7 +30,6 @@ if web.config.get('_session') is None:
     web.config.session_parameters['ignore_expiry'] = False
     web.config.session_parameters['ignore_change_ip'] = True
     web.config.session_parameters['secret_key'] = 'Jfadfsajk139wagistviwt2'
-    web.config.session_parameters['expired_message'] = 'Session expired'
     store = web.session.DBStore(db, 'foodcenter_sessions')
     web.config._session = web.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
 

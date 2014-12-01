@@ -43,16 +43,16 @@ class LogIn(AdminAuth):
                 print errinfo
                 return render.admin.login("admin", U"管理员登录", errinfo)
             else:
-                web.config._session.name   = result[0].username
-                web.config._session.role   = "admin"
-                web.config._session.logged = True
+                self.session.name     = result[0].username
+                self.session.nickname = result[0].nickname
+                self.session.role     = "admin"
+                self.session.logged   = True
                 if data.remeber:      #记住密码
                     web.config.session_parameters['ignore_expiry'] = True
                 raise web.seeother("/dashboard")
 
         except Exception as err:
-            print err
-            return render.errinfo("order", U"出错啦", err)
+            return self.error(err)
 
 
 class LogOut(AdminAuth):
@@ -61,8 +61,8 @@ class LogOut(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        web.config._session.kill()
-        raise web.seeother('/')
+        self.session.kill()
+        return web.seeother('/')
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -75,11 +75,18 @@ class GetProfile(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.profiles("profile", "个人资料", "")
+        return render.admin.profiles("profile", "个人资料", self.session, "")
 
     @AdminAuth.sessionChecker
     def POST(self):
-        pass
+        data = web.input() #nickname email ..
+        try:
+            db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
+                    nickname = data.nickname, email = data.email)
+            return render.admin.profiles("profile", "个人资料", self.session, "个人资料更新成功!", "success")
+        except Exception as err:
+            return render.admin.profiles("profile", "个人资料", self.session, "出现以下错误:\n"+err)
+
 
 class ChgPasswd(AdminAuth):
     def __init__(self):
@@ -87,11 +94,24 @@ class ChgPasswd(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.settings("setting", "设置", "")
+        return render.admin.settings("setting", "设置", self.session, "")
 
     @AdminAuth.sessionChecker
     def POST(self):
-        pass
+        data = web.input()   #old_passwd new_passwd
+        try:
+            sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
+            result = list(db.query(sql, vars={'username' : self.session.name,
+                'password' : hashlib.new("md5", data.old_passwd).hexdigest()}))
+
+            if len(result) <= 0: # 旧密码输错
+                return render.admin.settings("setting", "设置",self.session, "旧密码输入错误!")
+            else: # 更新密码
+                db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
+                        password = hashlib.new("md5", data.new_passwd).hexdigest())
+                return render.admin.settings("setting", "设置", self.session, "密码修改成功!", "success")
+        except Exception as err:
+            return self.error(err)
 
 class DashBoard(AdminAuth):
     def __init__(self):
@@ -99,7 +119,7 @@ class DashBoard(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.dashboard("dashboard", "仪表盘", "")
+        return render.admin.dashboard("dashboard", "仪表盘", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -111,7 +131,7 @@ class Orderings(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.orderings("orderings", "订单管理", "")
+        return render.admin.orderings("orderings", "订单管理", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -123,7 +143,7 @@ class GetMeals(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.meals("meals", "套餐管理", "")
+        return render.admin.meals("meals", "套餐管理", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -135,7 +155,7 @@ class AddMeal(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.meals("meals", "添加套餐", "")
+        return render.admin.meals("meals", "添加套餐", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -147,7 +167,7 @@ class Feedback(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.feedback("feedback", "反馈处理", "")
+        return render.admin.feedback("feedback", "反馈处理", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -159,7 +179,7 @@ class Users(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.users("users", "用户管理", "")
+        return render.admin.users("users", "用户管理", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -171,7 +191,7 @@ class AddUser(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.users("users", "添加用户", "")
+        return render.admin.users("users", "添加用户", self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):

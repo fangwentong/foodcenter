@@ -42,8 +42,7 @@ class signup(StuAuth):
             sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid"
             result = list(db.query(sql, vars={'sid':user_info.sid}))
         except Exception as err:
-            print err
-            return render.errinfo("feedback", U"出错啦", err)
+            return self.error(err)
 
         if len(result) >= 1: #已注册,自动跳转
             print("Already Registerd!")
@@ -71,8 +70,7 @@ class signup(StuAuth):
                         )
                 raise web.seeother("/order/info")
             except Exception as err:
-                print err
-                return render.errinfo("order", U"出错啦", err)
+                return self.error(err)
 
     def getSexId(self, sex):
         if sex == "boy":
@@ -115,8 +113,7 @@ class signin(StuAuth):
                 raise web.seeother("/order/info")
 
         except Exception as err:
-            print err
-            return render.errinfo("order", U"出错啦", err)
+            return self.error(err)
 
 class add_order(StuAuth):
     """
