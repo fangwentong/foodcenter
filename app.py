@@ -3,6 +3,7 @@
 
 import web
 import sys, os
+import models.iweb
 
 from config.urls import urls
 from config.setting import db
@@ -31,7 +32,7 @@ if web.config.get('_session') is None:
     web.config.session_parameters['ignore_change_ip'] = True
     web.config.session_parameters['secret_key'] = 'Jfadfsajk139wagistviwt2'
     store = web.session.DBStore(db, 'foodcenter_sessions')
-    web.config._session = web.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
+    web.config._session = models.iweb.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
 
 if __name__ == "__main__":
     if 'SERVER_SOFTWARE' in os.environ:
