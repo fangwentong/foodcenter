@@ -52,7 +52,7 @@ class LogIn(AdminAuth):
                 raise web.seeother("/dashboard")
 
         except Exception as err:
-            return self.error(err)
+            return render.errinfo("admin", U"出错啦", err)
 
 
 class LogOut(AdminAuth):

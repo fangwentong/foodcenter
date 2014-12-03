@@ -44,7 +44,7 @@ class AdminAuth:
         返回错误页面
         """
         print msg
-        return render.admin.error("feedback", U"出错啦", msg)
+        return render.admin.error("admin", U"出错啦", web.config._session, msg)
 
     @staticmethod
     def success(msg):
