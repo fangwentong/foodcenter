@@ -192,9 +192,15 @@ img {
 
 /*修改container默认宽度*/
 @media (min-width:1200px){
-    .container{
+	.container{
 		width: 970px;
-    }
+	}
+}
+
+@media (min-width: 768px){
+	.form-link {
+		overflow: hidden;
+	}
 }
 
 @media (max-width:768px) {
