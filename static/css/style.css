@@ -143,16 +143,26 @@ ul.list-narrow>ul.list-unstyled {
 	text-decoration: none;
 }
 
-.footer section.copyrights {
+.footer .copyrights {
 	background-color: #22132d;
 	padding: 20px 0;
 	color: #a5a2a7;
 }
 
 .footer .copyrights .copy {
+	padding-top: 10px;
 	color:#6f6a74;
 }
 
+.footer .copyrights a {
+	font-weight: 500;
+	color: #585858;
+}
+
+.footer .copyrights a:hover {
+	color: #4F608C;
+	text-decoration: none;
+}
 
 .carousel-control .fa-chevron-left,
 .carousel-control .fa-chevron-right {
@@ -177,6 +187,7 @@ img {
 	border-radius: 4px;
 	margin-top: 30px;
 	margin-bottom: 30px;
+	padding-bottom: 15px;;
 }
 
 /*修改container默认宽度*/
