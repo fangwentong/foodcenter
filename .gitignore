@@ -56,6 +56,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
 index.wsgic
-static/image*
 config/secret.py
