@@ -7,15 +7,33 @@ from config import setting
 db     = setting.db
 render = setting.render
 
+class BasePage:
+    """网站页面基类"""
+    def __init__(self, page_name, page_title):
+        """
+        __init__
+        """
+        self.page = web.storage(
+                name = page_name,
+                title = page_title,
+                errinfo = ""
+                )
+
+
 class StuAuth:
     """
     用于身份验证的工具类
     """
-    def __init__(self):
+    def __init__(self, page_name, page_title):
         """
         __init__
         """
         self.session = web.config._session
+        self.page    = web.storage(
+                name  = page_name,
+                title = page_title,
+                errinfo = ""
+                )
         # print("An Object was created, which id {}".format(id(self)))
 
     @staticmethod
@@ -37,6 +55,7 @@ class StuAuth:
                         web.config._session.sid    = result[0].student_id
                         web.config._session.role   = "student"
                         web.config._session.logged = True
+                        web.config.session_parameters['ignore_expiry'] = True        #通过URL登陆后，Session不失效
                     else:
                         web.config._session.wid    = data.wid
                     return web.seeother("")
@@ -70,12 +89,16 @@ class StuAuth:
         return _sessionChecker
 
     @staticmethod
-    def error(msg):
+    def error(msg, page_name="order", page_title="出错啦"):
         """
         返回错误页面
         """
         print msg
-        return render.errinfo("order", U"出错啦", msg)
+        return render.errinfo(web.storage(
+                name    = page_name,
+                title   = page_title,
+                errinfo = msg
+            ))
 
     @staticmethod
     def success(msg):
@@ -93,4 +116,3 @@ class StuAuth:
             return False
         else:
             return True
-

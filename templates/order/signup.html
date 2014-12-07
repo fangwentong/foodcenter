@@ -1,17 +1,15 @@
-$def with(page_name, page_title, errinfo)
+$def with(page)
 
-$:render.widgets.header(page_name, page_title)
+$:render.widgets.header(page)
 
-
-				
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
 		<h3 class="text-center text-primary">注册新用户</h3>
 
-		$if errinfo:
+		$if page.errinfo:
 		    <div class="alert alert-danger fade in col-sm-10 col-sm-offset-2">
 		        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
-		        <strong>$errinfo</strong>
+		        <strong>$page.errinfo</strong>
 		    </div>
 
 		<div class="form-link">

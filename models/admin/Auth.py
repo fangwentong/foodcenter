@@ -11,11 +11,17 @@ class AdminAuth:
     """
     用于管理员身份验证的工具类
     """
-    def __init__(self):
+    def __init__(self, page_name="", page_title=""):
         """
         __init__
         """
-        self.session = web.config._session
+        self.session  = web.config._session
+        self.page = web.storage(
+                name         = page_name,
+                title        = page_title,
+                errinfo      = "",
+                successsinfo = ""
+                )
         # print("An Object was created, which id {}".format(id(self)))
 
     @staticmethod
@@ -24,7 +30,7 @@ class AdminAuth:
         session 检查装饰器
         """
         def _sessionChecker(*args, **kwargs):
-            print ("Before {} is called.".format(func.__name__))
+            # print ("Before {} is called.".format(func.__name__))
             try:
                 #管理员尚未登录
                 if not web.config._session.logged or web.config._session.role != "admin":
@@ -34,17 +40,23 @@ class AdminAuth:
                     ret = func(*args, **kwargs)
             except Exception as err:
                 return AdminAuth.error(err)
-            print ("After {} is called.".format(func.__name__))
+            # print ("After {} is called.".format(func.__name__))
             return ret
         return _sessionChecker
 
     @staticmethod
-    def error(msg):
+    def error(msg, pagename="", pagetitle="出错啦"):
         """
         返回错误页面
         """
         print msg
-        return render.admin.error("admin", U"出错啦", web.config._session, msg)
+        return render.admin.error(
+                web.storage(
+                    name    = pagename,
+                    title   = pagetitle,
+                    errinfo = msg
+                    ),
+                web.config._session)
 
     @staticmethod
     def success(msg):

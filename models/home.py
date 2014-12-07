@@ -2,19 +2,15 @@
 #coding=utf-8
 
 from config import setting
+from base import BasePage
 import web
 
 render = setting.render
 db = setting.db
 
 def notfound():
-    return web.notfound(render.err404("err404", U"链接不存在"))
+    return web.notfound(render.err404(web.storage(name="err404", title=U"链接不存在")))
 
-class index:
-    def GET(self):
-        return render.index("home", U"哈工大饮食中心")
-    def POST(self):
-        pass
 
 class redirect:
     def GET(self, path):
@@ -22,39 +18,82 @@ class redirect:
     def POST(self):
         pass
 
-class test:
+
+class index(BasePage):
+    """
+    首页导航
+    """
+    def __init__(self):
+        BasePage.__init__(self, "home", U"哈工大饮食中心")
     def GET(self):
-        return render.test("test", U"测试页面")
+        return render.index(self.page)
     def POST(self):
         pass
 
-class about:
+
+class test(BasePage):
+    """
+    测试页面
+    """
+    def __init___(self):
+        BasePage.__init__(self, "test", U"测试页面")
     def GET(self):
-        return render.pages.aboutus("about", U"关于我们")
+        return render.test(self.page)
     def POST(self):
         pass
 
-class contact:
+class about(BasePage):
+    """
+    关于我们
+    """
+    def __init__(self):
+        BasePage.__init__(self, "about", U"关于我们 —— 哈工大饮食中心")
     def GET(self):
-        return render.pages.contactus("contactus", U"联系我们")
+        return render.pages.aboutus(self.page)
     def POST(self):
         pass
 
-class help:
+class contact(BasePage):
+    """
+    联系我们
+    """
+    def __init__(self):
+        BasePage.__init__(self, "contactus", U"联系我们 —— 哈工大饮食中心")
     def GET(self):
-        return render.pages.generalhelp("generalhelp", U"常见问题")
+        return render.pages.contactus(self.page)
     def POST(self):
         pass
 
-class canteen:
+class help(BasePage):
+    """
+    常见问题
+    """
+    def __init__(self):
+        BasePage.__init__(self, "generalhelp", U"常见问题 —— 哈工大饮食中心")
     def GET(self):
-        return render.pages.canteen("canteen", U"餐厅特色")
+        return render.pages.generalhelp(self.page)
     def POST(self):
         pass
 
-class feedback:
+class canteen(BasePage):
+    """
+    餐厅特色
+    """
+    def __init__(self):
+        BasePage.__init__(self, "canteen", U"餐厅特色 —— 哈工大饮食中心")
     def GET(self):
-        return render.pages.feedback("feedback", U"意见反馈")
+        return render.pages.canteen(self.page)
+    def POST(self):
+        pass
+
+class feedback(BasePage):
+    """
+    意见反馈
+    """
+    def __init__(self):
+        BasePage.__init__(self, "feedback", U"意见反馈 —— 哈工大饮食中心")
+    def GET(self):
+        return render.pages.feedback(self.page)
     def POST(self):
         data = web.input()
         #print data
@@ -68,7 +107,10 @@ class feedback:
                     solved  = 0,
                     addTime = web.SQLLiteral("NOW()")
                     )
-            return render.pages.feedback_success("feedback", U"反馈成功")
+            self.page.title = "反馈成功"
+            return render.pages.feedback_success(self.page)
         except Exception as err:
             print err
-            return render.errinfo("feedback", U"出错啦", err)
+            self.page.title   = "出错啦"
+            self.page.errinfo = err
+            return render.errinfo(self.page)

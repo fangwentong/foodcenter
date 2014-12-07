@@ -1,7 +1,7 @@
-$def with(page_name, page_title, session)
+$def with(page, session)
 
 $def if_active(name="index"):
-	$if name == page_name:
+	$if name == page.name:
 		active
 
 <!DOCTYPE html>
@@ -10,9 +10,9 @@ $def if_active(name="index"):
 	<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>$page_title</title>
+	<title>$page.title</title>
 	<meta name="author" content="$site.author.name -- $site.author.email">
-	<link rel="chorcut icon" href="/static/favicon.ico">
+	<link rel="chorcut icon" href="$asset_path/favicon.ico">
 
 	<link href="$asset_path/css/bootstrap.min.css" rel="stylesheet">
     <link href="$asset_path/css/font-awesome.min.css" rel="stylesheet">
