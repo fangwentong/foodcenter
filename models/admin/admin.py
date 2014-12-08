@@ -24,7 +24,7 @@ class Index(AdminAuth):
 
 class LogIn(AdminAuth):
     def __init__(self):
-        AdminAuth.__init__(self, "admin", "管理员登陆 —— 哈工大饮食中心")
+        AdminAuth.__init__(self, "admin", "管理员登陆 - 哈工大饮食中心")
 
     # 切莫添加sessionChecker, 否则包含循环重定向
     def GET(self):
