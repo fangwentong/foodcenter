@@ -47,7 +47,7 @@ class about(BasePage):
     关于我们
     """
     def __init__(self):
-        BasePage.__init__(self, "about", U"关于我们 —— 哈工大饮食中心")
+        BasePage.__init__(self, "about", U"关于我们 - 哈工大饮食中心")
     def GET(self):
         return render.pages.aboutus(self.page)
     def POST(self):
@@ -58,7 +58,7 @@ class contact(BasePage):
     联系我们
     """
     def __init__(self):
-        BasePage.__init__(self, "contactus", U"联系我们 —— 哈工大饮食中心")
+        BasePage.__init__(self, "contactus", U"联系我们 - 哈工大饮食中心")
     def GET(self):
         return render.pages.contactus(self.page)
     def POST(self):
@@ -69,7 +69,7 @@ class help(BasePage):
     常见问题
     """
     def __init__(self):
-        BasePage.__init__(self, "generalhelp", U"常见问题 —— 哈工大饮食中心")
+        BasePage.__init__(self, "generalhelp", U"常见问题 - 哈工大饮食中心")
     def GET(self):
         return render.pages.generalhelp(self.page)
     def POST(self):
@@ -80,7 +80,7 @@ class canteen(BasePage):
     餐厅特色
     """
     def __init__(self):
-        BasePage.__init__(self, "canteen", U"餐厅特色 —— 哈工大饮食中心")
+        BasePage.__init__(self, "canteen", U"餐厅特色 - 哈工大饮食中心")
     def GET(self):
         return render.pages.canteen(self.page)
     def POST(self):
@@ -91,7 +91,7 @@ class feedback(BasePage):
     意见反馈
     """
     def __init__(self):
-        BasePage.__init__(self, "feedback", U"意见反馈 —— 哈工大饮食中心")
+        BasePage.__init__(self, "feedback", U"意见反馈 - 哈工大饮食中心")
     def GET(self):
         return render.pages.feedback(self.page)
     def POST(self):

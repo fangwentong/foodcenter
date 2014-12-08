@@ -14,7 +14,7 @@ class index(StuAuth):
     订餐导航
     """
     def __init__(self):
-        StuAuth.__init__(self, "order", "生日餐预定 —— 哈工大饮食中心")
+        StuAuth.__init__(self, "order", "生日餐预定 - 哈工大饮食中心")
 
     @StuAuth.decoder
     def GET(self):
@@ -90,7 +90,7 @@ class signin(StuAuth):
     登陆类
     """
     def __init__(self):
-        StuAuth.__init__(self, "order", U"用户登录 —— 哈工大饮食中心")
+        StuAuth.__init__(self, "order", U"用户登录 - 哈工大饮食中心")
 
     @StuAuth.decoder
     def GET(self):
@@ -169,7 +169,7 @@ class get_help(StuAuth):
     订餐帮助
     """
     def __init__(self):
-        StuAuth.__init(self, "order", "订餐帮助 —— 哈尔滨工业大学")
+        StuAuth.__init(self, "order", "订餐帮助 - 哈尔滨工业大学")
     def GET(self):
         return render.order.orderhelp(self.page)
     def POST(self):
