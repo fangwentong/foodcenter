@@ -103,18 +103,18 @@ class ChgPasswd(AdminAuth):
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input()   #old_passwd new_passwd
+        data = web.input()   #oldp newp
         try:
             sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
             result = list(db.query(sql, vars={'username' : self.session.name,
-                'password' : hashlib.new("md5", data.old_passwd).hexdigest()}))
+                'password' : hashlib.new("md5", data.oldp).hexdigest()}))
 
             if len(result) <= 0: # 旧密码输错
                 self.page.errinfo = "旧密码输入错误!"
                 return render.admin.settings(self.page, self.session)
             else: # 更新密码
                 db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
-                        password = hashlib.new("md5", data.new_passwd).hexdigest())
+                        password = hashlib.new("md5", data.newp).hexdigest())
                 return render.admin.settings("setting", "设置", self.session, "密码修改成功!", "success")
         except Exception as err:
             return self.error(err, "settings")
@@ -133,7 +133,7 @@ class DashBoard(AdminAuth):
 
 class Orderings(AdminAuth):
     def __init__(self):
-        AdminAuth.__init__(self, "ordrings", "订单管理")
+        AdminAuth.__init__(self, "orderings", "订单管理")
 
     @AdminAuth.sessionChecker
     def GET(self):
@@ -203,13 +203,24 @@ class AddUser(AdminAuth):
     def POST(self):
         pass
 
+class ToolsList(AdminAuth):
+    def __init__(self):
+        AdminAuth.__init__(self, "tools", "小工具")
+    @AdminAuth.sessionChecker
+    def GET(self):
+        return render.admin.tools(self.page, self.session)
+
+    @AdminAuth.sessionChecker
+    def POST(self):
+        pass
+
 class DrawPrize(AdminAuth):
     def __init__(self):
-        AdminAuth.__init__(self)
+        AdminAuth.__init__(self, "draw-prize", "抽奖")
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin
+        return render.admin.drawprize(self.page, self.session)
 
     @AdminAuth.sessionChecker
     def POST():
@@ -217,11 +228,11 @@ class DrawPrize(AdminAuth):
 
 class AddOrder(AdminAuth):
     def __init__(self):
-        AdminAuth.__init__(self)
+        AdminAuth.__init__(self, "add-order", "添加订单")
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin
+        return render.admin.addordering(self.page, self.session)
 
     @AdminAuth.sessionChecker
     def POST():
@@ -229,11 +240,11 @@ class AddOrder(AdminAuth):
 
 class SearchOrder(AdminAuth):
     def __init__(self):
-        AdminAuth.__init__(self)
+        AdminAuth.__init__(self, "search-order", "查询订单")
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin
+        return render.admin.searchordering(self.page, self.session)
 
     @AdminAuth.sessionChecker
     def POST():

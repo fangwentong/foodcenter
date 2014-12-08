@@ -72,26 +72,25 @@ $def if_active(name="index"):
 				<li class="$if_active('meals')"><a href="/admin/meals"><span class="fa fa-list-alt fa-fw"></span> 套餐管理</a></li>
 				<li class="$if_active('feedback')"><a href="/admin/feedback"><span class="fa fa-comment-o fa-fw"></span> 反馈管理</a></li>
 				<li class="$if_active('users')"><a href="/admin/users"><span class="fa fa-group fa-fw"></span> 用户管理</a></li>
-				<!-- <li class="$if_active('')"><a href=""><span class="fa fa-list fa-fw"></span>Dropdown</a></li> -->
 				<li class="parent">
-					<a href="#">
+					<a href="/admin/tools" class="$if_active('tools')">
 						<span class="fa fa-fw fa-wrench"></span> 工具<span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-s fa-plus fa-fw"></em></span>
 					</a>
 					<ul class="children collapse" id="sub-item-1">
 						<li>
-							<a href="#" class="">
+							<a href="/admin/tools/draw-prize" class="$if_active('draw-prize')">
 							<span class="fa fa-fw fa-gavel"></span>
 							随机抽奖
 							</a>
 						</li>
 						<li>
-							<a href="#" class="">
+							<a href="/admin/tools/add-order" class="$if_active('add-order')">
 								<span class="fa fa-fw fa-plus"></span>
 								添加订单
 							</a>
 						</li>
 						<li>
-							<a href="#" class="">
+							<a href="/admin/tools/search-order" class="$if_active('search-order')">
 								<span class="fa fa-fw fa-search"></span>
 								查询订单
 							</a>

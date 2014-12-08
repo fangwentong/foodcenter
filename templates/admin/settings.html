@@ -16,6 +16,37 @@ $:render.admin.header(page, session)
 </div>
 
 <div class="row">
+    <div class="col-lg-12">
+        <form class="form-horizontal" role="form" action="" method="post">
+            <div class="form-group">
+                <label for="oldp" class="col-sm-2 control-label">旧密码</label>
+                <div class="col-sm-10">
+                    <input id="oldp" class="form-control" type="text" name="oldp" placeholer="旧密码" autofocus required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="oldp" class="col-sm-2 control-label">新密码</label>
+                <div class="col-sm-10">
+                    <input id="newp" class="form-control" type="text" name="newp" placeholer="新密码" autofocus required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="oldp" class="col-sm-2 control-label">确认新密码</label>
+                <div class="col-sm-10">
+                    <input id="newp2" class="form-control" type="text" name="newp2" placeholer="新密码" autofocus required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">更新密码</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 

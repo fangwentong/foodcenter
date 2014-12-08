@@ -20,8 +20,9 @@ urls = (
         r"/users",              prefix + "admin.Users",
         r"/adduser",            prefix + "admin.AddUser",
 
-        r"/tools",              prefix + "admin.",
-        r"/tools/order/add",    prefix + "admin.",
-        r"/tools/order/search", prefix + "admin."
+        r"/tools",              prefix + "admin.ToolsList",
+        r"/tools/draw-prize",   prefix + "admin.DrawPrize",
+        r"/tools/add-order",    prefix + "admin.AddOrder",
+        r"/tools/search-order", prefix + "admin.SearchOrder"
 
         )
