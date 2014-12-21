@@ -14,6 +14,7 @@ urls = (
 
         r"/dashboard",          prefix + "admin.DashBoard",
         r"/orderings",          prefix + "admin.Orderings",
+        r"/articles",           prefix + "admin.ArticleManagement",
         r"/meals",              prefix + "admin.GetMeals",
         r"/addmeal",            prefix + "admin.AddMeal",
         r"/feedback",           prefix + "admin.Feedback",

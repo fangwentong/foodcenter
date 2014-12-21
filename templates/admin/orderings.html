@@ -11,12 +11,54 @@ $:render.admin.header(page, session)
 </div>
 
 <div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header">订单管理</h1>
-	</div>
+    <div class="col-lg-12">
+        <h2>未完成订单</h2>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body tabs">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab1" data-toggle="tab"> 今日订单</a></li>
+                    <li class=""><a href="#tab2" data-toggle="tab">三日内订单</a></li>
+                    <li class=""><a href="#tab3" data-toggle="tab">七日内订单</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="tab1">
+                    </div>
+                    <div class="tab-pane fade" id="tab2">
+                    </div>
+                    <div class="tab-pane fade" id="tab3">
+                    </div>
+                </div>
+            </div>
+        </div><!--/.panel-->
+    </div>
+
+    <div class="col-lg-12">
+        <h2>历史订单</h2>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body tabs">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#history1" data-toggle="tab"> 昨日订单</a></li>
+                    <li class=""><a href="#history2" data-toggle="tab"> 一周内</a></li>
+                    <li class=""><a href="#history3" data-toggle="tab"> 一个月</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="history1">
+                    </div>
+                    <div class="tab-pane fade" id="history2">
+                    </div>
+                    <div class="tab-pane fade" id="history3">
+                    </div>
+                </div>
+            </div>
+        </div><!--/.panel-->
+    </div>
+
 </div>
 
-<div class="row">
-</div>
-
-$:render.admin.footer()
+$:render.admin.footer(page)

@@ -143,6 +143,30 @@ class Orderings(AdminAuth):
     def POST(self):
         pass
 
+class ArticleManagement(AdminAuth):
+    def __init__(self):
+        AdminAuth.__init__(self, "articles", "文章管理")
+
+    @AdminAuth.sessionChecker
+    def GET(self):
+        return render.admin.articles(self.page, self.session)
+
+    @AdminAuth.sessionChecker
+    def POST(self):
+        pass
+
+class AddArticle(AdminAuth):
+    def __init__(self):
+        AdminAuth.__init__(self, "articles", "添加文章")
+
+    @AdminAuth.sessionChecker
+    def GET(self):
+        return render.admin
+
+    @AdminAuth.sessionChecker
+    def POST(self):
+        pass
+
 class GetMeals(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "meals", "套餐管理")

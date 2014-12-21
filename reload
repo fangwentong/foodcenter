@@ -1,7 +1,5 @@
 #!/bin/sh
 
-DIR=`pwd`
-PID=`eval "pgrep -f $DIR/index.wsgi"`
-kill $PID
+kill `pgrep -f "$HOME/food/index.wsgi"`
 
 spawn-fcgi -d `pwd` -f `pwd`/index.wsgi -a 127.0.0.1 -p 9002

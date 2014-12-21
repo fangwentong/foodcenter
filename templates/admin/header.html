@@ -69,6 +69,7 @@ $def if_active(name="index"):
 			<ul class="nav menu">
 				<li class="$if_active('dashboard')"><a href="/admin/dashboard"><span class="fa fa-dashboard fa-fw"></span> 仪表盘</a></li>
 				<li class="$if_active('orderings')"><a href="/admin/orderings"><span class="fa fa-line-chart fa-fw"></span> 订单管理</a></li>
+				<li class="$if_active('articles')"><a href="/admin/articles"><span class="fa fa-file-text-o fa-fw"></span> 文章管理</a></li>
 				<li class="$if_active('meals')"><a href="/admin/meals"><span class="fa fa-list-alt fa-fw"></span> 套餐管理</a></li>
 				<li class="$if_active('feedback')"><a href="/admin/feedback"><span class="fa fa-comment-o fa-fw"></span> 反馈管理</a></li>
 				<li class="$if_active('users')"><a href="/admin/users"><span class="fa fa-group fa-fw"></span> 用户管理</a></li>
@@ -98,7 +99,7 @@ $def if_active(name="index"):
 					</ul>
 				</li>
 				<li role="presentation" class="divider"></li>
-				<!-- <li><a href="/login"><span class="fa fa-home fa-fw"></span> Home</a></li> -->
+				<li><a href="/"><span class="fa fa-home fa-fw"></span> 中心首页</a></li>
 			</ul>
 		</div>
 	</header>
