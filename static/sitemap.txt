@@ -9,6 +9,5 @@ http://foodcenter.sinaapp.com/feedback
 http://foodcenter.sinaapp.com/order
 http://foodcenter.sinaapp.com/order/signup
 http://foodcenter.sinaapp.com/order/signin
-http://foodcenter.sinaapp.com/order/add
 
-http://foodcenter.sinaapp.com/admin
+http://foodcenter.sinaapp.com/article
