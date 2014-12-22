@@ -1,6 +1,9 @@
-哈工大饮食中心官网
-===
+哈工大饮食中心
+---
 
-**开发中**
 
-- 查看[在线页面](http://foodcenter.sinaapp.com/)
+哈尔滨工业大学饮食中心官方网站
+
+在线地址 :  http://food.wentong.me
+
+

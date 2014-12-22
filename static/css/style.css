@@ -167,9 +167,17 @@ ul.list-narrow>ul.list-unstyled {
 .carousel-control .fa-chevron-left,
 .carousel-control .fa-chevron-right {
 	position: absolute;
-	top: 50%;
+    top: 50%;
 	z-index: 5;
 	display: inline-block;
+}
+.carousel-control .fa-chevron-left {
+    left: 50%;
+    margin-left: -10px;
+}
+.carousel-control .fa-chevron-right {
+    right: 50%;
+    margin-right: -10px;
 }
 
 .carousel-inner .item img {
