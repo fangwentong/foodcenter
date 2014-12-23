@@ -19,12 +19,25 @@ class BasePage:
                 errinfo = ""
                 )
 
+class Article:
+    """新闻页面基类"""
+    def __init__(self, page_name="", page_title="", page_url="", page_id=100):
+        """
+        __init__
+        """
+        self.page = web.storage(
+                name    = page_name,
+                title   = page_title,
+                url     = setting.site.root + page_url,
+                page_id = page_id
+                )
+
 
 class StuAuth:
     """
     用于身份验证的工具类
     """
-    def __init__(self, page_name, page_title):
+    def __init__(self, page_name="", page_title=""):
         """
         __init__
         """

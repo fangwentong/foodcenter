@@ -6,7 +6,7 @@ from app import app
 import web
 
 """
-本文件专用于在服务器上部署
+此文件专用于服务器端部署
 本地直接运行同目录下的app.py
 """
 
@@ -15,8 +15,8 @@ if 'SERVER_SOFTWARE' in os.environ:
     import sae
     application = sae.create_wsgi_app(app.wsgifunc())
 else:
+    # Nginx with Fastcgi 部署
     os.environ["SCRIPT_NAME"] = ""
     os.environ["REAL_SCRIPT_NAME"] = ""
-    # Nginx + Fastcgi 部署
     web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
     app.run()

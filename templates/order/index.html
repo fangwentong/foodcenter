@@ -11,7 +11,7 @@ $:render.widgets.header(page)
 		<div class="col-md-12 page-content">
 			<!-- 友情提示模块 -->
 			<h3 class="">友情提示</h3>
-			<div class=>
+			<div class="">
 				<p class="">1.	免费生日餐仅限哈工大统招全日制在校生。</p>
 				<p class="">2.	本订餐平台只允许提前一周并且至少提前24小时预订免费生日餐。</p>
 				<p class="">3.	免费生日餐仅限中午11:00-12:30点供应。</p>
@@ -22,12 +22,23 @@ $:render.widgets.header(page)
 			</div>
 			<br>
 
-	        $if not session.logged or session.role != "student":
-	            <p class="h5 text-warning"> * 系统检测到您尚未登陆</p>
-	            <a href="/order/signin"><button class="btn btn-lg btn-primary btn-block">点击登陆</button></a>
-	        $else:
-	            <p class="h5 text-success"> * 系统检测到您已经登陆</p>
-	            <a href="/order/add"><button class="btn btn-lg btn-primary btn-block">马上订餐</button></a>
+            $if not session.logged or session.role != "student":
+                <p class="h5 text-warning"> * 系统检测到您尚未登陆</p>
+                <a href="/order/signin" class="btn btn-lg btn-primary btn-block">点击登陆</a>
+            $else:
+                <p class="h5 text-success"> * 系统检测到您已经登陆</p>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <a href="/order/info" class="btn btn-lg btn-success btn-block">
+                            我的订单
+                        </a>
+                    </div>
+                    <div class="col-xs-6">
+                        <a href="/order/add" class="btn btn-lg btn-primary btn-block">
+                            马上订餐
+                        </a>
+                    </div>
+                </div>
 		</div>
 	</div>
 </div>

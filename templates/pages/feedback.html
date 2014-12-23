@@ -7,9 +7,9 @@ $:render.widgets.header(page)
 		<h3 class="text-center text-primary">意见反馈</h3>
 		<form class="form-horizontal" role="form" action="feedback" method="post">
 			<div class="form-group">
-				<label for="username" class="col-sm-2 control-label">您的姓名</label>
+				<label for="username" class="col-sm-2 control-label">* 您的姓名</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="username" name="username" placeholder="Tony" autofocus>
+					<input type="text" class="form-control" id="username" name="username" placeholder="Tony" autofocus required>
 				</div>
 			</div>
 			<div class="form-group">
@@ -25,7 +25,7 @@ $:render.widgets.header(page)
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="feedback" class="col-sm-2 control-label">*您的建议</label>
+				<label for="feedback" class="col-sm-2 control-label">* 您的建议</label>
 				<div class="col-sm-10">
 					<textarea class="form-control" rows="5" id="feedback" name="feedback" placeholder="在这里写出您的意见或建议" required></textarea>
 				</div>
