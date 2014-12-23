@@ -15,9 +15,8 @@ if 'SERVER_SOFTWARE' in os.environ:
     import sae
     application = sae.create_wsgi_app(app.wsgifunc())
 else:
-    home = ''
-    os.environ["SCRIPT_NAME"] = home
-    os.environ["REAL_SCRIPT_NAME"] = home
+    os.environ["SCRIPT_NAME"] = ""
+    os.environ["REAL_SCRIPT_NAME"] = ""
     # Nginx + Fastcgi 部署
     web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
     app.run()
