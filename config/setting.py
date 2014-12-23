@@ -10,7 +10,7 @@ db = secret.db
 weconf = secret.webchat
 render = web.template.render('templates/', cache=False)
 
-web.config.debug = False
+web.config.debug = True
 
 site = web.storage (
         title  = U"哈工大饮食中心",
