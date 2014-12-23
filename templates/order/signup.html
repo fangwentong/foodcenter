@@ -57,7 +57,7 @@ $:render.widgets.header(page)
 			</div>
 			<div class="form-group">
 				<div class="col-sm-6 col-sm-offset-3">
-					<button type="submit" class="btn btn-lg btn-primary btn-block">提交信息</button>
+					<button type="submit" id="signup-btn" class="btn btn-lg btn-primary btn-block">提交信息</button>
 				</div>
 			</div>
 		</form>
@@ -66,3 +66,31 @@ $:render.widgets.header(page)
 
 
 $:render.widgets.footer(page)
+
+<script>
+$$(function() {
+    $$('#signup-btn').on('click', signup);
+    function signup() {
+        if($$('#student-id').val() == '') {
+            //学号为空
+            alert('请输入学号');
+            return false;
+        }
+        if($$('#student-name').val() == '') {
+            //姓名为空
+            alert('请输入姓名');
+            return false;
+        }
+        if($$('#birthday').val() == '') {
+            //生日为空
+            alert('请输入生日');
+            return false;
+        }
+        if($$('#phone').val() == '') {
+            // 手机号码为空
+            alert('请输入手机号码');
+            return false;
+        }
+    }
+});
+</script>
