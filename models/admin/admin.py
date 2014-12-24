@@ -2,7 +2,7 @@
 #coding=utf-8
 
 import web
-import hashlib
+import hashlib, json
 from config import setting
 from Auth import AdminAuth
 
@@ -103,21 +103,41 @@ class ChgPasswd(AdminAuth):
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input()   #oldp newp
-        try:
-            sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
-            result = list(db.query(sql, vars={'username' : self.session.name,
-                'password' : hashlib.new("md5", data.oldp).hexdigest()}))
+        data = web.input(req='')
+        req = data.req
 
-            if len(result) <= 0: # 旧密码输错
-                self.page.errinfo = "旧密码输入错误!"
-                return render.admin.settings(self.page, self.session)
-            else: # 更新密码
-                db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
-                        password = hashlib.new("md5", data.newp).hexdigest())
-                return render.admin.settings("setting", "设置", self.session, "密码修改成功!", "success")
-        except Exception as err:
-            return self.error(err, "settings")
+        if req == "check":
+            try:
+                sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
+                result = list(db.query(sql, vars={'username' : self.session.name,
+                    'password' : hashlib.new("md5", data.oldp).hexdigest()}))
+
+                web.header('Content-Type', 'application/json')
+                if len(result) > 0:
+                    return json.dumps({'is_valid' : '1'})
+                else:
+                    return json.dumps({'is_valid' : '0'})
+            except Exception as err:
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'errinfo' : '出现错误: ' + err})
+
+        elif req == "submit":
+            try:
+                sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
+                result = list(db.query(sql, vars={'username' : self.session.name,
+                    'password' : hashlib.new("md5", data.oldp).hexdigest()}))
+
+                web.header('Content-Type', 'application/json')
+                if len(result) <= 0: # 旧密码输错
+                    return json.dumps({'errinfo': '旧密码输入错误!'})
+                else: # 更新密码
+                    db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
+                            password = hashlib.new("md5", data.newp).hexdigest())
+                    return json.dumps({'successinfo' : '密码修改成功'})
+            except Exception as err:
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'errinfo':'出现错误: '+err})
+
 
 class DashBoard(AdminAuth):
     def __init__(self):
