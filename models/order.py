@@ -3,7 +3,7 @@
 
 from config import setting
 from base import StuAuth
-import web
+import web, json
 
 render = setting.render
 db     = setting.db
@@ -130,9 +130,30 @@ class add_order(StuAuth):
 
     @StuAuth.sessionChecker
     def POST(self):
-        #raise web.seeother("/order/info")
-        pass
+        data = web.data()
+        req  = web.input(req='').req
 
+        if req == 'canteen':
+            try:
+                sql = "SELECT cid, name FROM foodcenter_canteen WHERE location=$location"
+                result = list(db.query(sql, vars={'location' : data}))
+
+                web.header('Content-Type', 'application/json')
+                return json.dumps(result)
+            except Exception:
+                web.header('Content-Type', 'application/json')
+                return '{}'
+        elif(req == 'package'):
+            try:
+                sql = "SELECT id, name, isactive FROM foodcenter_meals WHERE canteen=$canteen"
+                result = list(db.query(sql, vars={'canteen': data}))
+                web.header('Content-Type', 'application/json')
+                return json.dumps(result)
+            except Exception:
+                web.header('Content-Type', 'application/json')
+                return '{}'
+        else:
+            raise web.Forbidden()
 
 class get_info(StuAuth):
     """

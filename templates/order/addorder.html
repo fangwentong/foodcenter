@@ -22,7 +22,7 @@ $:render.widgets.header(page)
 			<div class="form-group">
 				<label for="birthday" class="col-sm-2 control-label">* 生日</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="birthday" name="birthday" placeholder="1990-10-04" required>
+					<input type="text" class="form-control" id="birthday" name="birthday" placeholder="19890904" required>
 				</div>
 			</div>
 			<div class="form-group">
@@ -40,30 +40,33 @@ $:render.widgets.header(page)
 					</select>
 				</div>
 			</div>
+
 			<div class="form-group">
 				<label for="location" class="col-sm-2 control-label">* 选择校区</label>
 				<div class="col-sm-10">
 					<select class="form-control" id="location" name="location">
-						<option value="first" selected>一校区</option>
-						<option value="second">二校区</option>
+						<option value="" >选择校区</option>
+						<option value="1">一校区</option>
+						<option value="2">二校区</option>
+						<option value="3">土木楼</option>
+						<option value="4">科学园</option>
 					</select>
 				</div>
 			</div>
+
 			<div class="form-group">
-				<label for="canteen" class="col-sm-2 control-label">* 就餐地点</label>
+				<label for="canteen" class="col-sm-2 control-label">* 领餐地点</label>
 				<div class="col-sm-10">
 					<select class="form-control" id="canteen" name="canteen">
-						<option value="" selected>阳光餐厅</option>
-						<option value="">百味佳餐厅</option>
+						<option value="">请先选择校区</option>
 					</select>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="package" class="col-sm-2 control-label">* 生日餐选择</label>
+				<label for="package" class="col-sm-2 control-label">* 生日餐</label>
 				<div class="col-sm-10">
 					<select class="form-control" id="package" name="package">
-						<option value="" selected>蔬菜面</option>
-						<option value="">牛肉面</option>
+						<option value="">请先选择领餐地点</option>
 					</select>
 				</div>
 			</div>
@@ -75,7 +78,7 @@ $:render.widgets.header(page)
 			</div>
 			<div class="form-group">
 				<div class="col-sm-6 col-sm-offset-3">
-					<button type="submit" class="btn btn-lg btn-primary btn-block">提交订单</button>
+					<button type="submit" id="order-btn" class="btn btn-lg btn-primary btn-block">提交订单</button>
 				</div>
 			</div>
 		</form>
@@ -83,3 +86,122 @@ $:render.widgets.header(page)
 </div>
 
 $:render.widgets.footer(page)
+
+<script>
+$$(function() {
+
+	/*根据地点选择餐厅*/
+	$$('#location').change(get_canteen);
+	function get_canteen() {
+		var location = $$('#location').find(':selected').val();
+		$$.post('add?req=canteen', location,
+			function(data) {
+				var options = "<option value=''>请选择</option>";
+				console.log(data);
+				for(var i = data.length-1; i >= 0; i--) {
+					options += "<option value=" + data[i].cid + ">" + data[i].name + "</option>";
+				}
+				if(location == '') {
+					options = "<option value=''>请先选择校区</option>"
+				}
+				$$('#canteen').html(options);
+
+				option = "<option value=''>请先选择领餐地点</option>"
+				$$('#package').html(option);
+
+			});
+	}
+
+	/** 
+	 *  根据餐厅选择套餐
+	 */
+	$$('#canteen').change(get_package);
+	function get_package() {
+		var canteen = $$('#canteen').find(':selected').val();
+		$$.post('add?req=package', canteen,
+			function(data) {
+				console.log(data);
+				var options = "<option value=''>请选择</option>";
+				for(var i =  data.length-1; i >= 0; i--) {
+					if(data[i].isactive == 1) {
+						options += "<option value=" + data[i].id + ">" + data[i].name + "</option>";
+					}
+					else {
+						options += "<option value=" + data[i].id + " disabled>" + data[i].name + "</option>";
+					}
+				}
+				if(canteen == '') {
+					options = "<option value=''>请先选择领餐地点</option>"
+				}
+				$$('#package').html(options);
+				console.log(options)
+			});
+	}
+	/*表单验证*/
+	$$('#order-btn').bind('click', checkValid);
+
+	function checkValid() {
+		if($$('#student-id').val() == '') {
+			alert("请填写学号");
+			return false;
+		}
+		if($$('#student-name').val() == '') {
+			alert("请填写姓名");
+			return false;
+		}
+		if($$('#birthday').val() == '') {
+			alert("请填写生日");
+			return false;
+		}
+		if($$('#phone').val() == '') {
+			alert("请填写手机号");
+			return false;
+		}
+
+		if ($$('#sex').val() == '') {			
+			alert('请选择性别！');
+			return false;
+		}	
+		if ($$('#location').val() == '') {			
+			alert('请选择校区！');
+			return false;
+		}		
+		if($$('#canteen').val() == '') {
+			alert('请选择领餐地点!');
+			return false;
+		}
+		if($$('#package').val() == '') {
+			alert('请选择生日餐!');
+			return false;
+		}
+
+		if (!/^\d{2}\d+$/g.test($$('#student-id').val())) {
+			if ("sSbB".indexOf($$('#student-id').val().split('')[2]) === -1) {
+				alert("对不起，您不在我们的订餐人群内。");
+				return false;
+			}
+		}
+
+		var phone = $$('#phone').val().trim();
+		var phone_validate = phone.match(/(^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$)|(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/);
+		if(phone_validate==null) {
+			t_alert("请输入正确的手机号码！");
+			return false;
+		}
+
+		var birthday = $$('#birthday').val().trim();
+		var result = birthday.match(/((^((1[8-9]\d{2})|([2-9]\d{3}))(10|12|0?[13578])(3[01]|[12][0-9]|0?[1-9])$)|(^((1[8-9]\d{2})|([2-9]\d{3}))(11|0?[469])(30|[12][0-9]|0?[1-9])$)|(^((1[8-9]\d{2})|([2-9]\d{3}))(0?2)(2[0-8]|1[0-9]|0?[1-9])$)|(^([2468][048]00)(0?2)(29)$)|(^([3579][26]00)(0?2)(29)$)|(^([1][89][0][48])(0?2)(29)$)|(^([2-9][0-9][0][48])(0?2)(29)$)|(^([1][89][2468][048])(0?2)(29)$)|(^([2-9][0-9][2468][048])(0?2)(29)$)|(^([1][89][13579][26])(0?2)(29)$)|(^([2-9][0-9][13579][26])(0?2)(29)$))/);
+        if(result==null)
+        {
+
+        }
+	};
+
+	/*提交表单并处理结果*/
+	$$('#order-btn').bind('click', checkReturn);
+	function checkReturn() {
+
+	};
+
+});
+</script>

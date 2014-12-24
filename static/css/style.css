@@ -13,10 +13,31 @@ body {
 	border-top: 7px solid #5c307d;
 }
 
+/*文章主体*/
+
 article.article {
 	margin-bottom: 30px;
 	margin-top: 30px;
 }
+
+
+.page-content {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	padding-bottom: 15px;;
+}
+
+/*表单样式*/
+
+form > .form-group > div > p {
+	margin-top: 5px;
+	margin-bottom: 0;
+}
+
+
+/*list 移动设备优化*/
 
 ul.list-narrow {
 	padding: 8px 0 8px 22px;
@@ -46,6 +67,8 @@ ul.list-narrow>ul.list-unstyled {
 	color: #666;
 }
 
+
+/*footer 样式*/
 .footer section.footerExtra {
 	background-color: #f8f7f4;
 	padding: 40px 0;
@@ -164,6 +187,8 @@ ul.list-narrow>ul.list-unstyled {
 	text-decoration: none;
 }
 
+/*首页carousel*/
+
 .carousel-control .fa-chevron-left,
 .carousel-control .fa-chevron-right {
 	position: absolute;
@@ -185,18 +210,13 @@ ul.list-narrow>ul.list-unstyled {
 	height: 50%;
 }
 
+/*图片风格*/
+
 img {
 	width: 100%;
 	height: auto;
 }
 
-.page-content {
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	margin-top: 30px;
-	margin-bottom: 30px;
-	padding-bottom: 15px;;
-}
 
 /*修改container默认宽度*/
 @media (min-width:1200px){
