@@ -3,7 +3,7 @@
 
 from config import setting
 from base import BasePage
-import web
+import web, json
 
 render = setting.render
 db = setting.db
@@ -95,22 +95,25 @@ class feedback(BasePage):
     def GET(self):
         return render.pages.feedback(self.page)
     def POST(self):
-        data = web.input()
-        #print data
+        data = web.input(req = '', username = '', feedback = '')
+        req = data.req
 
-        try:
-            db.insert('foodcenter_feedbacks',
-                    name    = data.username,
-                    email   = data.email,
-                    phone   = data.phone,
-                    content = data.feedback,
-                    solved  = 0,
-                    addTime = web.SQLLiteral("NOW()")
-                    )
-            self.page.title = "反馈成功"
-            return render.pages.feedback_success(self.page)
-        except Exception as err:
-            print err
-            self.page.title   = "出错啦"
-            self.page.errinfo = err
-            return render.errinfo(self.page)
+        if req == 'submit':
+            if data.username == '':
+                return json.dumps({'errinfo' : '请输入您的姓名'})
+            if data.feedback == '':
+                return json.dumps({'errinfo' : '请输入您的反馈'})
+            try:
+                db.insert('foodcenter_feedbacks',
+                        name    = data.username,
+                        email   = data.email,
+                        phone   = data.phone,
+                        content = data.feedback,
+                        solved  = 0,
+                        addTime = web.SQLLiteral("NOW()")
+                        )
+                return json.dumps({'successinfo' : '已收到您的反馈，我们会尽快解决您的问题 ^_^'})
+            except Exception as err:
+                return json.dumps({'errinfo' : '出现错误: ' + err})
+        else:
+            return web.Forbidden()

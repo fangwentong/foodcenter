@@ -137,6 +137,8 @@ class ChgPasswd(AdminAuth):
             except Exception as err:
                 web.header('Content-Type', 'application/json')
                 return json.dumps({'errinfo':'出现错误: '+err})
+        else:
+            return web.Forbidden()
 
 
 class DashBoard(AdminAuth):
