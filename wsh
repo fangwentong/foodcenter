@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+#coding=utf-8
+
+"""
+简单微信操作命令行
+"""
+from config.setting import weconf
+import werobot.client
+import json
+Client = werobot.client.Client(weconf.appID, weconf.appsecret)
+
+menu_path = "config/menu/"
+
+options = """
+****** Menu ********
+1. Update Menu
+2. Get Menu
+3. Get Access Token
+
+********************
+"""
+
+if __name__ == "__main__":
+    while(True):
+        print options
+
+        selection = raw_input()
+
+        if selection == '1':
+            print "please input json file name"
+            filename = raw_input()
+            try:
+                fp = open(menu_path + filename)
+                menu = fp.read()
+                print menu
+                print json.loads(menu)
+                print Client.create_menu(menu)
+            except Exception as err:
+                print str(err)
+        elif selection == '2':
+            print '\n' + str(Client.get_menu())
+        elif selection == '3':
+            print '\n' + str(Client.grant_token())
+        else:
+            print "Invalid input!"

@@ -239,7 +239,7 @@ class get_help(StuAuth):
     订餐帮助
     """
     def __init__(self):
-        StuAuth.__init(self, "order", "订餐帮助 - 哈尔滨工业大学")
+        StuAuth.__init__(self, "order", "订餐帮助 - 哈工大饮食中心")
     def GET(self):
         return render.order.orderhelp(self.page)
     def POST(self):
