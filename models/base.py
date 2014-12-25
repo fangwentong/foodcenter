@@ -63,14 +63,23 @@ class StuAuth:
                     sql = "SELECT * FROM foodcenter_users WHERE weixinId = $wx_id" #验证微信账户信息
                     result = list(db.query(sql, vars={'wx_id':data.wid}))
 
-                    if len(result) >= 0:
+                    if len(result) > 0:
                         web.config._session.name   = result[0].student_name
                         web.config._session.sid    = result[0].student_id
                         web.config._session.role   = "student"
                         web.config._session.logged = True
                         web.config.session_parameters['ignore_expiry'] = True        #通过URL登陆后，Session不失效
                     else:
-                        web.config._session.wid    = data.wid
+                        if hasattr(web.config._session, "logged") and web.config._session.logged == True \
+                            and web.config._session.role == "student":
+                            sql = "SELECT * FROM foodcenter_users WHERE student_name=$name"
+                            print web.config._session.name
+                            result = list(db.query(sql, vars={'name' : web.config._session.name}))
+                            if len(result) > 0 and result[0].weixinId == "":
+                                db.update('foodcenter_users', web.db.sqlwhere({'student_name' : web.config._session.name}),
+                                        weixinId = data.wid)
+                        else:
+                            web.config._session.wid = data.wid
                     return web.seeother("")
                 except Exception as err:
                     return StuAuth.error(err)
@@ -91,7 +100,7 @@ class StuAuth:
             try:
                 #尚未登录
                 if not web.config._session.logged or web.config._session.role != "student":
-                    return web.seeother("/order/signin")
+                    return web.seeother("/order/signup")
                 #已经登录且为学生
                 else:
                     ret = func(*args, **kwargs)

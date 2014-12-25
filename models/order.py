@@ -59,6 +59,11 @@ class signup(StuAuth):
                 print self.page.errinfo
                 return render.order.signup(self.page)
 
+            weixinId = ""
+            if hasattr(self.session, 'wid'):
+                if StuAuth.isValid(self.session.wid):
+                    weixinId = self.session.wid
+                self.session.wid = ""
             try:      #验证通过， 插入新的表项
                 db.insert('foodcenter_users',
                         student_id    = user_info.sid,
@@ -67,7 +72,7 @@ class signup(StuAuth):
                         birthday      = user_info.birthday,
                         phone         = user_info.phone,
                         short_message = user_info.message,
-                        weixinId      = "",
+                        weixinId      = weixinId,
                         add_time      = web.SQLLiteral("NOW()"),
                         isLock        = 0
                         )

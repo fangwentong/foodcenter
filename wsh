@@ -17,6 +17,7 @@ options = """
 2. Get Menu
 3. Get Access Token
 
+0. Quit.
 ********************
 """
 
@@ -26,13 +27,15 @@ if __name__ == "__main__":
 
         selection = raw_input()
 
+        if selection == '0':
+            break
         if selection == '1':
-            print "please input json file name"
-            filename = raw_input()
+            # print "please input json file name"
+            # filename = raw_input()
+            filename = "menu20141225.json"
             try:
                 fp = open(menu_path + filename)
                 menu = fp.read()
-                print menu
                 print json.loads(menu)
                 print Client.create_menu(menu)
             except Exception as err:
