@@ -84,7 +84,7 @@ $$(function() {
                     alert(data.errinfo);
                 }
 
-            });
+            }, "json");
     }
 
     /*校验两次密码输入是否匹配密码是否正确*/
@@ -137,8 +137,7 @@ $$(function() {
                 if (data.errinfo) {
                     alert(data.errinfo);
                 }
-
-            });
+            }, "json");
         return false;
 
     }

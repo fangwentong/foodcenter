@@ -97,24 +97,73 @@ class signin(StuAuth):
         return render.order.signin(self.page)
 
     def POST(self):
-        info = web.input()  #sid & name
-        try:
-            sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
-            result = list(db.query(sql, vars={'sid' : info.sid, 'name' : info.name}))
+        data = web.input(req = '', sid = '', name = '')
+        req = data.req
+        print data
 
-            if len(result) <= 0:          #学生身份验证
-                self.page.errinfo = "您输入的学号和姓名不匹配，请检查后重试."
-                print self.page.errinfo
-                return render.order.signin(self.page)
-            else:
-                web.config._session.name   = result[0].student_name
-                web.config._session.sid    = result[0].student_id
-                web.config._session.role   = "student"
-                web.config._session.logged = True
-                raise web.seeother("/order/info")
+        if req == 'check':
+            print "hello"
+            if data.sid == '':
+                return "{}"
+            try:
+                sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid"
+                result = list(db.query(sql, vars={'sid' : data.sid}))
 
-        except Exception as err:
-            return self.error(err)
+                web.header('Content-Type', 'application/json')
+                if len(result) > 0:       #是已注册的学生
+                    return json.dumps({'valid' : '2'})
+                else:
+                    sql = "SELECT * FROM foodcenter_students WHERE student_id=$sid"
+                    result = list(db.query(sql, vars={'sid' : data.sid}))
+
+                    if len(result) > 0:   #是学生，但尚未注册
+                        return json.dumps({'valid' : '1'})
+                    else:
+                        return json.dumps({'valid' : '0'})
+
+            except Exception as err:
+                return json.dumps({})
+
+        elif req == 'submit':
+            if data.sid == '':
+                return json.dumps({'errinfo' : "请输入您的学号"})
+            if data.name == '':
+                return json.dumps({'errinfo' : "请输入您的姓名"})
+            try:
+                sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
+                result = list(db.query(sql, vars={'sid' : data.sid, 'name' : data.name}))
+
+                if len(result) <= 0:          #学生身份验证
+                    web.header('Content-Type', 'application/json')
+                    return json.dumps({'errinfo' : "您输入的学号和姓名不匹配，请检查后重试."})
+                else:
+                    self.session.name   = result[0].student_name
+                    self.session.sid    = result[0].student_id
+                    self.session.role   = "student"
+                    self.session.logged = True
+                    return json.dumps({'successinfo' : '登陆成功，正在跳转'})
+
+            except Exception as err:
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'errinfo' : '出现错误: ' + err})
+        else:
+            return web.Forbidden()
+
+class logout(StuAuth):
+    """
+    退出登陆
+    """
+    def __init__(self):
+        StuAuth.__init__(self,"order", "退出登陆")
+
+    @StuAuth.sessionChecker
+    def GET(self):
+        self.session.kill()
+        return web.seeother('/order')
+
+    @StuAuth.sessionChecker
+    def POST(self):
+        pass
 
 class add_order(StuAuth):
     """

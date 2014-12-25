@@ -4,13 +4,7 @@ $:render.widgets.header(page)
 
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
-		<h3 class="text-center text-primary">登陆</h3>
-
-		$if page.errinfo:
-		    <div class="alert alert-danger fade in">
-		        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
-		        <strong>$page.errinfo</strong>
-		    </div>
+		<h3 class="text-center text-primary header">登陆</h3>
 
 		<div class="form-link">
 			<p class="pull-right"><a href="/order/signup">尚未注册?</a></p>
@@ -30,7 +24,7 @@ $:render.widgets.header(page)
 			</div>
 			<div class="form-group">
 				<div class="col-sm-6 col-sm-offset-3">
-					<button type="submit" id="login-btn" class="btn btn-lg btn-primary btn-block">点击登陆</button>
+					<button id="login-btn" class="btn btn-lg btn-primary btn-block">点击登陆</button>
 				</div>
 			</div>
 		</form>
@@ -39,20 +33,60 @@ $:render.widgets.header(page)
 
 $:render.widgets.footer(page)
 <script>
-    $$(function() {
-        $$('#login-btn').on('click', login);
-        function login() {
-            if($$('#student-id').val() == '') {
-                //学号为空
-                alert("请输入学号");
-                return false;
-            }
-            if($$('#student-name').val() == '') {
-                //姓名为空
-                alert("请输入姓名");
-                return false;
-            }
+$$(function() {
+	/* $$('#student-id').bind('change', check_valid); */
+	function check_valid() {
+		var student_id = $$('#student-id').val();
+		return $$.post('signin?req=check', {"sid": student_id},
+			function(data) {
+				console.log(data);
+				console.log(data.valid);
+				if(data.valid == '0') {
+					/*学号无效*/
+					alert("您输入的学号无效!");
+					return false;
+				}
+				if(data.valid == '1') {
+					/*是学生但尚未注册*/
+					alert("您尚未注册，请先注册");
+					location.href = "signup";
+				}
+				else if(data.valid == '2') {
+					/*已注册学号*/
+					return true;
+				}
+			}, "json");
+	}
+	$$('#login-btn').bind('click', submit);
+	function submit() {
+		sid  = $$('#student-id').val();
+		name = $$('#student-name').val();
+        if(sid == '') {
+            //学号为空
+            alert("请输入学号");
+            return false;
         }
-    });
+        if(name == '') {
+            //姓名为空
+            alert("请输入姓名");
+            return false;
+        }
+        if (check_valid()) {
+        	console.log("submit");
+	        $$.post('signin?req=submit', {"sid" : sid,  "name" : name},
+	        	function(data) {
+	        		if (data.successinfo) {
+	        			/*登陆成功*/
+	        			location.href = "info";
+	        		}
+	                if (data.errinfo) {
+	                    alert(data.errinfo);
+	                }
+	                return false;
+	            }, "json");
+        }
+        return false;
+	}
+});
 </script>
 

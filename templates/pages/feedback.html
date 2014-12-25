@@ -4,7 +4,7 @@ $:render.widgets.header(page)
 
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
-		<h3 class="text-center text-primary">意见反馈</h3>
+		<h3 class="text-center text-primary header">意见反馈</h3>
 		<form class="form-horizontal" role="form" action="feedback" method="post">
 			<div class="form-group">
 				<label for="username" class="col-sm-2 control-label">* 您的姓名</label>
@@ -19,7 +19,7 @@ $:render.widgets.header(page)
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">您的手机</label>
+				<label for="phone" class="col-sm-2 control-label">您的手机</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" id="phone" name="phone" placeholder="18000000000">
 				</div>
@@ -42,21 +42,43 @@ $:render.widgets.header(page)
 $:render.widgets.footer(page)
 
 <script>
-    $$(function() {
-        //
-        $$('#feedback-btn').on('click', feedback);
-        function feedback() {
-            if($$('#username').val() == '') {
-                //昵称为空
-                alert("请输入您的姓名");
-                return false;
-            }
-            if($$('#feedback').val() == '') {
-                //反馈内容为空
-                alert("请输入您的反馈");
-                return false;
-            }
-        }
+$$(function() {
 
-    });
+    $$('#feedback-btn').bind('click', submit_data);
+
+    function submit_data() {
+    	var username = $$('#username').val();
+    	var email    = $$('#email').val();
+    	var phone    = $$('#phone').val();
+    	var feedback = $$('#feedback').val();
+    	if(username == '') {
+    		alert("请输入您的姓名");
+    		return false;
+    	}
+    	if(feedback == '') {
+    		alert("请输入您的反馈");
+    		return false;
+    	}
+    	console.log(feedback);
+
+        $$.post('feedback?req=submit',
+        	{"username" : username,
+	  		 "email"    : email,
+			 "phone"    : phone,
+			 "feedback" : feedback},
+            function(data) {
+                if (data.successinfo) {
+                    alert(data.successinfo);
+                    location.reload();
+                }
+                if (data.errinfo) {
+                    alert(data.errinfo);
+                }
+
+            }, "json");
+        return false;
+
+    }
+
+});
 </script>

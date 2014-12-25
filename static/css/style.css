@@ -20,6 +20,9 @@ article.article {
 	margin-top: 30px;
 }
 
+article .content h3.header {
+	padding-bottom: 30px;
+}
 
 .page-content {
 	border: 1px solid #ddd;

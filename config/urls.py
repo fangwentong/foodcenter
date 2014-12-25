@@ -19,6 +19,7 @@ urls = (
         r"/order",                     prefix + "order.index",
         r"/order/signup",              prefix + "order.signup",
         r"/order/signin",              prefix + "order.signin",
+        r"/order/logout",              prefix + "order.logout",
         r"/order/add",                 prefix + "order.add_order",
         r"/order/info",                prefix + "order.get_info",
         r"/order/help",                prefix + "order.get_help",
