@@ -117,3 +117,33 @@ class feedback(BasePage):
                 return json.dumps({'errinfo' : '出现错误: ' + err})
         else:
             return web.Forbidden()
+
+class GetArticle:
+    def GET(self):
+        page_id = web.input(id="").id
+
+        if page_id == "":
+            # 获取文章列表
+            return web.notfound(render.err404(web.storage(name="err404", title=U"链接不存在")))
+        else:
+            try:
+                sql = "SELECT * FROM foodcenter_articles WHERE id=$id AND is_active=$active"
+                result = list(db.query(sql, vars={'id' : page_id, 'active' : '1'}))
+
+                if len(result) <= 0:
+                    return web.notfound(render.err404(web.storage(name="err404", title=U"链接不存在")))
+                article = result[0]
+                return render.pages.article(web.storage(
+                    title = article.title,
+                    name  = "title"
+                    ), article)
+
+            except Exception as err:
+                return render.errinfo(web.storage(
+                    name = "article",
+                    title = "出错啦",
+                    errinfo = err
+                    ))
+
+    def POST(self):
+        pass

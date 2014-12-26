@@ -1,0 +1,18 @@
+$def with(page, article)
+
+$:render.widgets.header(page)
+
+<div class="content">
+	<div class="col-md-12">
+		<div class="col-md-12 page-content">
+			<h3>$page.title</h3>
+			<br>
+			$:article.content
+		</div>
+		<div class="col-md-12 comment">
+			$:render.widgets.comments(article)
+		</div>
+	</div>
+</div>
+
+$:render.widgets.footer(page)

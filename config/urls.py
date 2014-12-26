@@ -15,6 +15,7 @@ urls = (
         r"/help",                      prefix + "home.help",
         r"/canteen",                   prefix + "home.canteen",
         r"/feedback",                  prefix + "home.feedback",
+        r"/article",                   prefix + "home.GetArticle",
 
         r"/order",                     prefix + "order.index",
         r"/order/signup",              prefix + "order.signup",
