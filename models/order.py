@@ -128,7 +128,6 @@ class signin(StuAuth):
         print data
 
         if req == 'check':
-            print "hello"
             if data.sid == '':
                 return "{}"
             try:
@@ -205,13 +204,14 @@ class add_order(StuAuth):
 
     @StuAuth.sessionChecker
     def POST(self):
-        data = web.data()
-        req  = web.input(req='').req
+        data = web.input(req="")
+        req  = data.req
+        print "request = " + req
 
         if req == 'canteen':
             try:
                 sql = "SELECT cid, name FROM foodcenter_canteen WHERE location=$location"
-                result = list(db.query(sql, vars={'location' : data}))
+                result = list(db.query(sql, vars={'location' : data.location}))
 
                 web.header('Content-Type', 'application/json')
                 return json.dumps(result)
@@ -221,14 +221,108 @@ class add_order(StuAuth):
         elif(req == 'package'):
             try:
                 sql = "SELECT id, name, isactive FROM foodcenter_meals WHERE canteen=$canteen"
-                result = list(db.query(sql, vars={'canteen': data}))
+                result = list(db.query(sql, vars={'canteen': data.canteen}))
                 web.header('Content-Type', 'application/json')
                 return json.dumps(result)
             except Exception:
                 web.header('Content-Type', 'application/json')
                 return '{}'
+        elif(req == 'submit'):
+            # 验证数据有效性
+            web.header('Content-Type', 'application/json')
+            try:
+                print "before verify"
+                print data.student_id
+                print data.student_name
+                status =  self.checkMatch(data.student_id, data.student_name)
+                if status == -3:
+                    return json.dumps({'errinfo' : "抱歉，系统出现错误."})
+                elif status == -2:
+                    return json.dumps({'errinfo' : "姓名不能为空"})
+                elif status == -1:
+                    return json.dumps({'errinfo' : "学号不能为空"})
+                elif status == 0:
+                    return json.dumps({'errinfo' : "学号与姓名不匹配!"})
+                elif status == 2:
+                    return json.dumps({'errinfo' : "您的账户被锁定，请检查是否您是否有未完成的订单!"})
+                elif status == 3:
+                    return json.dumps({'errinfo' : "此账户尚未注册，请先注册", 'action':'signup'})
+                print "after verify"
+
+                db.insert('foodcenter_orders',
+                        user_id = self.getUID(),
+                        canteen_id = data.canteen,
+                        package_id = data.package,
+                        location  = data.location,
+                        description = data.message,
+                        student_name = data.student_name,
+                        student_id = data.student_id,
+                        phone = data.phone,
+                        sex = self.getSexId(data.sex),
+                        birthday = data.birthday,
+                        token = self.generateToken(),
+                        wish = data.message,
+                        addtime = web.SQLLiteral("NOW()"),
+                        active = '1'
+                        )
+                return json.dumps({'successinfo' : "添加成功!"})
+            except Exception as err:
+                return json.dumps({'errinfo' : "出现错误: " + str(err)})
+
         else:
             raise web.Forbidden()
+
+    def getSexId(self, sex):
+        """
+        根据性别名称获取性别id
+        """
+        if sex == "boy":
+            return 0
+        elif sex == "girl":
+            return 1
+        else:
+            print ("Invalid Sex!\n")
+            return -1
+
+    def checkMatch(self, sid, name):
+        if sid == '':
+            return -1
+        if name == '':
+            return -2
+        try:
+            sql = "SELECT * FROM foodcenter_students WHERE student_id=$sid AND student_name=$name"
+            result = list(db.query(sql, vars={'sid' : sid, 'name' : name}))
+
+            if len(result) > 0:       #是学生
+                sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
+                result = list(db.query(sql, vars={'sid' : sid, 'name' : name}))
+                if len(result) > 0: # 已注册
+                    if result[0].isLock == 0: # 有效
+                        return 1
+                    else:  # 账户被锁定
+                        return 2
+                else: #  没有注册
+                    return 3
+            else:
+                return 0 # 验证出错
+        except Exception as err:
+            print err
+            return -3  # 系统出现错误
+
+    def generateToken(self):
+        return "1234"
+
+    def getUID(self):
+        try:
+            sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid"
+            result = list(db.query(sql, vars={'sid' : self.session.sid}))
+            if len(result) > 0:
+                return result[0].number
+            else:
+                return self.session.sid
+        except Exception as err:
+            print err
+            return self.session.sid
 
 class get_info(StuAuth):
     """
