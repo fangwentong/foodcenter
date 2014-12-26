@@ -25,6 +25,45 @@ robot = werobot.WeRoBot(token = weconf.token, enable_session = False)
 
 # 控制逻辑
 
+############## Models ##################
+def get_package_name(package_id):
+    try:
+        sql = "SELECT * FROM foodcenter_meals WHERE id=$id"
+        result = list(db.query(sql, vars={'id' : str(package_id)}))
+        if len(result) > 0:
+            return result[0].name
+        else:
+            return "没有找到匹配的套餐"
+    except Exception as err:
+        return "出现错误: " + str(err)
+
+def get_canteen_name(canteen_id):
+    try:
+        sql = "SELECT * FROM foodcenter_canteen WHERE cid=$cid"
+        result = list(db.query(sql, vars={'cid' : canteen_id}))
+        if len(result) > 0:
+            return result[0].name
+        else:
+            return "没有找到匹配的餐厅"
+    except Exception as err:
+        return "出现错误: " + str(err)
+
+def authchecker(func):
+    """管理员权限验证"""
+    def _authchecker(message):
+        try:
+            sql = "SELECT * FROM foodcenter_cmd_admins WHERE WeixinId=$wx_id"
+            result = list(db.query(sql, vars={'wx_id' : message.source}))
+            if len(result) <= 0:
+                return basic.help_message
+            else:
+                return func(message)
+
+        except Exception as err:
+            return "出现错误: " + str(err)
+    return _authchecker
+
+########################################
 ########### 订阅 / 退订事件 ####################
 @robot.subscribe
 def say_hello(message):
@@ -97,13 +136,9 @@ def get_news(message):
 #################### 文本消息处理 ######################
 
 @robot.filter("所有订单")
+@authchecker
 def get_all_order(message):
     try:
-        sql = "SELECT * FROM foodcenter_cmd_admins WHERE WeixinId=$wx_id"
-        result = list(db.query(sql, vars={'wx_id' : message.source}))
-        if len(result) <= 0:
-            return basic.help_message
-
         TODAY = time.strftime('%Y-%m-%d')
         sql = "SELECT * FROM foodcenter_orders WHERE birthday=$birthday AND active=$active"
         result = list(db.query(sql, vars={'birthday' : TODAY, 'active' : '1'}))
@@ -119,37 +154,17 @@ def get_all_order(message):
     except Exception as err:
         return str(err)
 
+@robot.filter("管理")
+@authchecker
+def get_admin_entrance(message):
+    return setting.site.root + "/admin"
+
 
 # 默认Handler
 @robot.handler
 def reply_others(message):
     return basic.help_message
 
-############## Models ##################
-def get_package_name(package_id):
-    try:
-        sql = "SELECT * FROM foodcenter_meals WHERE id=$id"
-        result = list(db.query(sql, vars={'id' : str(package_id)}))
-        if len(result) > 0:
-            return result[0].name
-        else:
-            return "没有找到匹配的套餐"
-    except Exception as err:
-        return "出现错误: " + str(err)
-
-def get_canteen_name(canteen_id):
-    try:
-        sql = "SELECT * FROM foodcenter_canteen WHERE cid=$cid"
-        result = list(db.query(sql, vars={'cid' : canteen_id}))
-        if len(result) > 0:
-            return result[0].name
-        else:
-            return "没有找到匹配的餐厅"
-    except Exception as err:
-        return "出现错误: " + str(err)
-
-
-########################################
 
 if __name__ == '__main__':
     if 'SERVER_SOFTWARE' in os.environ:

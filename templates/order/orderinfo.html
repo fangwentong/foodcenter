@@ -8,12 +8,21 @@ $:render.widgets.header(page)
 </div>
 
 <div class="content">
-	<div class="page-img">
-		<img src="$image_url/order/background.jpg">
-	</div>
 	<div class="col-md-12">
-		<div class="col-md-12 page-content">
-			<img src="$image_url/order/background.jpg">
+		<div class="col-md-12 stu-info">
+			<p class="h5"><span class="text-primary">$data.user.student_name</span> , 您的订单如下:</p>
+		</div>
+		<div class="col-md-12 order-list">
+			$for order in data.orders:
+				<div class="order-item">
+					<li class="">使用人姓名 : $order.student_name</li>
+					<li class="">使用人学号 : $order.student_id</li>
+					<li class=""> 领取时间 : $order.birthday 11:00-12:30</li>
+					<li class=""> 领取地点 : $order.canteen</li>
+				</div>
+		</div>
+		<div class="col-md-12">
+			<p class="h5 text-info">* 请注意时间，按时领取.</p>
 		</div>
 	</div>
 </div>

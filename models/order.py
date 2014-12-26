@@ -8,6 +8,27 @@ import web, json
 render = setting.render
 db     = setting.db
 
+def get_package_name(package_id):
+    try:
+        sql = "SELECT * FROM foodcenter_meals WHERE id=$id"
+        result = list(db.query(sql, vars={'id' : str(package_id)}))
+        if len(result) > 0:
+            return result[0].name
+        else:
+            return "没有找到匹配的套餐"
+    except Exception as err:
+        return "出现错误: " + str(err)
+
+def get_canteen_name(canteen_id):
+    try:
+        sql = "SELECT * FROM foodcenter_canteen WHERE cid=$cid"
+        result = list(db.query(sql, vars={'cid' : canteen_id}))
+        if len(result) > 0:
+            return result[0].name
+        else:
+            return "没有找到匹配的餐厅"
+    except Exception as err:
+        return "出现错误: " + str(err)
 
 class index(StuAuth):
     """
@@ -224,13 +245,16 @@ class get_info(StuAuth):
             sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
             stu_info   = list(db.query(sql, vars={'sid' : self.session.sid, 'name' : self.session.name}))
             # 获取订单信息
-            sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active=1"
+            sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active='1'"
             order_info = list(db.query(sql, vars={'sid' : self.session.sid}))
 
+            for order in order_info:
+                order.canteen = get_canteen_name(str(order.canteen_id))
             data = web.storage (
                     user  = stu_info[0],
-                    order = order_info
+                    orders = order_info
                     )
+            print "hello"
             return render.order.orderinfo(self.page, data)
         except Exception as err:
             return self.error(err)
