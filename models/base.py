@@ -68,7 +68,6 @@ class StuAuth:
                         web.config._session.sid    = result[0].student_id
                         web.config._session.role   = "student"
                         web.config._session.logged = True
-                        web.config.session_parameters['ignore_expiry'] = True        #通过URL登陆后，Session不失效
                     else:
                         if hasattr(web.config._session, "logged") and web.config._session.logged == True \
                             and web.config._session.role == "student":

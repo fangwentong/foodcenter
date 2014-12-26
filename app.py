@@ -26,10 +26,6 @@ app.notfound = models.home.notfound
 # Session
 if web.config.get('_session') is None:
     web.config.session_parameters['cookie_name'] = 'foodcenter_sid'
-    web.config.session_parameters['cookie_domain'] = None
-    web.config.session_parameters['timeout'] = 10800
-    web.config.session_parameters['ignore_expiry'] = False
-    web.config.session_parameters['ignore_change_ip'] = True
     web.config.session_parameters['secret_key'] = 'Jfadfsajk139wagistviwt2'
     store = web.session.DBStore(db, 'foodcenter_sessions')
     web.config._session = models.iweb.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
