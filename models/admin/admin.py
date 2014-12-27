@@ -258,19 +258,45 @@ class Users(AdminAuth):
 
     @AdminAuth.sessionChecker
     def POST(self):
-        pass
+        data = web.input(req='')
+        req = data.req
 
-class AddUser(AdminAuth):
-    def __init__(self):
-        AdminAuth.__init__(self, "users", "添加用户")
+        if req == "check":
+            try:
+                sql = "SELECT * FROM foodcenter_admins WHERE username=$username"
+                result = list(db.query(sql, vars={'username' : data.username}))
 
-    @AdminAuth.sessionChecker
-    def GET(self):
-        return render.admin.users(self.page, self.session)
+                web.header('Content-Type', 'application/json')
+                if len(result) <= 0:
+                    return json.dumps({'is_valid' : '1'})
+                else:
+                    return json.dumps({'is_valid' : '0'})
+            except Exception as err:
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'errinfo' : '出现错误: ' + str(err)})
 
-    @AdminAuth.sessionChecker
-    def POST(self):
-        pass
+        elif req == "submit":
+            try:
+                sql = "SELECT * FROM foodcenter_admins WHERE username=$username"
+                result = list(db.query(sql, vars={'username' : data.username}))
+
+                web.header('Content-Type', 'application/json')
+                if len(result) > 0: # 用户名已被占用
+                    return json.dumps({'errinfo': '用户名已被占用!'})
+                else: # 更新密码
+                    db.insert('foodcenter_admins',
+                            username = data.username,
+                            password = hashlib.new("md5", data.newp).hexdigest(),
+                            role  = data.role,
+                            nickname = "",
+                            email = "",
+                            )
+                    return json.dumps({'successinfo' : '成功添加用户'})
+            except Exception as err:
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'errinfo':'出现错误: '+ str(err)})
+        else:
+            return web.Forbidden()
 
 class ToolsList(AdminAuth):
     def __init__(self):

@@ -45,11 +45,148 @@ $:render.admin.header(page, session)
 				</table>
 			</div>
 		</div>
-		<div class="add-user">
-			
+		<div class="add-user" style="padding-top:30px;">
+			<div class="col-sm-4 col-sm-offset-4">
+				<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal">
+				添加新用户
+				</button>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			        <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+			      </div>
+			      <div class="modal-body">
+
+
+					<form class="form-horizontal" role="form" method="post">
+					    <div class="form-group">
+					        <label for="username" class="col-sm-offset-2 col-sm-2 control-label">用户名</label>
+					        <div class="col-sm-4 ">
+					            <input id="username" class="form-control" type="text" name="username" placeholer="用户名" autofocus required>
+					        </div>
+					        <div class="col-sm-4">
+					            <p id="username-alert" class="text-danger">
+					             </p>
+					        </div>
+					    </div>
+					    <div class="form-group">
+					        <label for="newp" class="col-sm-offset-2 col-sm-2 control-label">密码</label>
+					        <div class="col-sm-4">
+					            <input id="newp" class="form-control" type="password" name="newp" placeholer="请输入密码" required>
+					        </div>
+					        <div class="col-sm-4">
+					            <p id="newp1-alert" class="text-danger" >
+					                </p>
+					        </div>
+					    </div>
+					    <div class="form-group">
+					        <label for="newp2" class="col-sm-offset-2 col-sm-2 control-label">确认密码</label>
+					        <div class="col-sm-4">
+					            <input id="newp2" class="form-control" type="password" name="newp2" placeholer="请确认密码" required>
+					        </div>
+					        <div class="col-sm-4">
+					            <p id="newp2-alert" class="text-danger">
+					            </p>
+					        </div>
+					    </div>
+					</form>
+
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        <button type="button" id="setting-btn" class="btn btn-primary">添加用户</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>	
 		</div>
 	</div>
 </div>
 
 
 $:render.admin.footer(page)
+
+<script>
+$$(function() {
+    /* 判断旧密码是否正确*/
+    $$('#username').change(check_exist);
+    function check_exist() {
+        var username = $$('#username').val();
+        $$.post('users?req=check', {"username" : username},
+            function(data) {
+                if(data.is_valid == '1') {
+                    $$('#username-alert').attr("class","text-success");
+                    $$('#username-alert').html('<i class="fa fa-fw fa-check"></i> 合法的用户名');
+                }
+                else {
+                    $$('#username-alert').attr("class", "text-danger");
+                    $$('#username-alert').html('<i class="fa fa-fw fa-close"></i> 此用户名已被占用')
+                }
+                if(data.errinfo) {
+                    alert(data.errinfo);
+                }
+
+            }, "json");
+    }
+
+    /*校验两次密码输入是否匹配密码是否正确*/
+    $$('#newp').bind("keyup", check_same);
+    $$('#newp2').bind("keyup", check_same);
+    function check_same() {
+        var newp = $$('#newp').val();
+        var newp2 = $$('#newp2').val();
+        if(newp == '' || newp2 == '') {
+            return false;
+        }
+
+        if(newp == newp2) {
+            $$('#newp2-alert').attr("class","text-success");
+            $$('#newp2-alert').html('<i class="fa fa-fw fa-check"></i> 校验通过');
+        }
+        else {
+            $$('#newp2-alert').attr("class", "text-danger");
+            $$('#newp2-alert').html('<i class="fa fa-fw fa-close"></i> 密码输入不一致')
+        }
+    }
+
+    $$('#setting-btn').bind('click', submit_data);
+    function submit_data() {
+        var username = $$('#username').val();
+        var newp = $$('#newp').val();
+        var newp2 = $$('#newp2').val();
+        if(username == '') {
+            //
+            alert("请输入用户名.");
+            return false;
+        }
+        if(newp == '' || newp2 == '') {
+            //
+            alert("请输入密码.");
+            return false;
+        }
+        if(newp != newp2) {
+            //
+            alert("密码输入不一致!");
+            return false;
+        }
+
+        $$.post('users?req=submit', {"username" : username, "newp" : newp, "role" : '3'},
+            function(data) {
+                if (data.successinfo) {
+                    alert(data.successinfo);
+                    location.reload();
+                }
+                if (data.errinfo) {
+                    alert(data.errinfo);
+                }
+            }, "json");
+        return false;
+    }
+})
+</script>
+
