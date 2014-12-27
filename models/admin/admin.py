@@ -81,16 +81,39 @@ class GetProfile(AdminAuth):
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input() #nickname email ..
-        try:
-            db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
-                    nickname = data.nickname, email = data.email)
+        data = web.input(req='')
+        req = data.req
 
-            self.page.successinfo = "个人资料更新成功"
-            return render.admin.profiles(self.page, self.session)
-        except Exception as err:
-            self.page.errinfo = "出现以下错误:\n"+err
-            return render.admin.profiles(self.page, self.session)
+        if req == "email":
+            try:
+                sql = "SELECT * FROM foodcenter_admins WHERE username=$username"
+                result = list(db.query(sql, vars={'username' : self.session.name}))
+
+                web.header('Content-Type', 'application/json')
+                if len(result) > 0:
+                    return json.dumps({'email' : result[0].email})
+                else:
+                    return json.dumps({'errinfo' : '没有找到匹配的用户'})
+            except Exception as err:
+                web.header('Content-Type', 'application/json')
+                return json.dumps({'errinfo' : '出现错误: ' + str(err)})
+
+        elif req == "submit":
+            web.header('Content-Type', 'application/json')
+            try:
+                if data.nickname == "":
+                    return json.dumps({"errinfo", "请输入昵称"})
+                if data.email == "email":
+                    return json.dumps({'errinfo', "请输入邮箱"})
+                db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
+                        nickname = data.nickname, email = data.email)
+
+                self.session.nickname = data.nickname
+                return json.dumps({'successinfo': "个人资料更新成功"})
+            except Exception as err:
+                return json.dumps({'errinfo' : "出现错误: " + str(err)})
+        else:
+            return web.Forbidden()
 
 
 class ChgPasswd(AdminAuth):
@@ -119,7 +142,7 @@ class ChgPasswd(AdminAuth):
                     return json.dumps({'is_valid' : '0'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo' : '出现错误: ' + err})
+                return json.dumps({'errinfo' : '出现错误: ' + str(err)})
 
         elif req == "submit":
             try:
@@ -136,7 +159,7 @@ class ChgPasswd(AdminAuth):
                     return json.dumps({'successinfo' : '密码修改成功'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo':'出现错误: '+err})
+                return json.dumps({'errinfo':'出现错误: '+ str(err)})
         else:
             return web.Forbidden()
 

@@ -339,6 +339,8 @@ class get_info(StuAuth):
             sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
             stu_info   = list(db.query(sql, vars={'sid' : self.session.sid, 'name' : self.session.name}))
             # 获取订单信息
+            if len(stu_info) <= 0:
+                return self.error("没有找到您的信息")
             sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active='1'"
             order_info = list(db.query(sql, vars={'sid' : self.session.sid}))
 
