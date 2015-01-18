@@ -4,14 +4,19 @@
 import web
 import os
 import time
-import secret
 
-db = secret.db
-weconf = secret.webchat
+try:
+    import secret.db as db
+    import secret.webchat as weconf
+except ImportError:
+    import secret_sample.db as db
+    import secret_sample.webchat as weconf
+
 render = web.template.render('templates/', cache=False)
 
 web.config.debug = True
 
+# 站点信息
 site = web.storage (
         title  = U"哈工大饮食中心",
         brand  = U"哈工大饮食中心",
@@ -31,12 +36,13 @@ site = web.storage (
         author = web.storage (
             name     = "fangwentong",
             email    = "fangwentong2012@gmail.com",
-            home     = "http://www.fangwentong.com",
+            home     = "http://wentong.me",
             org      = "Pureweber",
             org_site = "http://www.pureweber.com",
             ),
         )
 
+# 后台管理系统配置
 admin = web.storage (
         title = U"Food",
         tagline = U"Center",

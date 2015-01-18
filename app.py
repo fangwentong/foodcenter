@@ -5,8 +5,7 @@ import web
 import sys, os
 import models.iweb
 
-from config.urls import urls
-from config.setting import db
+from config import urls, db
 import models.home
 
 default_encoding = 'utf-8'

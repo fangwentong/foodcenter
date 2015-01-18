@@ -15,12 +15,12 @@ if 'SERVER_SOFTWARE' in os.environ:
             )
 else:
     db = web.database (
-           host = HOST_ADRESS,
-           port = PORT,
+           host = "127.0.0.1",
+           port = 3307,
            dbn  = 'mysql',
-           db   = DB_NAME,
-           user = USER_NAME,
-           pw   = PASSWORD
+           db   = 'fd',
+           user = 'root',
+           pw   = 'root'
     )
 
 webchat = web.storage (

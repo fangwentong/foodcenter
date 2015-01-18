@@ -1,0 +1,4 @@
+#!/bin/sh
+
+find . -name "*.pyc" | xargs rm -f
+rm index.wsgic
