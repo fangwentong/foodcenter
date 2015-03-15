@@ -16,8 +16,8 @@ class JinjaRender:
         from jinja2 import Environment,FileSystemLoader
         self._lookup = Environment(loader=FileSystemLoader(*a, **kwargs), extensions=extensions)
         self._lookup.globals.update(globals)
-        self.path = ""
         self.dirname = a[0]
+        self.path = ""
 
     def __getattr__(self, name):
         # Assuming all templates end with .html
@@ -27,6 +27,7 @@ class JinjaRender:
         else:
             self.path = name + '.html'
             t = self._lookup.get_template(self.path)
+            self.path = ""  # Rest
             return t.render
 
 class Storage(dict):
