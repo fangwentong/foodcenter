@@ -12,7 +12,9 @@ except ImportError:
 db = secret.db
 weconf =secret.webchat
 
-render = web.template.render('templates/', cache=False)
+from utils import JinjaRender
+render = JinjaRender('templates', encoding='utf-8')
+# render = web.template.render('templates', cache=False)
 
 web.config.debug = True
 
@@ -55,6 +57,13 @@ if 'SERVER_SOFTWARE' in os.environ:
 else:
     asset_path = "/static"
     image_url = "/static/image"
+
+render._lookup.globals.update(
+    site = site,
+    admin = admin,
+    asset_path = asset_path,
+    image_url = image_url
+)
 
 web.template.Template.globals['site'] = site
 web.template.Template.globals['admin'] = admin

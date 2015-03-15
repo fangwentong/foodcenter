@@ -29,5 +29,5 @@ urls = (
 
         r"/we/WeixinInterface",        prefix + "webchat.WeixinHandler",
 
-        r"/test",                      prefix + "home.test",
+        r"/test",                      prefix + "home.test"
         )

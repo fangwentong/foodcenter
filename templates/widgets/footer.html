@@ -1,101 +1,80 @@
-$def with(page)
+<footer class="footer">
+	<!-- 回到顶部按钮 -->
+	<div id="back-top">
+		<a href="#topLine" title="回到顶部"></a>
+	</div>
 
-			</div>
-		</article>
-		<footer class="footer">
-			<!-- 回到顶部按钮 -->
-			<div id="back-top">
-				<a href="#topLine" title="回到顶部"></a>
-			</div>
+	<!-- footerExtra -->
+	{% block footerExtra %}
+	{% endblock footerExtra %}
 
-                        <!-- if page.name == 'home': -->
-                            <!-- 常用链接 -->
-                            <section class="footerExtra">
-                                <div class="container">
-                                    <ul class="link clearfix">
-                                        <li class="commlink">
-                                            <h2>常用链接</h2>
-                                            <ul class="clearfix">
-                                                <li><a href="http://www.hit.edu.cn" target="_blank">哈工大首页 <i class="fa fa-angle-right fa-fw"></i></a></li>
-                                                <li><a href="http://today.hit.edu.cn" target="_blank">今日哈工大 <i class="fa fa-angle-right fa-fw"></i></a></li>
-                                                <li><a href="http://jwc.hit.edu.cn" target="_blank">教务处 <i class="fa fa-angle-right fa-fw"></i></a></li>
-                                                <li><a href="http://www.lib.hit.edu.cn" target="_blank">图书馆 <i class="fa fa-angle-right fa-fw"></i></a></li>
-                                                <li><a href="http://hqjt.hit.edu.cn" target="_blank">后勤集团 <i class="fa fa-angle-right fa-fw"></i></a></li>
-                                                <li><a href="/" target="_blank">饮食中心 <i class="fa fa-angle-right fa-fw"></i></a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </section>
+	<!-- 尾部链接 -->
+	<section class="footer-links">
+		<div class="container">
+			<ul class="clearfix list-unstyled">
+				<li class="col-sm-2 col-xs-4">
+					<h4><a href="/">中心首页</a></h4>
+					<a href="#">近期活动</a>
+					<!-- <a href="/news">近期活动</a> -->
+					<a href="/about">关于我们</a>
+				</li>
+				<li class="col-sm-2 col-xs-4">
+					<h4><a href="/canteen">餐厅特色</a></h4>
+					<a href="/canteen#xueshi">学士楼</a>
+					<!-- <a href="/canteen#">学子楼</a> -->
+					<a href="/canteen#xueyuan">学苑楼</a>
+					<!-- <a href="/canteen#">土木楼</a> -->
+					<!-- <a href="/canteen#">科学园</a> -->
+					<a href="/canteen#second">二校区</a>
+				</li>
+				<li class="col-sm-2 col-xs-4">
+					<h4><a href="/contact">联系我们</a></h4>
+					<a href="/contact#first">一校区</a>
+					<a href="/contact#second">二校区</a>
+				</li>
+				<li class="col-sm-2 col-xs-4">
+					<h4><a href="/help">常见问题</a></h4>
+					<a href="/help#rehandler-card">补办饭卡</a>
+					<a href="/help#open-time">餐厅供餐时间</a>
+				</li>
+				<li class="col-sm-2 col-xs-4">
+					<h4><a href="/order">生日订餐</a></h4>
+					<a href="/order/signup">注册</a>
+					<a href="/order/add">添加订单</a>
+					<a href="/order/info">订单信息</a>
+				</li>
+				<li class="col-sm-2 col-xs-4">
+					<h4><a href="/feedback">意见反馈</a></h4>
+				</li>
+			</ul>
+		</div>
+	</section>
 
-			<!-- 尾部链接 -->
-			<section class="footer-links">
-				<div class="container">
-					<ul class="clearfix list-unstyled">
-						<li class="col-sm-2 col-xs-4">
-							<h4><a href="/">中心首页</a></h4>
-							<a href="#">近期活动</a>
-							<!-- <a href="/news">近期活动</a> -->
-							<a href="/about">关于我们</a>
-						</li>
-						<li class="col-sm-2 col-xs-4">
-							<h4><a href="/canteen">餐厅特色</a></h4>
-							<a href="/canteen#xueshi">学士楼</a>
-							<!-- <a href="/canteen#">学子楼</a> -->
-							<a href="/canteen#xueyuan">学苑楼</a>
-							<!-- <a href="/canteen#">土木楼</a> -->
-							<!-- <a href="/canteen#">科学园</a> -->
-							<a href="/canteen#second">二校区</a>
-						</li>
-						<li class="col-sm-2 col-xs-4">
-							<h4><a href="/contact">联系我们</a></h4>
-							<a href="/contact#first">一校区</a>
-							<a href="/contact#second">二校区</a>
-						</li>
-						<li class="col-sm-2 col-xs-4">
-							<h4><a href="/help">常见问题</a></h4>
-							<a href="/help#rehandler-card">补办饭卡</a>
-							<a href="/help#open-time">餐厅供餐时间</a>
-						</li>
-						<li class="col-sm-2 col-xs-4">
-							<h4><a href="/order">生日订餐</a></h4>
-							<a href="/order/signup">注册</a>
-							<a href="/order/add">添加订单</a>
-							<a href="/order/info">订单信息</a>
-						</li>
-						<li class="col-sm-2 col-xs-4">
-							<h4><a href="/feedback">意见反馈</a></h4>
-						</li>
-					</ul>
+	<!-- 版权声明 -->
+	<section class="copyrights">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<p class="text-center">饮食中心邮箱: yinshi@hit.edu.cn</p>
 				</div>
-			</section>
-
-			<!-- 版权声明 -->
-			<section class="copyrights">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-4">
-							<p class="text-center">饮食中心邮箱: yinshi@hit.edu.cn</p>
-						</div>
-						<div class="col-md-4">
-							<p class="text-center">服务监督电话: 86403090</p>
-						</div>
-						<div class="col-md-4">
-							<p class="text-center">地址: 哈尔滨市南岗区西大直街92号</p>
-						</div>
-						<div class="col-md-12 copy">
-							<p class="text-center">&copy; $site.date.year $site.owner.name</p>
-							<p class="text-center">Powered by <a href="$site.author.org_site" target="_blank">$site.author.org</a></p>
-						</div>
-					</div>
+				<div class="col-md-4">
+					<p class="text-center">服务监督电话: 86403090</p>
 				</div>
-			</section>
-		</footer>
+				<div class="col-md-4">
+					<p class="text-center">地址: 哈尔滨市南岗区西大直街92号</p>
+				</div>
+				<div class="col-md-12 copy">
+					<p class="text-center">&copy; {{site.date.year }} {{ site.owner.name }}</p>
+					<p class="text-center">Powered by <a href="{{ site.author.org_site }}" target="_blank">{{ site.author.org }}</a></p>
+				</div>
+			</div>
+		</div>
+	</section>
+</footer>
 
-		<script src="$asset_path/js/jquery.min.js"></script>
-		<script src="$asset_path/js/bootstrap.min.js"></script>
-		<script src="$asset_path/js/style.js"></script>
-		<!-- Baidu Analytics -->
-		$:render.widgets.analytics()
-	</body>
-</html>
+<script src="{{ asset_path }}/js/jquery.min.js"></script>
+<script src="{{ asset_path }}/js/bootstrap.min.js"></script>
+<script src="{{ asset_path }}/js/style.js"></script>
+
+<!-- Baidu Analytics -->
+{% include render.widgets.analytics() %}

@@ -26,7 +26,7 @@ class index(BasePage):
     def __init__(self):
         BasePage.__init__(self, "home", U"哈工大饮食中心")
     def GET(self):
-        return render.index(self.page)
+        return render.widgets.index(page = self.page)
     def POST(self):
         pass
 
