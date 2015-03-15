@@ -3,12 +3,8 @@
 
 import web
 import hashlib, json
-from config import setting
+from config import render, db
 from Auth import AdminAuth
-
-render = setting.render
-db = setting.db
-
 
 class Index(AdminAuth):
     def __init__(self):

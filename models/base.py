@@ -2,10 +2,7 @@
 #coding=utf-8
 
 import web
-from config import setting
-
-db     = setting.db
-render = setting.render
+from config import db, render, site
 
 class BasePage:
     """网站页面基类"""
@@ -28,7 +25,7 @@ class Article:
         self.page = web.storage(
                 name    = page_name,
                 title   = page_title,
-                url     = setting.site.root + page_url,
+                url     = site.root + page_url,
                 page_id = page_id
                 )
 

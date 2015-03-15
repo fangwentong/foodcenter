@@ -6,11 +6,11 @@ import os
 import time
 
 try:
-    import secret.db as db
-    import secret.webchat as weconf
+    import secret
 except ImportError:
-    import secret_sample.db as db
-    import secret_sample.webchat as weconf
+    import secret_sample as secret
+db = secret.db
+weconf =secret.webchat
 
 render = web.template.render('templates/', cache=False)
 

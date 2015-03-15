@@ -5,7 +5,7 @@ import web
 import sys, os
 import models.iweb
 
-from config import urls, db
+from config import db, urls
 import models.home
 
 default_encoding = 'utf-8'
@@ -25,7 +25,6 @@ app.notfound = models.home.notfound
 # Session
 if web.config.get('_session') is None:
     web.config.session_parameters['cookie_name'] = 'foodcenter_sid'
-    web.config.session_parameters['secret_key'] = 'Jfadfsajk139wagistviwt2'
     store = web.session.DBStore(db, 'foodcenter_sessions')
     web.config._session = models.iweb.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
 

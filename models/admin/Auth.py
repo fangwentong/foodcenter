@@ -2,10 +2,7 @@
 #coding=utf-8
 
 import web
-from config import setting
-
-db     = setting.db
-render = setting.render
+from config import render
 
 class AdminAuth:
     """
