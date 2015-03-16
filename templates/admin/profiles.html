@@ -1,7 +1,6 @@
-$def with(page, session)
+{% extends 'admin/admin.html' %}
 
-$:render.admin.header(page, session)
-
+{% block section %}
 <div class="row">
 	<ol class="breadcrumb">
 		<li><a href="/admin"><span class="fa fa-home"></span></a></li>
@@ -21,7 +20,7 @@ $:render.admin.header(page, session)
             <div class="form-group">
                 <label for="username" class="col-sm-offset-2 col-sm-2 control-label">用户名</label>
                 <div class="col-sm-4 ">
-                    <input id="username" class="form-control" type="text" name="username" placeholer="" value="$session.name" disabled>
+                  <input id="username" class="form-control" type="text" name="username" placeholer="" value="{{ session.name }}" disabled>
                 </div>
                 <div class="col-sm-4">
                     <p id="username-alert" class="text-danger">
@@ -31,7 +30,7 @@ $:render.admin.header(page, session)
             <div class="form-group">
                 <label for="nickname" class="col-sm-offset-2 col-sm-2 control-label">昵称</label>
                 <div class="col-sm-4">
-                    <input id="nickname" class="form-control" type="text" name="nickname" placeholer="" value="$session.nickname" required>
+                  <input id="nickname" class="form-control" type="text" name="nickname" placeholer="" value="{{ session.nickname }}" required>
                 </div>
                 <div class="col-sm-4">
                     <p id="nickname-alert" class="text-danger" >
@@ -60,32 +59,32 @@ $:render.admin.header(page, session)
         </form>
     </div>
 </div>
+{% endblock section %}
 
-$:render.admin.footer(page)
-
-
+{% block content %}
+{{ super() }}
 <script>
-$$(function() {
+$(function() {
     /*获取邮箱*/
-    $$.post('profile?req=email', {"username" : $$('#username').val()},
+    $.post('profile?req=email', {"username" : $('#username').val()},
     	function(data){
     		if(data.errinfo) {
     			console.log(data.errinfo);
     		}
     		if(data.email) {
-    			$$('#email').attr("value", data.email);
+    			$('#email').attr("value", data.email);
     		}
 
     	}, "json");
 
 
-    $$('#setting-btn').bind('click', submit_data);
+    $('#setting-btn').bind('click', submit_data);
     function submit_data() {
-        var username = $$('#username').val();
-        var nickname = $$('#nickname').val();
-        var email = $$('#email').val();
+        var username = $('#username').val();
+        var nickname = $('#nickname').val();
+        var email = $('#email').val();
 
-        $$.post('profile?req=submit', {"nickname" : nickname, "email" : email},
+        $.post('profile?req=submit', {"nickname" : nickname, "email" : email},
             function(data) {
                 if (data.successinfo) {
                     alert(data.successinfo);
@@ -99,4 +98,5 @@ $$(function() {
     }
 })
 </script>
+{% endblock content %}
 

@@ -112,7 +112,7 @@ class StuAuth:
         返回错误页面
         """
         print msg
-        return render.errinfo(web.storage(
+        return render.errinfo(page = web.storage(
                 name    = page_name,
                 title   = page_title,
                 errinfo = msg

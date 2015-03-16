@@ -24,7 +24,7 @@ class LogIn(AdminAuth):
 
     # 切莫添加sessionChecker, 否则包含循环重定向
     def GET(self):
-        return render.admin.login(self.page)
+        return render.admin.login(page = self.page)
 
     def POST(self):
         data = web.input(remeber="")   #username password remeber
@@ -37,7 +37,7 @@ class LogIn(AdminAuth):
             if len(result) <= 0:    #身份验证失败
                 self.page.errinfo = "您输入的用户名和密码不匹配，请检查后重试."
                 print self.page.errinfo
-                return render.admin.login(self.page)
+                return render.admin.login(page = self.page)
             else:
                 self.session.name     = result[0].username
                 self.session.nickname = result[0].nickname
@@ -50,7 +50,7 @@ class LogIn(AdminAuth):
         except Exception as err:
             self.page.title   = "出错啦!"
             self.page.errinfo  = err
-            return render.errinfo(self.page)
+            return render.errinfo(page = self.page)
 
 
 class LogOut(AdminAuth):
@@ -73,7 +73,7 @@ class GetProfile(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.profiles(self.page, self.session)
+        return render.admin.profiles(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -118,7 +118,7 @@ class ChgPasswd(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.settings(self.page, self.session)
+        return render.admin.settings(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -166,7 +166,7 @@ class DashBoard(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.dashboard(self.page, self.session)
+        return render.admin.dashboard(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -178,7 +178,7 @@ class Orderings(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.orderings(self.page, self.session)
+        return render.admin.orderings(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -190,7 +190,7 @@ class ArticleManagement(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.articles(self.page, self.session)
+        return render.admin.articles(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -214,7 +214,7 @@ class GetMeals(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.meals(self.page, self.session)
+        return render.admin.meals(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -226,7 +226,7 @@ class AddMeal(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.meals(self.page, self.session)
+        return render.admin.meals(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -238,7 +238,7 @@ class Feedback(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.feedback(self.page, self.session)
+        return render.admin.feedback(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -250,7 +250,7 @@ class Users(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.users(self.page, self.session)
+        return render.admin.users(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -299,7 +299,7 @@ class ToolsList(AdminAuth):
         AdminAuth.__init__(self, "tools", "小工具")
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.tools(self.page, self.session)
+        return render.admin.tools(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -311,7 +311,7 @@ class DrawPrize(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.drawprize(self.page, self.session)
+        return render.admin.drawprize(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST():
@@ -323,7 +323,7 @@ class AddOrder(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.addordering(self.page, self.session)
+        return render.admin.addordering(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST():
@@ -335,7 +335,7 @@ class SearchOrder(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.searchordering(self.page, self.session)
+        return render.admin.searchordering(page = self.page, session = self.session)
 
     @AdminAuth.sessionChecker
     def POST():

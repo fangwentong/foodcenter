@@ -1,13 +1,9 @@
-$def with(page)
-		</article>
-		<footer class="footer">
-			<div></div>
-		</footer>
+<footer class="footer">
+  <div></div>
+</footer>
 
-		<script src="$asset_path/js/jquery.min.js"></script>
-		<script src="$asset_path/js/bootstrap.min.js"></script>
-		<script src="$asset_path/js/admin.js"></script>
-		<!-- Baidu Analytics -->
-		$:render.widgets.analytics()
-	</body>
-</html>
+<script src="{{ asset_path }}/js/jquery.min.js"></script>
+<script src="{{ asset_path }}/js/bootstrap.min.js"></script>
+<script src="{{ asset_path }}/js/admin.js"></script>
+<!-- Baidu Analytics -->
+{% include 'widgets/analytics.html' with context %}

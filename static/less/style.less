@@ -60,27 +60,18 @@ form > .form-group > div > p {
 
 ul.list-narrow {
 	padding: 8px 0 8px 22px;
-}
-
-ul.list-narrow > li.canteen {
-	font-weight: bold;
-}
-
-ul.list-narrow.clearfix > li.canteen {
-	width: 80px;
-	+ li {
-		list-style: none;
-		ul.list-unstyled {
-			padding: 0;
-			margin: 0;
-			li {
-				margin: 0 5px 4px;
-			}
+	li {
+		ul.list-unstytled {
+			color: #666;
 		}
+	}
+	.first {
+		color: #666;
 	}
 }
 
 
+/*
 ul.list-narrow>li>ul.list-unstyled {
 	margin: 5px 0 5px;
 	padding: 5px 0 5px;
@@ -91,15 +82,26 @@ ul.list-narrow>li>ul.list-unstyled>li {
 	margin-left: 5px;
 	margin-top: 2px;
 	margin-bottom: 2px;
-	font-weight: normal;
 }
-
-ul.list-narrow>li>ul.list-unstyled {
-	color: #666;
+*/
+ul.list-narrow.clearfix > li.canteen {
+	font-weight: bold;
+	width: 80px;
+	+ li {
+		list-style: none;
+		ul.list-unstyled {
+			color: #666;
+			padding: 0;
+			margin: 0;
+			li {
+				margin: 0 5px 4px;
+			}
+		}
+	}
 }
-
 
 /*footer 样式*/
+
 .footer section.footerExtra {
 	background-color: #f8f7f4;
 	padding: 40px 0;

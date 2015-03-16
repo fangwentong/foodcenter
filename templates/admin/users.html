@@ -1,7 +1,6 @@
-$def with(page, session)
+{% extends 'admin/admin.html'%}
 
-$:render.admin.header(page, session)
-
+{% block section %}
 <div class="row">
 	<ol class="breadcrumb">
 		<li><a href="/admin"><span class="fa fa-home"></span></a></li>
@@ -103,29 +102,30 @@ $:render.admin.header(page, session)
 			      </div>
 			    </div>
 			  </div>
-			</div>	
+			</div>
 		</div>
 	</div>
 </div>
+{% endblock section %}
 
 
-$:render.admin.footer(page)
-
+{% block content %}
+{{ super() }}
 <script>
-$$(function() {
+$(function() {
     /* 判断旧密码是否正确*/
-    $$('#username').change(check_exist);
+    $('#username').change(check_exist);
     function check_exist() {
-        var username = $$('#username').val();
-        $$.post('users?req=check', {"username" : username},
+        var username = $('#username').val();
+        $.post('users?req=check', {"username" : username},
             function(data) {
                 if(data.is_valid == '1') {
-                    $$('#username-alert').attr("class","text-success");
-                    $$('#username-alert').html('<i class="fa fa-fw fa-check"></i> 合法的用户名');
+                    $('#username-alert').attr("class","text-success");
+                    $('#username-alert').html('<i class="fa fa-fw fa-check"></i> 合法的用户名');
                 }
                 else {
-                    $$('#username-alert').attr("class", "text-danger");
-                    $$('#username-alert').html('<i class="fa fa-fw fa-close"></i> 此用户名已被占用')
+                    $('#username-alert').attr("class", "text-danger");
+                    $('#username-alert').html('<i class="fa fa-fw fa-close"></i> 此用户名已被占用')
                 }
                 if(data.errinfo) {
                     alert(data.errinfo);
@@ -135,30 +135,30 @@ $$(function() {
     }
 
     /*校验两次密码输入是否匹配密码是否正确*/
-    $$('#newp').bind("keyup", check_same);
-    $$('#newp2').bind("keyup", check_same);
+    $('#newp').bind("keyup", check_same);
+    $('#newp2').bind("keyup", check_same);
     function check_same() {
-        var newp = $$('#newp').val();
-        var newp2 = $$('#newp2').val();
+        var newp = $('#newp').val();
+        var newp2 = $('#newp2').val();
         if(newp == '' || newp2 == '') {
             return false;
         }
 
         if(newp == newp2) {
-            $$('#newp2-alert').attr("class","text-success");
-            $$('#newp2-alert').html('<i class="fa fa-fw fa-check"></i> 校验通过');
+            $('#newp2-alert').attr("class","text-success");
+            $('#newp2-alert').html('<i class="fa fa-fw fa-check"></i> 校验通过');
         }
         else {
-            $$('#newp2-alert').attr("class", "text-danger");
-            $$('#newp2-alert').html('<i class="fa fa-fw fa-close"></i> 密码输入不一致')
+            $('#newp2-alert').attr("class", "text-danger");
+            $('#newp2-alert').html('<i class="fa fa-fw fa-close"></i> 密码输入不一致')
         }
     }
 
-    $$('#setting-btn').bind('click', submit_data);
+    $('#setting-btn').bind('click', submit_data);
     function submit_data() {
-        var username = $$('#username').val();
-        var newp = $$('#newp').val();
-        var newp2 = $$('#newp2').val();
+        var username = $('#username').val();
+        var newp = $('#newp').val();
+        var newp2 = $('#newp2').val();
         if(username == '') {
             //
             alert("请输入用户名.");
@@ -175,7 +175,7 @@ $$(function() {
             return false;
         }
 
-        $$.post('users?req=submit', {"username" : username, "newp" : newp, "role" : '3'},
+        $.post('users?req=submit', {"username" : username, "newp" : newp, "role" : '3'},
             function(data) {
                 if (data.successinfo) {
                     alert(data.successinfo);
@@ -189,4 +189,5 @@ $$(function() {
     }
 })
 </script>
+{% endblock content %}
 

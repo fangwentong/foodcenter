@@ -48,12 +48,12 @@ class AdminAuth:
         """
         print msg
         return render.admin.error(
-                web.storage(
+                page = web.storage(
                     name    = pagename,
                     title   = pagetitle,
                     errinfo = msg
                     ),
-                web.config._session)
+                session = web.config._session)
 
     @staticmethod
     def success(msg):

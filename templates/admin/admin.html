@@ -1,30 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-  {% include 'widgets/header.html' with context %}
+  {% include 'admin/header.html' with context %}
   <body>
     <!--[if lt IE 9]>
     <div class="alert alert-danger">
-      <a class="close" data-dismiss="alert" href="#" aria-hidden="true">x</a>
+    	<a class="close" data-dismiss="alert" href="#" aria-hidden="true">x</a>
       <div style="text-align:center;">
         为了获得更好的浏览体验，建议您升级IE浏览器或安装<a style="color:blue;" href="http://www.google.cn/intl/zh-CN/chrome/browser/"><strong>Google Chrome</strong></a>、<a style="color:blue;" href="http://firefox.com.cn/"><strong>Firefox</strong></a>等现代浏览器，否则网站某些功能可能无法正常使用.
       </div>
     </div>
     <![endif]-->
+    {% include 'admin/nav.html' with context %}
 
-    {% include 'widgets/nav.html' with context %}
-
-    {# content 块，有默认内容 #}
     {% block content %}
-    <article class="container article">
-      <div class="row">
-        {% block section%}
-        {% endblock %}
-      </div>
+    <article class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+      {% block section %}
+      {% endblock section %}
     </article>
-    {# 尾部信息 #}
-    {% include 'widgets/footer.html' with context%}
+    {% include 'admin/footer.html' with context %}
     {% endblock content %}
-
-  </body>
-
+	</body>
 </html>

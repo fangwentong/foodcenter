@@ -1,8 +1,6 @@
-$def with(page, session)
+{% extends 'admin/admin.html' %}
 
-$:render.admin.header(page, session)
-
-
+{% block section %}
 <div class="row">
 	<ol class="breadcrumb">
 		<li><a href="/admin"><span class="fa fa-home"></span></a></li>
@@ -19,5 +17,5 @@ $:render.admin.header(page, session)
 
 <div class="row">
 </div>
+{% endblock section %}
 
-$:render.admin.footer(page)

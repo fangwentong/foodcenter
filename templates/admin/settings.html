@@ -1,7 +1,6 @@
-$def with(page, session)
+{% extends 'admin/admin.html' %}
 
-$:render.admin.header(page, session)
-
+{% block section %}
 <div class="row">
 	<ol class="breadcrumb">
 		<li><a href="/admin"><span class="fa fa-home"></span></a></li>
@@ -60,25 +59,25 @@ $:render.admin.header(page, session)
         </form>
     </div>
 </div>
+{% endblock section %}
 
-
-$:render.admin.footer(page)
-
+{% block content %}
+{{ super() }}
 <script>
-$$(function() {
+$(function() {
     /* 判断旧密码是否正确*/
-    $$('#oldp').change(check_password);
+    $('#oldp').change(check_password);
     function check_password() {
-        var password = $$('#oldp').val();
-        $$.post('settings?req=check', {"oldp" : password},
+        var password = $('#oldp').val();
+        $.post('settings?req=check', {"oldp" : password},
             function(data) {
                 if(data.is_valid == '1') {
-                    $$('#oldp-alert').attr("class","text-success");
-                    $$('#oldp-alert').html('<i class="fa fa-fw fa-check"></i> 密码正确');
+                    $('#oldp-alert').attr("class","text-success");
+                    $('#oldp-alert').html('<i class="fa fa-fw fa-check"></i> 密码正确');
                 }
                 else {
-                    $$('#oldp-alert').attr("class", "text-danger");
-                    $$('#oldp-alert').html('<i class="fa fa-fw fa-close"></i> 密码错误')
+                    $('#oldp-alert').attr("class", "text-danger");
+                    $('#oldp-alert').html('<i class="fa fa-fw fa-close"></i> 密码错误')
                 }
                 if(data.errinfo) {
                     alert(data.errinfo);
@@ -88,30 +87,30 @@ $$(function() {
     }
 
     /*校验两次密码输入是否匹配密码是否正确*/
-    $$('#newp').bind("keyup", check_same);
-    $$('#newp2').bind("keyup", check_same);
+    $('#newp').bind("keyup", check_same);
+    $('#newp2').bind("keyup", check_same);
     function check_same() {
-        var newp = $$('#newp').val();
-        var newp2 = $$('#newp2').val();
+        var newp = $('#newp').val();
+        var newp2 = $('#newp2').val();
         if(newp == '' || newp2 == '') {
             return false;
         }
 
         if(newp == newp2) {
-            $$('#newp2-alert').attr("class","text-success");
-            $$('#newp2-alert').html('<i class="fa fa-fw fa-check"></i> 校验通过');
+            $('#newp2-alert').attr("class","text-success");
+            $('#newp2-alert').html('<i class="fa fa-fw fa-check"></i> 校验通过');
         }
         else {
-            $$('#newp2-alert').attr("class", "text-danger");
-            $$('#newp2-alert').html('<i class="fa fa-fw fa-close"></i> 密码输入不一致')
+            $('#newp2-alert').attr("class", "text-danger");
+            $('#newp2-alert').html('<i class="fa fa-fw fa-close"></i> 密码输入不一致')
         }
     }
 
-    $$('#setting-btn').bind('click', submit_data);
+    $('#setting-btn').bind('click', submit_data);
     function submit_data() {
-        var oldp = $$('#oldp').val();
-        var newp = $$('#newp').val();
-        var newp2 = $$('#newp2').val();
+        var oldp = $('#oldp').val();
+        var newp = $('#newp').val();
+        var newp2 = $('#newp2').val();
         if(oldp == '') {
             //
             alert("请输入旧密码.");
@@ -128,7 +127,7 @@ $$(function() {
             return false;
         }
 
-        $$.post('settings?req=submit', {"oldp" : oldp, "newp" : newp},
+        $.post('settings?req=submit', {"oldp" : oldp, "newp" : newp},
             function(data) {
                 if (data.successinfo) {
                     alert(data.successinfo);
@@ -139,7 +138,7 @@ $$(function() {
                 }
             }, "json");
         return false;
-
     }
 })
 </script>
+{% endblock content %}
