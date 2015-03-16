@@ -1,11 +1,9 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section %}
 <div class="content">
 	<div class="col-md-12">
 		<p class="h3 text-danger">对不起, 您访问的链接不存在 :-( </p>
 	</div>
 </div>
-
-$:render.widgets.footer(page)
+{% endblock section %}

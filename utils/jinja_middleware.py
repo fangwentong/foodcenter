@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #coding=utf-8
 
+__all__ = ["JinjaRender"]
+
 import os
 
 class JinjaRender:
@@ -25,9 +27,13 @@ class JinjaRender:
             self.path = os.path.join(self.path, name)
             return self
         else:
-            self.path = name + '.html'
-            t = self._lookup.get_template(self.path)
-            self.path = ""  # Rest
+            self.path = os.path.join(self.path, name + '.html')
+            try:
+                t = self._lookup.get_template(self.path)
+            except Exception, e:
+                raise e
+            finally:
+                self.path = ""  # Reset
             return t.render
 
 class Storage(dict):

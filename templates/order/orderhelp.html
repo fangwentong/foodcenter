@@ -1,7 +1,6 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section%}
 <div class="content">
 	<div class="col-md-12">
 		<div class="col-md-12 page-content">
@@ -38,5 +37,4 @@ $:render.widgets.header(page)
 		</div>
 	</div>
 </div>
-
-$:render.widgets.footer(page)
+{% endblock section %}

@@ -1,7 +1,6 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section %}
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
 		<h3 class="text-center text-primary header">登陆</h3>
@@ -30,14 +29,16 @@ $:render.widgets.header(page)
 		</form>
 	</div>
 </div>
+{% endblock section %}
 
-$:render.widgets.footer(page)
+{% block content %}
+{{ super() }}
 <script>
-$$(function() {
-	/* $$('#student-id').bind('change', check_valid); */
+$(function() {
+	/* $('#student-id').bind('change', check_valid); */
 	function check_valid() {
-		var student_id = $$('#student-id').val();
-		return $$.post('signin?req=check', {"sid": student_id},
+		var student_id = $('#student-id').val();
+		return $.post('signin?req=check', {"sid": student_id},
 			function(data) {
 				console.log(data);
 				console.log(data.valid);
@@ -57,10 +58,10 @@ $$(function() {
 				}
 			}, "json");
 	}
-	$$('#login-btn').bind('click', submit);
+	$('#login-btn').bind('click', submit);
 	function submit() {
-		sid  = $$('#student-id').val();
-		name = $$('#student-name').val();
+		sid  = $('#student-id').val();
+		name = $('#student-name').val();
         if(sid == '') {
             //学号为空
             alert("请输入学号");
@@ -73,7 +74,7 @@ $$(function() {
         }
         if (check_valid()) {
         	console.log("submit");
-	        $$.post('signin?req=submit', {"sid" : sid,  "name" : name},
+	        $.post('signin?req=submit', {"sid" : sid,  "name" : name},
 	        	function(data) {
 	        		if (data.successinfo) {
 	        			/*登陆成功*/
@@ -89,4 +90,4 @@ $$(function() {
 	}
 });
 </script>
-
+{% endblock content%}

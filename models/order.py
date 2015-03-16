@@ -39,7 +39,7 @@ class index(StuAuth):
 
     @StuAuth.decoder
     def GET(self):
-        return render.order.index(self.page, self.session)
+        return render.order.index(page = self.page, session = self.session)
 
     def POST(self):
         pass
@@ -54,7 +54,7 @@ class signup(StuAuth):
 
     @StuAuth.decoder
     def GET(self):
-        return render.order.signup(self.page)
+        return render.order.signup(page = self.page)
 
     def POST(self):
         user_info = web.input()
@@ -78,7 +78,7 @@ class signup(StuAuth):
             if len(result) <= 0:          #学生身份验证
                 self.page.errinfo = "学生身份验证出错，请输入正确的学生信息."
                 print self.page.errinfo
-                return render.order.signup(self.page)
+                return render.order.signup(page = self.page)
 
             weixinId = ""
             if hasattr(self.session, 'wid'):
@@ -120,7 +120,7 @@ class signin(StuAuth):
 
     @StuAuth.decoder
     def GET(self):
-        return render.order.signin(self.page)
+        return render.order.signin(page = self.page)
 
     def POST(self):
         data = web.input(req = '', sid = '', name = '')
@@ -200,7 +200,7 @@ class add_order(StuAuth):
     @StuAuth.decoder
     @StuAuth.sessionChecker
     def GET(self):
-        return render.order.addorder(self.page)
+        return render.order.addorder(page = self.page)
 
     @StuAuth.sessionChecker
     def POST(self):
@@ -351,7 +351,7 @@ class get_info(StuAuth):
                     orders = order_info
                     )
             print "hello"
-            return render.order.orderinfo(self.page, data)
+            return render.order.orderinfo(page = self.page, data = data)
         except Exception as err:
             return self.error(err)
 
@@ -366,6 +366,6 @@ class get_help(StuAuth):
     def __init__(self):
         StuAuth.__init__(self, "order", "订餐帮助 - 哈工大饮食中心")
     def GET(self):
-        return render.order.orderhelp(self.page)
+        return render.order.orderhelp(page = self.page)
     def POST(self):
         pass

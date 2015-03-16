@@ -1,7 +1,6 @@
-$def with(page, data)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section %}
 <div class="content">
     <div class="col-md-12">
     </div>
@@ -13,18 +12,20 @@ $:render.widgets.header(page)
 			<p class="h5"><span class="text-primary">$data.user.student_name</span> , 您的订单如下:</p>
 		</div>
 		<div class="col-md-12 order-list">
-			$for order in data.orders:
+      {% for order in data.orders %}
 				<div class="order-item">
-					<li class="">使用人姓名 : $order.student_name</li>
-					<li class="">使用人学号 : $order.student_id</li>
-					<li class=""> 领取时间 : $order.birthday 11:00-12:30</li>
-					<li class=""> 领取地点 : $order.canteen</li>
+          {% block loop_item scoped %}
+            <li class="">使用人姓名 : {{ order.student_name }}</li>
+            <li class="">使用人学号 : {{ order.student_id }}</li>
+            <li class=""> 领取时间 : {{ order.birthday 11:00-12:30 }}</li>
+            <li class=""> 领取地点 : {{ order.canteen }}</li>
+          {% endblock %}
 				</div>
+      {% endfor %}
 		</div>
 		<div class="col-md-12">
 			<p class="h5 text-info">* 请注意时间，按时领取.</p>
 		</div>
 	</div>
 </div>
-
-$:render.widgets.footer(page)
+{% endblock section %}

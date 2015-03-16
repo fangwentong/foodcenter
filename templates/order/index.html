@@ -1,11 +1,9 @@
-$def with(page, session)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
-
+{% block section %}
 <div class="content">
 	<div class="page-img">
-		<img src="$image_url/order/register_header.jpg">
+    <img src="{{ image_url }}/order/register_header.jpg">
 	</div>
 	<div class="col-md-12">
 		<div class="col-md-12 page-content">
@@ -22,26 +20,26 @@ $:render.widgets.header(page)
 			</div>
 			<br>
 
-            $if not session.logged or session.role != "student":
-                <p class="h5 text-warning"> * 系统检测到您尚未登陆</p>
-                <a href="/order/signin" class="btn btn-lg btn-primary btn-block">点击登陆</a>
-            $else:
-                <p class="h5 text-success"> * 系统检测到您已经登陆</p>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <a href="/order/info" class="btn btn-lg btn-success btn-block">
-                            我的订单
-                        </a>
-                    </div>
-                    <div class="col-xs-6">
-                        <a href="/order/add" class="btn btn-lg btn-primary btn-block">
-                            马上订餐
-                        </a>
-                    </div>
-                </div>
+      {% if not session.logged or session.role != "student" %}
+        <p class="h5 text-warning"> * 系统检测到您尚未登陆</p>
+        <a href="/order/signin" class="btn btn-lg btn-primary btn-block">点击登陆</a>
+      {% else %}
+        <p class="h5 text-success"> * 系统检测到您已经登陆</p>
+        <div class="row">
+            <div class="col-xs-6">
+                <a href="/order/info" class="btn btn-lg btn-success btn-block">
+                    我的订单
+                </a>
+            </div>
+            <div class="col-xs-6">
+                <a href="/order/add" class="btn btn-lg btn-primary btn-block">
+                    马上订餐
+                </a>
+            </div>
+        </div>
+      {% endif %}
 		</div>
 	</div>
 </div>
+{% endblock section %}
 
-
-$:render.widgets.footer(page)

@@ -1,7 +1,6 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section%}
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
 		<h3 class="text-center text-primary header">意见反馈</h3>
@@ -38,19 +37,20 @@ $:render.widgets.header(page)
 		</form>
 	</div>
 </div>
+{% endblock section%}
 
-$:render.widgets.footer(page)
-
+{% block content %}
+{{ super() }}
 <script>
-$$(function() {
+$(function() {
 
-    $$('#feedback-btn').bind('click', submit_data);
+    $('#feedback-btn').bind('click', submit_data);
 
     function submit_data() {
-    	var username = $$('#username').val();
-    	var email    = $$('#email').val();
-    	var phone    = $$('#phone').val();
-    	var feedback = $$('#feedback').val();
+    	var username = $('#username').val();
+    	var email    = $('#email').val();
+    	var phone    = $('#phone').val();
+    	var feedback = $('#feedback').val();
     	if(username == '') {
     		alert("请输入您的姓名");
     		return false;
@@ -61,7 +61,7 @@ $$(function() {
     	}
     	console.log(feedback);
 
-        $$.post('feedback?req=submit',
+        $.post('feedback?req=submit',
         	{"username" : username,
 	  		 "email"    : email,
 			 "phone"    : phone,
@@ -82,3 +82,4 @@ $$(function() {
 
 });
 </script>
+{% endblock content %}

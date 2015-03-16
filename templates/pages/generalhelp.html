@@ -1,7 +1,6 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section %}
 <div class="content">
 	<div class="col-md-12">
 		<div class="col-md-12 page-content">
@@ -30,129 +29,158 @@ $:render.widgets.header(page)
 			<h3 id="open-time">各餐厅开关餐时间</h3>
 			<strong>1. 一校区:</strong>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">学苑餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-08：30</li>
-					<li>午 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">学苑餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-08：30</li>
+            <li>午 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">美食林餐厅 </li>
-				<ul class="pull=left list-unstyled">
-					<li>全 天  10：30-19：30</li>
-				</ul>
+				<li class="canteen pull-left">美食林餐厅 </li>
+          <ul class="pull-left list-unstyled">
+            <li>全 天  10：30-19：30</li>
+          </ul>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">阳光餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>中 餐  10：00-12：50</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">阳光餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>中 餐  10：00-12：50</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">学士餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-08：30</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">学士餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-08：30</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">百味佳餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-08：30</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">百味佳餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-08：30</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">友来餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>全 天  06：00-22：00</li>
-				</ul>
+				<li class="canteen pull-left">友来餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>全 天  06：00-22：00</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">回味斋餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-08：30</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">回味斋餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-08：30</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">真味饺子园</li>
-				<ul class="pull-left list-unstyled">
-					<li>全 天  10：00-20：00</li>
-				</ul>
+				<li class="canteen pull-left">真味饺子园</li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>全 天  10：00-20：00</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">学子餐厅 </li>
-				<ul class="pull-left list-unstyled">
-					<li>中 餐  10：30-12：30</li>
-					<li>晚 餐  16：30-19：00</li>
-				</ul>
+				<li class="canteen pull-left">学子餐厅 </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>中 餐  10：30-12：30</li>
+            <li>晚 餐  16：30-19：00</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">丁香餐厅  </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  07：00-08：30</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">丁香餐厅  </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  07：00-08：30</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 
 			<strong>2. 科学园校区:</strong>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">南苑餐厅  </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  07：00-08：30</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">南苑餐厅  </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  07：00-08：30</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 
 			<strong>3. 二校区:</strong>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">真味饺子园</li>
-				<ul class="pull-left list-unstyled">
-					<li>全 天  09：00-21：00</li>
-				</ul>
+				<li class="canteen pull-left">真味饺子园</li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>全 天  09：00-21：00</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">清泽餐厅   </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-09：00</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">清泽餐厅   </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-09：00</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">锦绣餐厅    </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-09：00</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">锦绣餐厅    </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-09：00</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">清真餐厅    </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-09：00</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">清真餐厅    </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-09：00</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 			<ul class="list-narrow clearfix">
-				<li class="pull-left">天香餐厅    </li>
-				<ul class="pull-left list-unstyled">
-					<li>早 餐  06：30-08：15</li>
-					<li>中 餐  10：45-12：20</li>
-					<li>晚 餐  16：30-18：10</li>
-				</ul>
+				<li class="canteen pull-left">天香餐厅    </li>
+        <li>
+          <ul class="pull-left list-unstyled">
+            <li>早 餐  06：30-08：15</li>
+            <li>中 餐  10：45-12：20</li>
+            <li>晚 餐  16：30-18：10</li>
+          </ul>
+        </li>
 			</ul>
 		</div>
 	</div>
 </div>
-
-$:render.widgets.footer(page)
+{% endblock section%}

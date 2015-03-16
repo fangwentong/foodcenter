@@ -1,16 +1,16 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section %}
 <div class="content">
 	<div class="col-md-8 col-md-offset-2">
 		<h3 class="text-center text-primary">注册新用户</h3>
 
-		$if page.errinfo:
+    {% if page.errinfo %}
 		    <div class="alert alert-danger fade in col-sm-10 col-sm-offset-2">
 		        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
-		        <strong>$page.errinfo</strong>
+            <strong>{{ page.errinfo }}</strong>
 		    </div>
+    {% endif %}
 
 		<div class="form-link">
 			<p class="pull-right"><a href="/order/signin">已经注册?</a></p>
@@ -63,30 +63,31 @@ $:render.widgets.header(page)
 		</form>
 	</div>
 </div>
+{% endblock section %}
 
 
-$:render.widgets.footer(page)
-
+{% block content %}
+{{ super() }}
 <script>
-$$(function() {
-    $$('#signup-btn').on('click', signup);
+$(function() {
+    $('#signup-btn').on('click', signup);
     function signup() {
-        if($$('#student-id').val() == '') {
+        if($('#student-id').val() == '') {
             //学号为空
             alert('请输入学号');
             return false;
         }
-        if($$('#student-name').val() == '') {
+        if($('#student-name').val() == '') {
             //姓名为空
             alert('请输入姓名');
             return false;
         }
-        if($$('#birthday').val() == '') {
+        if($('#birthday').val() == '') {
             //生日为空
             alert('请输入生日');
             return false;
         }
-        if($$('#phone').val() == '') {
+        if($('#phone').val() == '') {
             // 手机号码为空
             alert('请输入手机号码');
             return false;
@@ -94,3 +95,4 @@ $$(function() {
     }
 });
 </script>
+{% endblock content %}

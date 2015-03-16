@@ -1,10 +1,9 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
+{% block section %}
 <div class="content">
 	<div class="page-img">
-		<img src="$image_url/show/aboutus.jpg">
+    <img src="{{ image_url }}/show/aboutus.jpg">
 	</div>
 	<div class="col-md-12">
 		<div class="col-md-12 page-content">
@@ -15,14 +14,14 @@ $:render.widgets.header(page)
 				&nbsp;&nbsp;
 				哈工大饮食中心作为后勤集团领导下的职能部门，自1997年成立以来，紧紧围绕学校和后勤集团的发展目标，注重内部管理和服务质量，坚持以“健康美味，温馨超值”作为经营理念；以“顾客至上，质量第一，持续改进，保证满意”作为质量方针；把“为顾客创造满意；为员工创造机会；为学校创造优势；为社会创造财富”作为自己的使命，在多年的实践中形成了“团结、协作、勤俭、诚信”的企业精神，形成了多层次、多模式、多元化的特色服务经营方式，满足了不同层次师生的需求。
 			</p>
-			<img src="$image_url/show/aboutus2.jpg" class="img-thumbnail">
+      <img src="{{ image_url }}/show/aboutus2.jpg" class="img-thumbnail">
 			<br>
 			<p>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				&nbsp;&nbsp;
 				哈工大饮食中心现有餐厅18个，按业态分为大伙、风味小吃、自选和经营餐厅；按经营方式分为自营、联营和租赁三种形式，中心建筑面积76226m2,就餐面积22328.3 m2，拥有员工近600人，中心下设八个部门, 按总部-配送-门店餐厅管理模式运作，实行中心主任领导下各系统、各部门分级负责的管理制度，重大决策由中心主任会议集体产生。中心倡导贡献理念,以贡献定薪酬，凭责任定待遇，不惟学历重能力,不惟能力重业绩，鼓励人才充分发挥个人的聪明才智。中心现有高级厨师58人，大专以上学历管理干部73人，形成了管理型、技术型人才 “有序引进，优化配置” 的用人机制。
 			</p>
-			<img src="$image_url/show/aboutus3.jpg" class="img-thumbnail">
+      <img src="{{ image_url }}/show/aboutus3.jpg" class="img-thumbnail">
 			<br>
 			<p>
 				&nbsp;&nbsp;&nbsp;&nbsp;
@@ -31,8 +30,6 @@ $:render.widgets.header(page)
 			</p>
 		</div>
 	</div>
-
 </div>
 
-
-$:render.widgets.footer(page)
+{% endblock section %}

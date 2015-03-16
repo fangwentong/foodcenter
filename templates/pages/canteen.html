@@ -1,11 +1,9 @@
-$def with(page)
+{% extends 'pages/layout.html' %}
 
-$:render.widgets.header(page)
-
-
+{% block section %}
 <div class="content">
 	<div class="page-img">
-		<img src="$image_url/show/ctts_header.jpg">
+    <img src="{{ image_url }}/show/ctts_header.jpg">
 	</div>
 	<div class="col-md-12">
 		<div class="col-md-12 page-content">
@@ -17,7 +15,7 @@ $:render.widgets.header(page)
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				位于学士楼一楼，建成于1998年，餐厅窗环境简洁，设备完善，可容纳800人同时就餐。学士楼以方便快捷的各种套餐为主要经营特色，以经济实惠、口味丰富赢得学生喜爱。
 			</p>
-    		<img src="$image_url/show/ctts/xsct.jpg" class="img-rounded">
+      <img src="{{ image_url }}/show/ctts/xsct.jpg" class="img-rounded">
 			<br>
 			<p>
 				<strong>百味佳餐厅</strong><br/>
@@ -25,14 +23,14 @@ $:render.widgets.header(page)
 				位于学士楼二楼，建于1996年，于1997年6月投入使用，楼层面积2300平方米，餐厅面积1150平方米，是哈工大最大的自选餐厅，日常提供各种主副食200余种，餐厅布局合理，环境幽雅，明亮、桌椅美观舒适，备有闭路电视，可同时容纳1300余人进餐,为黑龙江省高等院校标准的餐厅之一。
 			</p>
 			<br>
-    		<img src="$image_url/show/ctts/ylct.jpg" class="img-rounded">
+        <img src="{{ image_url }}/show/ctts/ylct.jpg" class="img-rounded">
 	  		<p>
 				<strong>友来餐厅</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				位于学士楼，餐厅是全天营业性餐厅，可容纳约450多人同时就餐。它以其快捷、方便、实惠、卫生、可口享誉校园。大碴粥、馅饼、烧饼等传统主食为友来赢来四方美誉，这里更是哈工大四大名人之一的“馅饼西施”的诞生地。
 			</p>
 			<br>
-    		<img src="$image_url/show/ctts/hwzct.jpg" class="img-rounded">
+        <img src="{{ image_url }}/show/ctts/hwzct.jpg" class="img-rounded">
 	  		<br>
 	  		<p>
 				<strong>回味斋餐厅</strong><br/>
@@ -42,7 +40,7 @@ $:render.widgets.header(page)
 			</p>
 			<br>
 			<br>
-    		<img src="$image_url/show/ctts/xzct.jpg" class="img-rounded" id="xuezi">
+        <img src="{{ image_url }}/show/ctts/xzct.jpg" class="img-rounded" id="xuezi">
 	  		<p>
 				<strong>学子真味饺子园</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -55,7 +53,7 @@ $:render.widgets.header(page)
 			</p>
 			<br>
 			<br>
-    		<img src="$image_url/show/ctts/xyct.jpg" class="img-rounded" id="xueyuan">
+        <img src="{{ image_url }}/show/ctts/xyct.jpg" class="img-rounded" id="xueyuan">
     		<br>
 	  		<p>
 				<strong>学苑餐厅</strong><br/>
@@ -76,7 +74,7 @@ $:render.widgets.header(page)
 			<br>
 			<br>
 
-    		<img src="$image_url/show/ctts/dxct.png" class="img-rounded" id="tumulou">
+        <img src="{{ image_url }}/show/ctts/dxct.png" class="img-rounded" id="tumulou">
 	  		<p>
 				<strong>丁香餐厅</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -85,7 +83,7 @@ $:render.widgets.header(page)
 			<br>
 			<br>
 
-    		<img src="$image_url/show/ctts/nyct.png" class="img-rounded" class="kexueyuan">
+        <img src="{{ image_url }}/show/ctts/nyct.png" class="img-rounded" class="kexueyuan">
 	  		<p>
 				<strong>南苑餐厅</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -94,34 +92,34 @@ $:render.widgets.header(page)
 			<br>
 			<br>
 
-    		<img src="$image_url/show/ctts/qzct.jpg" class="img-rounded" id="second">
+      <img src="{{ image_url }}/show/ctts/qzct.jpg" class="img-rounded" id="second">
 	  		<p>
 				<strong>清泽餐厅</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				位于哈工大二校区西门处，总面积为1529平方米，餐厅面积为739平方米，可同时容纳773人就餐。餐厅分为：大众熘炒和特色炒菜两部分。“大众熘炒”位于清泽餐厅一楼，主要经营炒菜、炝拌菜、炸酱面、打卤面、各种炒饭及特色炒面等。“特色炒菜”位于清泽餐厅二楼，主要经营各类炒菜、麻辣烫、农家拌饭、酸辣米线及各类可口点心等。
 			</p>
 			<br>
-    		<img src="$image_url/show/ctts/qzzwct.jpg" class="img-rounded">
+        <img src="{{ image_url }}/show/ctts/qzzwct.jpg" class="img-rounded">
 	  		<p>
 				<strong>清泽真味饺子园</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				位于工大二校区西门处、清泽餐厅西侧，成立于2009年，原是清泽方便食堂。改建后，真味饺子园以全然一新的面貌，古色古香的装饰，主要经营水饺、蒸饺、面条、凉菜等品项，以三鲜馅水饺为主打产品深受广大进餐者欢迎。饺子园可同时容纳112人进餐。
 			</p>
 			<br>
-    		<img src="$image_url/show/ctts/jxct.jpg" class="img-rounded">
+        <img src="{{ image_url }}/show/ctts/jxct.jpg" class="img-rounded">
 	  		<p>
 				<strong>锦绣餐厅</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				位于五公寓旁，建于1992年，1993年9月使用。餐厅面积2310平方米，2000年改造维修至今。正门朝向四公寓。餐厅分为两层，可同时容纳800人进餐。一楼经营各种熘炒、主食，二楼开放式自选经营，引进全新自动售餐系统，菜品种类齐全，独具特色。
 			</p>
-    		<img src="$image_url/show/ctts/qzct_1.jpg" class="img-rounded">
+        <img src="{{ image_url }}/show/ctts/qzct_1.jpg" class="img-rounded">
 	  		<p>
 				<strong>清真食堂</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				位于锦绣餐厅西侧，针对少数民族学生，专门加工制作各种回民类菜肴、主食。
 			</p>
 			<br>
-    		<img src="$image_url/show/ctts/txct.jpg" class="img-rounded">
+        <img src="{{ image_url }}/show/ctts/txct.jpg" class="img-rounded">
 	  		<p>
 				<strong>天香餐厅</strong><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -132,5 +130,4 @@ $:render.widgets.header(page)
 	</div>
 
 </div>
-
-$:render.widgets.footer(page)
+{% endblock section %}

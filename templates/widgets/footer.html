@@ -5,8 +5,7 @@
 	</div>
 
 	<!-- footerExtra -->
-	{% block footerExtra %}
-	{% endblock footerExtra %}
+	{% include 'widgets/footer_extra.html' %}
 
 	<!-- 尾部链接 -->
 	<section class="footer-links">
@@ -77,4 +76,4 @@
 <script src="{{ asset_path }}/js/style.js"></script>
 
 <!-- Baidu Analytics -->
-{% include render.widgets.analytics() %}
+{% include 'widgets/analytics.html' %}
