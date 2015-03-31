@@ -58,15 +58,10 @@ else:
     asset_path = "/static"
     image_url = "/static/image"
 
+# Jinja2 globals
 render._lookup.globals.update(
     site = site,
     admin = admin,
     asset_path = asset_path,
     image_url = image_url
 )
-
-web.template.Template.globals['site'] = site
-web.template.Template.globals['admin'] = admin
-web.template.Template.globals['render'] = render
-web.template.Template.globals['asset_path'] = asset_path
-web.template.Template.globals['image_url'] = image_url
