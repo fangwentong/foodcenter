@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
-prefix = "models.admin."
+prefix = "controllers.admin."
 
 urls = (
         r"",                    prefix + "admin.Index",

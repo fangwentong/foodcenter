@@ -1,9 +1,9 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
-from models import admin
+from controllers import admin
 
-prefix = 'models.'
+prefix = 'controllers.'
 
 urls = (
         r"",                           prefix + "home.index",

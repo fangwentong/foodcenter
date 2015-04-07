@@ -1,12 +1,14 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
-import web
 import sys, os
-import models.iweb
+try:
+    import utils.iweb.web as web
+except ImportError:
+    import web
 
 from config import db, urls
-import models.home
+import controllers.home
 
 default_encoding = 'utf-8'
 if sys.getdefaultencoding() != default_encoding:
@@ -20,13 +22,13 @@ sys.path.append(abspath)
 os.chdir(abspath)
 
 app = web.application(urls, globals(), autoreload=True)
-app.notfound = models.home.notfound
+app.notfound = controllers.home.notfound
 
 # Session
 if web.config.get('_session') is None:
     web.config.session_parameters['cookie_name'] = 'foodcenter_sid'
     store = web.session.DBStore(db, 'foodcenter_sessions')
-    web.config._session = models.iweb.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
+    web.config._session = web.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
 
 if __name__ == "__main__":
     if 'SERVER_SOFTWARE' in os.environ:

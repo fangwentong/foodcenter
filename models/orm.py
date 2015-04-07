@@ -5,15 +5,17 @@ __all__ = [
     "StringField",
     "IntegerField",
     "FloatField",
+    "TimeField",
+    "DateField",
     "BooleanField",
     "TextField",
     "BlobField",
     "Model"
 ]
 
-import logging
+import logging, time
 from config import db
-import web.Storage
+import web
 
 class Field(object):
     '''
@@ -91,6 +93,22 @@ class BlobField(Field):
         if not 'ddl' in kw:
             kw['ddl'] = 'blob'
         super(BlobField, self).__init__(**kw)
+
+class TimeField(Field):
+    def __init__(self, **kw):
+        if not 'default' in kw:
+            kw['default'] = time.strftime("%Y-%m-%d %H:%M:%S")
+        if not 'ddl' in kw:
+            kw['ddl'] = 'timestamp'
+        super(FloatField, self).__init__(**kw)
+
+class DateField(Field):
+    def __init__(self, **kw):
+        if not 'default' in kw:
+            kw['default'] = time.strftime("%Y-%m-%d")
+        if not 'ddl' in kw:
+            kw['ddl'] = 'date'
+        super(FloatField, self).__init__(**kw)
 
 class VersionField(Field):
     def __init__(self, name=None):
@@ -193,8 +211,7 @@ class Model(web.Storage):
                 else:
                     arg = v.default
                     setattr(self, k, arg)
-                L.append('`%s`=?' % k)
-                args.append(arg)
+                L.append('`%s`="%s"' % (k, arg))
         pk = self.__primary_key__.name
         args.append(getattr(self, pk))
         db.query('update `%s` set %s where %s=$value' % (self.__table__, ','.join(L), pk), vars={'value':args})
