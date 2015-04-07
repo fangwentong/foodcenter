@@ -1,0 +1,29 @@
+server
+{
+    listen 80;
+    server_name food.wentong.me;
+    root /var/www/foodcenter;
+    location / {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME "";
+        fastcgi_pass 127.0.0.1:9002;
+        rewrite ^/(.*).txt /static/$1.txt last;
+        }
+
+    location /static/ {
+        if (-f $request_filename) {
+                rewrite ^/static/(.*)$ /static/$1 break;
+                }
+        }
+
+    gzip            on;
+    gzip_min_length 1024;
+    gzip_buffers    4 8k;
+    gzip_types      text/css application/x-javascript application/json;
+
+
+    access_log logs/foodcenter.access;
+    error_log  logs/foodcenter.error;
+}

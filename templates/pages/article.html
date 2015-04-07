@@ -14,11 +14,11 @@
         <div class="content">
           <div class="col-md-12">
             <div class="col-md-12 page-content">
-              <h3>$page.title</h3>
+              <h3>{{ page.title }}</h3>
               <br>
               {% block article %}
               {% endblock %}
-              $:article.content
+              {{ article.content }}
             </div>
             <div class="col-md-12 comment">
               {% include 'widgets/comments.html' %}
