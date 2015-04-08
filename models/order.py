@@ -13,7 +13,7 @@ class Order(Model):
     id          = IntegerField(primary_key=True, nullable=False, ddl='int(11)')
     userId      = IntegerField(ddl='int(11)')        # 订餐人id
     canteenId   = IntegerField(ddl='int(7)')         # 就餐餐厅
-    mealId      = IntegerField('int(11)')            # 套餐
+    mealId      = IntegerField(ddl='int(11)')            # 套餐
     studentId   = StringField(ddl="varchar(64)")     # 就餐人学号
     studentName = StringField(ddl='varchar(255)')    # 就餐人姓名
     sex         = StringField(ddl='varchar(10)')     # 性别

@@ -100,7 +100,7 @@ class TimeField(Field):
             kw['default'] = time.strftime("%Y-%m-%d %H:%M:%S")
         if not 'ddl' in kw:
             kw['ddl'] = 'timestamp'
-        super(FloatField, self).__init__(**kw)
+        super(TimeField, self).__init__(**kw)
 
 class DateField(Field):
     def __init__(self, **kw):
@@ -108,7 +108,7 @@ class DateField(Field):
             kw['default'] = time.strftime("%Y-%m-%d")
         if not 'ddl' in kw:
             kw['ddl'] = 'date'
-        super(FloatField, self).__init__(**kw)
+        super(DateField, self).__init__(**kw)
 
 class VersionField(Field):
     def __init__(self, name=None):

@@ -1,5 +1,7 @@
 #!/bin/sh
 
-kill `pgrep -f "$HOME/food/index.wsgi"`
+find . -name "*.pyc" | xargs rm -f
+rm index.wsgic
 
+kill `pgrep -f "$HOME/food/index.wsgi"`
 spawn-fcgi -d `pwd` -f `pwd`/index.wsgi -a 127.0.0.1 -p 9002
