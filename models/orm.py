@@ -28,6 +28,7 @@ class Field(object):
         self.primary_key = kw.get('primary_key', False)
         self.nullable = kw.get('nullable', False)
         self.updatable = kw.get('updatable', True)
+        self.auto_increment = kw.get('ai', False)
         self.insertable = kw.get('insertable', True)
         self.ddl = kw.get('ddl', '')
         self._order = Field._count
@@ -75,7 +76,7 @@ class BooleanField(Field):
         if not 'default' in kw:
             kw['default'] = False
         if not 'ddl' in kw:
-            kw['ddl'] = 'bool'
+            kw['ddl'] = 'boolean'
         super(BooleanField, self).__init__(**kw)
 
 class TextField(Field):
@@ -127,9 +128,14 @@ def _gen_sql(table_name, mappings):
             raise StandardError('no ddl in field "%s".' % f.name)
         ddl = f.ddl
         nullable = f.nullable
+        auto_increment = f.auto_increment
         if f.primary_key:
             pk = f.name
-        sql.append(nullable and '  `%s` %s,' % (f.name, ddl) or '  `%s` %s not null,' % (f.name, ddl))
+        statement = '  `%s` %s' % (f.name, ddl)
+        statement += nullable and '' or ' not null'
+        statement += auto_increment and ' auto_increment' or ''
+        statement += ','
+        sql.append(statement)
     sql.append('  primary key(`%s`)' % pk)
     sql.append(');')
     return '\n'.join(sql)

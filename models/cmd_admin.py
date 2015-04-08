@@ -9,7 +9,7 @@ class CmdAdmin(Model):
     """
     __table__ = 'foodcenter_cmd_admins'
 
-    id       = IntegerField(primary_key=True, updatable=False, ddl='int(11)')
+    id       = IntegerField(primary_key=True, updatable=False, ai=True, ddl='int(11)')
     username = StringField(ddl='varchar(255)')
     password = StringField(ddl='varchar(255)')
     weixinId = StringField(ddl="varchar(255)")   # 微信 OpenId

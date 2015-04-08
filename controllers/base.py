@@ -7,28 +7,25 @@ from config import db, render, site
 class BasePage:
     """网站页面基类"""
     def __init__(self, page_name, page_title):
-        """
-        __init__
-        """
         self.page = web.storage(
                 name = page_name,
                 title = page_title,
                 errinfo = ""
                 )
+    def POST(self):
+        pass
 
 class Article:
     """新闻页面基类"""
     def __init__(self, page_name="", page_title="", page_url="", page_id=100):
-        """
-        __init__
-        """
         self.page = web.storage(
                 name    = page_name,
                 title   = page_title,
                 url     = site.root + page_url,
                 page_id = page_id
                 )
-
+    def POST(self):
+        pass
 
 class StuAuth:
     """

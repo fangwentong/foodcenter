@@ -6,7 +6,7 @@ import os, sys
 app_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 sys.path.insert(0, app_root)
 
-from models import Admin, Article, Canteen, CmdAdmin
+from models import Admin, Article, Canteen, CmdAdmin, FeedBack
 from models import Meal, Order, Student, User
 
 
@@ -21,6 +21,7 @@ SQLS.append(Admin().__sql__())
 SQLS.append(Article().__sql__())
 SQLS.append(Canteen().__sql__())
 SQLS.append(CmdAdmin().__sql__())
+SQLS.append(FeedBack().__sql__())
 SQLS.append(Meal().__sql__())
 SQLS.append(Order().__sql__())
 SQLS.append(Student().__sql__())

@@ -10,7 +10,7 @@ class Admin(Model):
     """
     __table__ = 'foodcenter_admins'
 
-    id       = IntegerField(primary_key=True, ddl='int(11)', updatable=False)
+    id       = IntegerField(primary_key=True, ddl='int(11)', ai=True, updatable=False)
     username = StringField(ddl='varchar(255)')                       # 用户名
     password = StringField(ddl='varchar(255)')                       # 密码
     role     = IntegerField(ddl="int(11)", default=3)                # 角色

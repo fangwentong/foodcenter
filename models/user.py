@@ -9,7 +9,7 @@ class User(Model):
     """
     __table__ = 'foodcenter_users'
 
-    id            = IntegerField(primary_key=True, updatable=False, ddl='int(11)')
+    id            = IntegerField(primary_key=True, updatable=False, ai=True, ddl='int(11)')
     studentId     = StringField(ddl="varchar(64)")    # 学号
     studentName   = StringField(ddl='varchar(255)')   # 姓名
     sex           = StringField(ddl='varchar(10)')    # 性别

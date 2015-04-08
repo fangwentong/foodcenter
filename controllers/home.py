@@ -3,6 +3,7 @@
 
 from config import setting
 from base import BasePage
+from models import FeedBack
 import web, json
 
 render = setting.render
@@ -25,8 +26,6 @@ class index(BasePage):
         BasePage.__init__(self, "home", U"哈工大饮食中心")
     def GET(self):
         return render.index(page = self.page)
-    def POST(self):
-        pass
 
 
 class test(BasePage):
@@ -37,8 +36,6 @@ class test(BasePage):
         BasePage.__init__(self, "test", U"测试页面")
     def GET(self):
         return render.test(page = self.page)
-    def POST(self):
-        pass
 
 class about(BasePage):
     """
@@ -48,8 +45,6 @@ class about(BasePage):
         BasePage.__init__(self, "about", U"关于我们 - 哈工大饮食中心")
     def GET(self):
         return render.pages.aboutus(page = self.page)
-    def POST(self):
-        pass
 
 class contact(BasePage):
     """
@@ -59,8 +54,6 @@ class contact(BasePage):
         BasePage.__init__(self, "contactus", U"联系我们 - 哈工大饮食中心")
     def GET(self):
         return render.pages.contactus(page = self.page)
-    def POST(self):
-        pass
 
 class help(BasePage):
     """
@@ -70,8 +63,6 @@ class help(BasePage):
         BasePage.__init__(self, "generalhelp", U"常见问题 - 哈工大饮食中心")
     def GET(self):
         return render.pages.generalhelp(page = self.page)
-    def POST(self):
-        pass
 
 class canteen(BasePage):
     """
@@ -81,8 +72,6 @@ class canteen(BasePage):
         BasePage.__init__(self, "canteen", U"餐厅特色 - 哈工大饮食中心")
     def GET(self):
         return render.pages.canteen(page = self.page)
-    def POST(self):
-        pass
 
 class feedback(BasePage):
     """
@@ -94,27 +83,25 @@ class feedback(BasePage):
         return render.pages.feedback(page = self.page)
     def POST(self):
         data = web.input(req = '', username = '', feedback = '')
-        req = data.req
-
-        if req == 'submit':
+        if data.req == 'submit':
             if data.username == '':
                 return json.dumps({'errinfo' : '请输入您的姓名'})
             if data.feedback == '':
                 return json.dumps({'errinfo' : '请输入您的反馈'})
             try:
-                db.insert('foodcenter_feedbacks',
-                        name    = data.username,
-                        email   = data.email,
-                        phone   = data.phone,
-                        content = data.feedback,
-                        solved  = 0,
-                        addTime = web.SQLLiteral("NOW()")
-                        )
+                FeedBack({
+                    "name": data.username,
+                    "email": data.email,
+                    "phone": data.phone,
+                    "content": data.feedback,
+                }).insert()
                 return json.dumps({'successinfo' : '已收到您的反馈，我们会尽快解决您的问题 ^_^'})
-            except Exception as err:
-                return json.dumps({'errinfo' : '出现错误: ' + err})
+            except Exception:
+                pass
+                # return json.dumps({'errinfo' : '出现错误: ' + str(err)})
         else:
             return web.Forbidden()
+
 
 class GetArticle:
     def GET(self):
@@ -142,6 +129,5 @@ class GetArticle:
                     title = "出错啦",
                     errinfo = err
                     ))
-
     def POST(self):
         pass

@@ -9,7 +9,7 @@ class Article(Model):
     """
     __table__ = 'foodcenter_articles'
 
-    id         = IntegerField(primary_key=True, updatable=False, ddl='int(15)')
+    id         = IntegerField(primary_key=True, updatable=False, ai=True, ddl='int(15)')
     title      = StringField(ddl='varchar(100)')  # 标题
     thumbnail  = StringField(ddl='varchar(100)')  # 缩略图
     url        = StringField(ddl='varchar(256)')  # 网址
