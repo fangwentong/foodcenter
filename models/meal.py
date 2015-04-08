@@ -9,7 +9,7 @@ class Meal(Model):
     """
     __table__ = 'foodcenter_meals'
 
-    id            = IntegerField(primary_key=True, nullable=False, ddl='int(11)')
+    id            = IntegerField(primary_key=True, updatable=False, ddl='int(11)')
     name          = StringField(ddl='varchar(50)')     # 套餐名
     picture       = StringField(ddl='varchar(200)')    # 图片
     description   = StringField(ddl='varchar(1000)')   # 餐品描述

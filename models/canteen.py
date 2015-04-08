@@ -9,7 +9,7 @@ class Canteen(Model):
     """
     __table__ = 'foodcenter_canteens'
 
-    id         = IntegerField(primary_key=True, nullable=False, ddl='int(11)')
+    id         = IntegerField(primary_key=True, updatable=False, ddl='int(11)')
     name       = StringField(ddl='varchar(50)')    # 餐厅名
     picture    = StringField(ddl='varchar(100)')   # 图片
     desription = StringField(ddl='varchar(2000)')  # 简介

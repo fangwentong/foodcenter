@@ -1,7 +1,7 @@
 create table foodcenter_sessions (
-    session_id char(128) unique not null,
-    atime timestamp not null default current_timestamp,
-    data text
+    `session_id` char(128) unique not null,
+    `atime` timestamp not null default current_timestamp,
+    `data` text
 );
 -- generating SQL for foodcenter_admins:
 create table `foodcenter_admins` (
@@ -11,6 +11,20 @@ create table `foodcenter_admins` (
   `role` int(11) not null,
   `nickname` varchar(64) not null,
   `email` varchar(128) not null,
+  primary key(`id`)
+);
+-- generating SQL for foodcenter_articles:
+create table `foodcenter_articles` (
+  `id` int(15) not null,
+  `title` varchar(100) not null,
+  `thumbnail` varchar(100) not null,
+  `url` varchar(256) not null,
+  `postTime` timestamp not null,
+  `lastModify` timestamp not null,
+  `isDraft` bool not null,
+  `summary` varchar(512) not null,
+  `body` varchar(10000) not null,
+  `visitors` varchar(12) not null,
   primary key(`id`)
 );
 -- generating SQL for foodcenter_canteens:

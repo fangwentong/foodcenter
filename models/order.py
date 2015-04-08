@@ -10,7 +10,7 @@ class Order(Model):
     """
     __table__ = 'foodcenter_orders'
 
-    id          = IntegerField(primary_key=True, nullable=False, ddl='int(11)')
+    id          = IntegerField(primary_key=True, updatable=False, ddl='int(11)')
     userId      = IntegerField(ddl='int(11)')        # 订餐人id
     canteenId   = IntegerField(ddl='int(7)')         # 就餐餐厅
     mealId      = IntegerField(ddl='int(11)')            # 套餐
