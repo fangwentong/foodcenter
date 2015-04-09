@@ -14,6 +14,9 @@ __all__ = [
 ]
 
 import logging, time
+import os,sys
+app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+sys.path.insert(0, app_root)             # 网站根目录加入搜索路径
 from config import db
 import web
 
@@ -206,6 +209,17 @@ class Model(web.Storage):
         d = list(db.query('select * from %s where %s=%s' % (cls.__table__, cls.__primary_key__.name, pk)))
         return cls(d[0]) if len(d)>0 else None
 
+    @classmethod
+    def getBy(cls, **kw):
+        '''
+        Get by condition
+        '''
+        L = []
+        for k, v in kw.iteritems():
+            L.append('`%s`="%s"' % (k, v))
+        d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
+        return cls(d[0]) if len(d)>0 else None
+
     def update(self):
         self.pre_update and self.pre_update()
         L = []
@@ -240,3 +254,4 @@ class Model(web.Storage):
                 params[v.name] = getattr(self, k)
         db.insert('%s' % self.__table__, **params)
         return self
+

@@ -12,6 +12,6 @@ class CmdAdmin(Model):
     id       = IntegerField(primary_key=True, updatable=False, ai=True, ddl='int(11)')
     username = StringField(ddl='varchar(255)')
     password = StringField(ddl='varchar(255)')
-    weixinId = StringField(ddl="varchar(255)")   # 微信 OpenId
+    weixinId = StringField(ddl="varchar(255)", updatable=False)   # 微信 OpenId
     role     = IntegerField(ddl="int(11)")       # 权限
 

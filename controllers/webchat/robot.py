@@ -2,7 +2,7 @@
 #coding=utf-8
 
 """
-
+微信控制逻辑
 """
 
 all = ['robot']
@@ -10,106 +10,64 @@ all = ['robot']
 import os, sys
 import time
 
-from config.setting import weconf
-from config import setting
-import basic
-
-render = setting.render
-db = setting.db
-
-app_root = os.path.dirname(__file__)
-sys.path.insert(0, os.path.join(app_root, 'virtualenv.bundle.zip'))
+current_path = os.path.dirname(__file__)
+app_root = os.path.join(current_path, os.path.pardir, os.path.pardir)
+sys.path.insert(0, app_root)             # 网站根目录加入搜索路径
+sys.path.insert(0, os.path.join(current_path, 'virtualenv.bundle.zip'))
 import werobot
+
+from config import weconf
+from config import db, site
+import template
 
 robot = werobot.WeRoBot(token = weconf.token, enable_session = False)
 
-# 控制逻辑
 
-############## Models ##################
-def get_package_name(package_id):
-    try:
-        sql = "SELECT * FROM foodcenter_meals WHERE id=$id"
-        result = list(db.query(sql, vars={'id' : str(package_id)}))
-        if len(result) > 0:
-            return result[0].name
-        else:
-            return "没有找到匹配的套餐"
-    except Exception as err:
-        return "出现错误: " + str(err)
+########  通用事件  #########
 
-def get_canteen_name(canteen_id):
-    try:
-        sql = "SELECT * FROM foodcenter_canteen WHERE cid=$cid"
-        result = list(db.query(sql, vars={'cid' : canteen_id}))
-        if len(result) > 0:
-            return result[0].name
-        else:
-            return "没有找到匹配的餐厅"
-    except Exception as err:
-        return "出现错误: " + str(err)
-
-def authchecker(func):
-    """管理员权限验证"""
-    def _authchecker(message):
-        try:
-            sql = "SELECT * FROM foodcenter_cmd_admins WHERE WeixinId=$wx_id"
-            result = list(db.query(sql, vars={'wx_id' : message.source}))
-            if len(result) <= 0:
-                return basic.help_message
-            else:
-                return func(message)
-
-        except Exception as err:
-            return "出现错误: " + str(err)
-    return _authchecker
-
-########################################
-########### 订阅 / 退订事件 ####################
 @robot.subscribe
 def say_hello(message):
-    return basic.welcome_message
+    return template.welcome_message
 
 @robot.unsubscribe
-def unsubscri(message):
+def unsubscribe(message):
     pass
-
-############## click 事件处理 ##################
 
 # 订餐注册
 @robot.key_click("SIGNUP")
 def signup(message):
     return [[
-        basic.page["signup"].title,
-        basic.page["signup"].description,
-        setting.image_url + "/thumbnail/" + basic.page["signup"].img,
-        setting.site.root + basic.page["signup"].url + "?wid=" + str(message.source)
+        template.page["signup"].title,
+        template.page["signup"].description,
+        site.image_url + "/thumbnail/" + template.page["signup"].img,
+        site.site.root + template.page["signup"].url + "?wid=" + str(message.source)
         ]]
 
 # 添加订单
 @robot.key_click("ADDORDER")
 def add_order(message):
     return [[
-        basic.page["add"].title,
-        basic.page["add"].description,
-        setting.image_url + "/thumbnail/" + basic.page["add"].img,
-        setting.site.root + basic.page["add"].url + "?wid=" + str(message.source)
+        template.page["add"].title,
+        template.page["add"].description,
+        site.image_url + "/thumbnail/" + template.page["add"].img,
+        site.site.root + template.page["add"].url + "?wid=" + str(message.source)
         ]]
 
 # 我的订单
 @robot.key_click("MYORDER")
 def get_my_order(message):
     return [[
-        basic.page["info"].title,
-        basic.page["info"].description,
-        setting.image_url + "/thumbnail/" + basic.page["info"].img,
-        setting.site.root + basic.page["info"].url + "?wid=" + str(message.source)
+        template.page["info"].title,
+        template.page["info"].description,
+        site.image_url + "/thumbnail/" + template.page["info"].img,
+        site.site.root + template.page["info"].url + "?wid=" + str(message.source)
         ]]
 
 # 消费纪录
 @robot.key_click("CONSUME_HISTORY")
 def consume_history(message):
     # return "对不起,没有找到您的消费信息."
-    return basic.consume_message
+    return template.consume_message
 
 # 最新活动
 @robot.key_click("LATEST_ACTIVITY")
@@ -126,8 +84,8 @@ def get_news(message):
             page_list.append([
                 page.title,
                 page.summary,
-                setting.image_url + "/articles/" + page.thumbnail,
-                setting.site.root + page.url
+                site.image_url + "/articles/" + page.thumbnail,
+                site.site.root + page.url
                 ])
         return page_list
     except Exception as err:
@@ -157,13 +115,13 @@ def get_all_order(message):
 @robot.filter("管理")
 @authchecker
 def get_admin_entrance(message):
-    return setting.site.root + "/admin"
+    return site.root + "/admin"
 
 
 # 默认Handler
 @robot.handler
 def reply_others(message):
-    return basic.help_message
+    return template.help_message
 
 
 if __name__ == '__main__':
@@ -172,4 +130,3 @@ if __name__ == '__main__':
         application = sae.create_wsgi_app(robot.wsgi)
     else:
         robot.run()
-

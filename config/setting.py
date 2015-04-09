@@ -51,17 +51,17 @@ admin = web.storage (
         )
 
 if 'SERVER_SOFTWARE' in os.environ:
-    asset_path = site.root + "/static"
+    site.asset_path = site.root + "/static"
     # image_url = "http://hitfoodcenter.qiniudn.com/image"
-    image_url = site.root + "/static/image"
+    site.image_url = site.root + "/static/image"
 else:
-    asset_path = "/static"
-    image_url = "/static/image"
+    site.asset_path = "/static"
+    site.image_url = "/static/image"
 
 # Jinja2 globals
 render._lookup.globals.update(
     site = site,
     admin = admin,
-    asset_path = asset_path,
-    image_url = image_url
+    asset_path = site.asset_path,
+    image_url = site.image_url
 )
