@@ -3,7 +3,7 @@
 
 from config import setting
 from base import BasePage
-from models import FeedBack
+from models import FeedBack, Article
 import web, json
 
 render = setting.render
@@ -112,12 +112,10 @@ class GetArticle:
             return web.notfound(render.err404(page = web.storage(name="err404", title=U"链接不存在")))
         else:
             try:
-                sql = "SELECT * FROM foodcenter_articles WHERE id=$id AND is_active=$active"
-                result = list(db.query(sql, vars={'id' : page_id, 'active' : '1'}))
+                article = Article.getBy(id = page_id, isDraft = False)
 
-                if len(result) <= 0:
+                if article == None:
                     return web.notfound(render.err404(page = web.storage(name="err404", title=U"链接不存在")))
-                article = result[0]
                 return render.pages.article(page = web.storage(
                     title = article.title,
                     name  = "title"
