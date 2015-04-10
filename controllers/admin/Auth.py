@@ -21,6 +21,9 @@ class AdminAuth:
                 )
         # print("An Object was created, which id {}".format(id(self)))
 
+    def POST(self):
+        pass
+
     @staticmethod
     def sessionChecker(func):
         """
@@ -29,10 +32,10 @@ class AdminAuth:
         def _sessionChecker(*args, **kwargs):
             # print ("Before {} is called.".format(func.__name__))
             try:
-                #管理员尚未登录
+                # 管理员尚未登录
                 if not web.config._session.logged or web.config._session.role != "admin":
                     return web.seeother("/login")
-                #已经登录且为管理员
+                # 已经登录且为管理员
                 else:
                     ret = func(*args, **kwargs)
             except Exception as err:
@@ -61,4 +64,3 @@ class AdminAuth:
         返回成功页面
         """
         print msg
-

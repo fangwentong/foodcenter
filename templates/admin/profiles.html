@@ -68,8 +68,8 @@ $(function() {
     /*获取邮箱*/
     $.post('profile?req=email', {"username" : $('#username').val()},
     	function(data){
-    		if(data.errinfo) {
-    			console.log(data.errinfo);
+    		if(data.err) {
+    			console.log(data.err);
     		}
     		if(data.email) {
     			$('#email').attr("value", data.email);
@@ -86,12 +86,12 @@ $(function() {
 
         $.post('profile?req=submit', {"nickname" : nickname, "email" : email},
             function(data) {
-                if (data.successinfo) {
-                    alert(data.successinfo);
+                if (data.success) {
+                    alert(data.success);
                     location.reload();
                 }
-                if (data.errinfo) {
-                    alert(data.errinfo);
+                if (data.err) {
+                    alert(data.err);
                 }
             }, "json");
         return false;

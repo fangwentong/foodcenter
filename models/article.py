@@ -14,8 +14,8 @@ class Article(Model):
     title      = StringField(ddl='varchar(100)')  # 标题
     thumbnail  = StringField(ddl='varchar(100)')  # 缩略图
     url        = StringField(ddl='varchar(256)')  # 网址
-    postTime   = TimeField()                      # 发布日期
     lastModify = TimeField()                      # 上次修改
+    postTime   = TimeField()                      # 发布日期
     isDraft    = BooleanField()                   # 是否为草稿
     summary    = StringField(ddl='varchar(512)')  # 摘要
     body       = StringField(ddl="varchar(10000)")# 文章内容
@@ -50,5 +50,5 @@ if __name__ == "__main__":
     # B.insert()
     # C.insert()
     # D.insert()
-    result = Article.get_bewteen()
+    result = Article.get_lastest(5)
     print [item.title for item in result]

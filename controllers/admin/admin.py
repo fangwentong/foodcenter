@@ -3,10 +3,18 @@
 
 import web
 import hashlib, json
-from config import render, db
+import sys, os
+app_root = os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)
+sys.path.insert(0, app_root)
+
+from config import render
 from Auth import AdminAuth
+from models import Admin
 
 class Index(AdminAuth):
+    """
+    主页, 重定向值Dashboard
+    """
     def __init__(self):
         AdminAuth.__init__(self)
 
@@ -19,6 +27,9 @@ class Index(AdminAuth):
         pass
 
 class LogIn(AdminAuth):
+    """
+    管理员登陆
+    """
     def __init__(self):
         AdminAuth.__init__(self, "admin", "管理员登陆 - 哈工大饮食中心")
 
@@ -27,20 +38,21 @@ class LogIn(AdminAuth):
         return render.admin.login(page = self.page)
 
     def POST(self):
-        data = web.input(remeber="")   #username password remeber
-        #print data
-
+        # username password remeber
+        data = web.input(username = "", password = "", remeber = "")
         try:
-            sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
-            result = list(db.query(sql, vars={'username' : data.username, 'password' : hashlib.new("md5", data.password).hexdigest()}))
+            result = Admin.getBy(
+                username = data.username,
+                password = hashlib.new("md5", data.password).hexdigest()
+                )
 
-            if len(result) <= 0:    #身份验证失败
+            if result == None:    #身份验证失败
                 self.page.errinfo = "您输入的用户名和密码不匹配，请检查后重试."
                 print self.page.errinfo
                 return render.admin.login(page = self.page)
             else:
-                self.session.name     = result[0].username
-                self.session.nickname = result[0].nickname
+                self.session.name     = result.username
+                self.session.nickname = result.nickname
                 self.session.role     = "admin"
                 self.session.logged   = True
                 if data.remeber:      #记住密码
@@ -82,32 +94,33 @@ class GetProfile(AdminAuth):
 
         if req == "email":
             try:
-                sql = "SELECT * FROM foodcenter_admins WHERE username=$username"
-                result = list(db.query(sql, vars={'username' : self.session.name}))
-
+                result = Admin.getBy(username = self.session.name)
                 web.header('Content-Type', 'application/json')
-                if len(result) > 0:
-                    return json.dumps({'email' : result[0].email})
+                if result:
+                    return json.dumps({'email' : result.email})
                 else:
-                    return json.dumps({'errinfo' : '没有找到匹配的用户'})
+                    return json.dumps({'err' : '没有找到匹配的用户'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo' : '出现错误: ' + str(err)})
+                return json.dumps({'err' : '出现错误: ' + str(err)})
 
         elif req == "submit":
             web.header('Content-Type', 'application/json')
             try:
                 if data.nickname == "":
-                    return json.dumps({"errinfo", "请输入昵称"})
+                    return json.dumps({"err", "请输入昵称"})
                 if data.email == "email":
-                    return json.dumps({'errinfo', "请输入邮箱"})
-                db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
-                        nickname = data.nickname, email = data.email)
+                    return json.dumps({'err', "请输入邮箱"})
+
+                person = Admin.getBy(username = self.session.name)
+                person.nickname = data.nickname
+                person.email = data.email
+                person.update()
 
                 self.session.nickname = data.nickname
-                return json.dumps({'successinfo': "个人资料更新成功"})
+                return json.dumps({'success': "个人资料更新成功"})
             except Exception as err:
-                return json.dumps({'errinfo' : "出现错误: " + str(err)})
+                return json.dumps({'err' : "出现错误: " + str(err)})
         else:
             return web.Forbidden()
 
@@ -127,35 +140,36 @@ class ChgPasswd(AdminAuth):
 
         if req == "check":
             try:
-                sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
-                result = list(db.query(sql, vars={'username' : self.session.name,
-                    'password' : hashlib.new("md5", data.oldp).hexdigest()}))
+                person = Admin.getBy(
+                    username = self.session.name,
+                    password = hashlib.new("md5", data.oldp).hexdigest()
+                )
 
                 web.header('Content-Type', 'application/json')
-                if len(result) > 0:
+                if person:
                     return json.dumps({'is_valid' : '1'})
                 else:
                     return json.dumps({'is_valid' : '0'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo' : '出现错误: ' + str(err)})
+                return json.dumps({'err' : '出现错误: ' + str(err)})
 
         elif req == "submit":
             try:
-                sql = "SELECT * FROM foodcenter_admins WHERE username=$username AND password=$password"
-                result = list(db.query(sql, vars={'username' : self.session.name,
-                    'password' : hashlib.new("md5", data.oldp).hexdigest()}))
-
+                person = Admin.getBy(
+                    username = self.session.name,
+                    password = hashlib.new("md5", data.oldp).hexdigest()
+                )
                 web.header('Content-Type', 'application/json')
-                if len(result) <= 0: # 旧密码输错
-                    return json.dumps({'errinfo': '旧密码输入错误!'})
+                if person == None: # 旧密码输错
+                    return json.dumps({'err': '旧密码输入错误!'})
                 else: # 更新密码
-                    db.update('foodcenter_admins', web.db.sqlwhere({'username' : self.session.name}),
-                            password = hashlib.new("md5", data.newp).hexdigest())
-                    return json.dumps({'successinfo' : '密码修改成功'})
+                    person.password = hashlib.new("md5", data.newp).hexdigest()
+                    person.update()
+                    return json.dumps({'success' : '密码修改成功'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo':'出现错误: '+ str(err)})
+                return json.dumps({'err':'出现错误: '+ str(err)})
         else:
             return web.Forbidden()
 
@@ -172,6 +186,7 @@ class DashBoard(AdminAuth):
     def POST(self):
         pass
 
+
 class Orderings(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "orderings", "订单管理")
@@ -183,6 +198,7 @@ class Orderings(AdminAuth):
     @AdminAuth.sessionChecker
     def POST(self):
         pass
+
 
 class ArticleManagement(AdminAuth):
     def __init__(self):
@@ -196,6 +212,7 @@ class ArticleManagement(AdminAuth):
     def POST(self):
         pass
 
+
 class AddArticle(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "articles", "添加文章")
@@ -207,6 +224,7 @@ class AddArticle(AdminAuth):
     @AdminAuth.sessionChecker
     def POST(self):
         pass
+
 
 class GetMeals(AdminAuth):
     def __init__(self):
@@ -220,6 +238,7 @@ class GetMeals(AdminAuth):
     def POST(self):
         pass
 
+
 class AddMeal(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "meals", "添加套餐")
@@ -231,6 +250,7 @@ class AddMeal(AdminAuth):
     @AdminAuth.sessionChecker
     def POST(self):
         pass
+
 
 class Feedback(AdminAuth):
     def __init__(self):
@@ -244,6 +264,7 @@ class Feedback(AdminAuth):
     def POST(self):
         pass
 
+
 class Users(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "users", "用户管理")
@@ -254,45 +275,42 @@ class Users(AdminAuth):
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input(req='')
+        data = web.input(req='', username = '')
         req = data.req
 
         if req == "check":
             try:
-                sql = "SELECT * FROM foodcenter_admins WHERE username=$username"
-                result = list(db.query(sql, vars={'username' : data.username}))
-
+                person = Admin.getBy(username = data.username)
                 web.header('Content-Type', 'application/json')
-                if len(result) <= 0:
+                if person == None:
                     return json.dumps({'is_valid' : '1'})
                 else:
                     return json.dumps({'is_valid' : '0'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo' : '出现错误: ' + str(err)})
+                raise err
+                return json.dumps({'err' : '出现错误: ' + str(err)})
 
         elif req == "submit":
             try:
-                sql = "SELECT * FROM foodcenter_admins WHERE username=$username"
-                result = list(db.query(sql, vars={'username' : data.username}))
-
+                person = Admin.getBy(username = data.username)
                 web.header('Content-Type', 'application/json')
-                if len(result) > 0: # 用户名已被占用
-                    return json.dumps({'errinfo': '用户名已被占用!'})
+                if person: # 用户名已被占用
+                    return json.dumps({'err': '用户名已被占用!'})
                 else: # 更新密码
-                    db.insert('foodcenter_admins',
-                            username = data.username,
-                            password = hashlib.new("md5", data.newp).hexdigest(),
-                            role  = data.role,
-                            nickname = "",
-                            email = "",
-                            )
-                    return json.dumps({'successinfo' : '成功添加用户'})
+                    Admin(dict(
+                        username = data.username,
+                        password = hashlib.new("md5", data.newp).hexdigest(),
+                        role  = data.role,
+                    )).insert()
+                    return json.dumps({'success' : '成功添加用户'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'errinfo':'出现错误: '+ str(err)})
+                raise err
+                return json.dumps({'err':'出现错误: '+ str(err)})
         else:
             return web.Forbidden()
+
 
 class ToolsList(AdminAuth):
     def __init__(self):
@@ -304,6 +322,7 @@ class ToolsList(AdminAuth):
     @AdminAuth.sessionChecker
     def POST(self):
         pass
+
 
 class DrawPrize(AdminAuth):
     def __init__(self):
@@ -317,6 +336,7 @@ class DrawPrize(AdminAuth):
     def POST():
         pass
 
+
 class AddOrder(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "add-order", "添加订单")
@@ -328,6 +348,7 @@ class AddOrder(AdminAuth):
     @AdminAuth.sessionChecker
     def POST():
         pass
+
 
 class SearchOrder(AdminAuth):
     def __init__(self):

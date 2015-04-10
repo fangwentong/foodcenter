@@ -4,11 +4,14 @@
 
 from orm import Model, StringField, IntegerField, DateField, TimeField, BooleanField
 from orm import db
+from meal import Meal
+from canteen import Canteen
+import web
 import datetime
 
 class Order(Model):
     """
-    订单
+    订单类
     """
     __table__ = 'foodcenter_orders'
 
@@ -50,6 +53,28 @@ class Order(Model):
             cls.__table__, cls.__primary_key__.name, limit, offset)))
         return [cls(item) for item in results]
 
+    @classmethod
+    def get_today(cls):
+        """
+        获取今日订单, 提供管理员查询接口
+        name : 套餐名
+        canteen : 领餐地点
+        studentName: 领餐人姓名
+        studentId:领餐人学号
+        birthday: 生日
+        """
+        now = datetime.datetime.now()
+        orders =  cls.get_bewteen(start = datetime.datetime.strftime(now, "%Y-%m-%d"))
+        return [ web.Storage(
+            name        = Meal.get(each_order.mealId).name,
+            canteen     = Canteen.get(each_order.canteenId).name,
+            studentName = each_order.studentName,
+            studentId   = each_order.studentId,
+            birthday    = each_order.birthday
+            ) for each_order in orders]
+
+
+
 if __name__ == "__main__":
     A = Order(dict(userId = "01"))
     B = Order(dict(userId = "02"))
@@ -62,5 +87,5 @@ if __name__ == "__main__":
     # C.insert()
     # D.insert()
     # E.insert()
-    result = Order.get_bewteen()
+    result = Order.get_today()
     print [item.userId for item in result]

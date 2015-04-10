@@ -19,8 +19,8 @@ create table `foodcenter_articles` (
   `title` varchar(100) not null,
   `thumbnail` varchar(100) not null,
   `url` varchar(256) not null,
-  `postTime` timestamp not null,
   `lastModify` timestamp not null,
+  `postTime` timestamp not null,
   `isDraft` boolean not null,
   `summary` varchar(512) not null,
   `body` varchar(10000) not null,
@@ -32,7 +32,7 @@ create table `foodcenter_canteens` (
   `id` int(11) not null auto_increment,
   `name` varchar(50) not null,
   `picture` varchar(100) not null,
-  `desription` varchar(2000) not null,
+  `description` varchar(2000) not null,
   `location` int(5) not null,
   `address` varchar(255) not null,
   primary key(`id`)
@@ -90,7 +90,7 @@ create table `foodcenter_orders` (
 create table `foodcenter_students` (
   `id` int(12) not null auto_increment,
   `studentId` varchar(64) not null,
-  `StudentName` varchar(255) not null,
+  `studentName` varchar(255) not null,
   `sex` varchar(10) not null,
   `identity` varchar(20) not null,
   `add_year` year(4) not null,

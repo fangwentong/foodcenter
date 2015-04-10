@@ -17,3 +17,13 @@ class Admin(Model):
     nickname = StringField(ddl="varchar(64)", default="管理员")      # 昵称
     email    = StringField(ddl="varchar(128)")                       # 邮箱
 
+if __name__ == '__main__':
+    import hashlib
+    A = Admin(dict(
+        username = "admin",
+        password = hashlib.new("md5", "1234").hexdigest(),
+        role     = 0
+    ))
+
+    # A.insert()
+    print Admin.getBy(username="admin").username

@@ -79,8 +79,8 @@ $(function() {
                     $('#oldp-alert').attr("class", "text-danger");
                     $('#oldp-alert').html('<i class="fa fa-fw fa-close"></i> 密码错误')
                 }
-                if(data.errinfo) {
-                    alert(data.errinfo);
+                if(data.err) {
+                    alert(data.err);
                 }
 
             }, "json");
@@ -129,12 +129,12 @@ $(function() {
 
         $.post('settings?req=submit', {"oldp" : oldp, "newp" : newp},
             function(data) {
-                if (data.successinfo) {
-                    alert(data.successinfo);
+                if (data.success) {
+                    alert(data.success);
                     location.reload();
                 }
-                if (data.errinfo) {
-                    alert(data.errinfo);
+                if (data.err) {
+                    alert(data.err);
                 }
             }, "json");
         return false;

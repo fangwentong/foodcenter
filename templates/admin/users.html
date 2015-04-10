@@ -127,8 +127,8 @@ $(function() {
                     $('#username-alert').attr("class", "text-danger");
                     $('#username-alert').html('<i class="fa fa-fw fa-close"></i> 此用户名已被占用')
                 }
-                if(data.errinfo) {
-                    alert(data.errinfo);
+                if(data.err) {
+                    alert(data.err);
                 }
 
             }, "json");
@@ -177,12 +177,12 @@ $(function() {
 
         $.post('users?req=submit', {"username" : username, "newp" : newp, "role" : '3'},
             function(data) {
-                if (data.successinfo) {
-                    alert(data.successinfo);
+                if (data.success) {
+                    alert(data.success);
                     location.reload();
                 }
-                if (data.errinfo) {
-                    alert(data.errinfo);
+                if (data.err) {
+                    alert(data.err);
                 }
             }, "json");
         return false;
