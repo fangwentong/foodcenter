@@ -16,5 +16,6 @@ class Canteen(Model):
     location   = IntegerField(ddl='int(5)')        # 校区
     address    = StringField(ddl='varchar(255)')   # 详细地址描述
 
+
 if __name__ == '__main__':
     pass

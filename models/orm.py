@@ -220,6 +220,17 @@ class Model(web.Storage):
         d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
         return cls(d[0]) if len(d)>0 else None
 
+    @classmethod
+    def getAll(cls, **kw):
+        '''
+        Get All by condition
+        '''
+        L = []
+        for k, v in kw.iteritems():
+            L.append('`%s`="%s"' % (k, v))
+        d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
+        return [cls(item) for item in d]
+
     def update(self):
         self.pre_update and self.pre_update()
         L = []

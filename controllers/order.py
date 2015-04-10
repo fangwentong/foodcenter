@@ -1,12 +1,15 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
-from config import setting
-from base import StuAuth
 import web, json
+import os, sys
+app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+sys.path.insert(0, app_root)
 
-render = setting.render
-db     = setting.db
+from config import render, db
+from models import User, Order, Student, Canteen, Meal
+from base import StuAuth
+
 
 def get_package_name(package_id):
     try:
@@ -41,8 +44,6 @@ class index(StuAuth):
     def GET(self):
         return render.order.index(page = self.page, session = self.session)
 
-    def POST(self):
-        pass
 
 
 class signup(StuAuth):
@@ -57,47 +58,49 @@ class signup(StuAuth):
         return render.order.signup(page = self.page)
 
     def POST(self):
-        user_info = web.input()
+        data = web.input(
+            sid = "",
+            name = "",
+            birthday = "",
+            phone = "",
+            sex = "",
+            message = ""
+        )
 
-        try:                   #查数据表，判断是否注册
-            sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid"
-            result = list(db.query(sql, vars={'sid':user_info.sid}))
-        except Exception as err:
-            return self.error(err)
+        if data.sid:
+            person = User.getBy(studentId = data.sid)
 
-        if len(result) >= 1: #已注册,自动跳转
+        if person:
             print("Already Registerd!")
             """
             TODO : 给出过渡页面,提示用户已经注册
             """
             raise web.seeother("/order/info")
         else:      #未注册
-            sql = "SELECT * FROM foodcenter_students WHERE student_id=$sid AND student_name=$name"
-            result = list(db.query(sql, vars={'sid':user_info.sid, 'name':user_info.name}))
+            student = Student.getBy(studentId = data.sid, studentName = data.name)
 
-            if len(result) <= 0:          #学生身份验证
+            if student == None:    # 学号&姓名无效
                 self.page.errinfo = "学生身份验证出错，请输入正确的学生信息."
                 print self.page.errinfo
                 return render.order.signup(page = self.page)
-
             weixinId = ""
-            if hasattr(self.session, 'wid'):
-                if StuAuth.isValid(self.session.wid):
-                    weixinId = self.session.wid
-                self.session.wid = ""
-            try:      #验证通过， 插入新的表项
-                db.insert('foodcenter_users',
-                        student_id    = user_info.sid,
-                        student_name  = user_info.name,
-                        sex           = self.getSexId(user_info.sex),
-                        birthday      = user_info.birthday,
-                        phone         = user_info.phone,
-                        short_message = user_info.message,
-                        weixinId      = weixinId,
-                        add_time      = web.SQLLiteral("NOW()"),
-                        isLock        = 0
-                        )
-                raise web.seeother("/order/info")
+            if hasattr(self.session, 'weixinId'):
+                weixinId = self.session.weixinId
+                del self.session.weixinId
+
+            try:                 # 插入新用户信息
+                User(dict(
+                    studentId    = data.sid,
+                    studentName  = data.name,
+                    sex          = self.getSexId(data.name),
+                    birthday     = data.birthday,
+                    phone        = data.phone,
+                    shortMessage = data.message,
+                    weixinId     = weixinId,
+                    addTime      = web.SQLLiteral("NOW()"),
+                    isLock       = False
+                )).insert()
+                return web.seeother("/order/info")
             except Exception as err:
                 return self.error(err)
 
@@ -124,55 +127,43 @@ class signin(StuAuth):
 
     def POST(self):
         data = web.input(req = '', sid = '', name = '')
-        req = data.req
-        print data
 
-        if req == 'check':
+        if data.req == 'check':
+            web.header('Content-Type', 'application/json')
             if data.sid == '':
                 return "{}"
             try:
-                sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid"
-                result = list(db.query(sql, vars={'sid' : data.sid}))
-
-                web.header('Content-Type', 'application/json')
-                if len(result) > 0:       #是已注册的学生
+                if User.getBy(studentId = data.sid):  # 是已注册的学生
                     return json.dumps({'valid' : '2'})
                 else:
-                    sql = "SELECT * FROM foodcenter_students WHERE student_id=$sid"
-                    result = list(db.query(sql, vars={'sid' : data.sid}))
-
-                    if len(result) > 0:   #是学生，但尚未注册
+                    if Student.getBy(studentId = data.sid):   #是学生，但尚未注册
                         return json.dumps({'valid' : '1'})
                     else:
                         return json.dumps({'valid' : '0'})
-
             except Exception as err:
                 return json.dumps({})
 
-        elif req == 'submit':
+        elif data.req == 'submit':
+            web.header('Content-Type', 'application/json')
             if data.sid == '':
                 return json.dumps({'errinfo' : "请输入您的学号"})
             if data.name == '':
                 return json.dumps({'errinfo' : "请输入您的姓名"})
             try:
-                sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
-                result = list(db.query(sql, vars={'sid' : data.sid, 'name' : data.name}))
-
-                if len(result) <= 0:          #学生身份验证
-                    web.header('Content-Type', 'application/json')
+                user = User.getBy(studentId = data.sid, studentName = data.name)
+                if user == None:          # 学生身份验证失败
                     return json.dumps({'errinfo' : "您输入的学号和姓名不匹配，请检查后重试."})
                 else:
-                    self.session.name   = result[0].student_name
-                    self.session.sid    = result[0].student_id
+                    self.session.name   = user.studentName
+                    self.session.sid    = user.studentId
                     self.session.role   = "student"
                     self.session.logged = True
                     return json.dumps({'successinfo' : '登陆成功，正在跳转'})
-
             except Exception as err:
-                web.header('Content-Type', 'application/json')
                 return json.dumps({'errinfo' : '出现错误: ' + err})
         else:
             return web.Forbidden()
+
 
 class logout(StuAuth):
     """
@@ -186,9 +177,6 @@ class logout(StuAuth):
         self.session.kill()
         return web.seeother('/order')
 
-    @StuAuth.sessionChecker
-    def POST(self):
-        pass
 
 class add_order(StuAuth):
     """
@@ -205,35 +193,29 @@ class add_order(StuAuth):
     @StuAuth.sessionChecker
     def POST(self):
         data = web.input(req="")
-        req  = data.req
-        print "request = " + req
 
-        if req == 'canteen':
+        if data.req == 'canteen':
+            web.header('Content-Type', 'application/json')
             try:
-                sql = "SELECT cid, name FROM foodcenter_canteen WHERE location=$location"
-                result = list(db.query(sql, vars={'location' : data.location}))
-
-                web.header('Content-Type', 'application/json')
+                canteens = Canteen.getAll(location = data.location)
+                result = [dict(cid = item.id, name = item.name) for item in canteens]
                 return json.dumps(result)
             except Exception:
-                web.header('Content-Type', 'application/json')
                 return '{}'
-        elif(req == 'package'):
+
+        elif data.req == 'package':
+            web.header('Content-Type', 'application/json')
             try:
-                sql = "SELECT id, name, isactive FROM foodcenter_meals WHERE canteen=$canteen"
-                result = list(db.query(sql, vars={'canteen': data.canteen}))
-                web.header('Content-Type', 'application/json')
+                meals = Meal.getAll(canteenId = data.canteen)
+                result = [dict(id = item.id, name = item.name) for item in meals]
                 return json.dumps(result)
             except Exception:
-                web.header('Content-Type', 'application/json')
                 return '{}'
-        elif(req == 'submit'):
+
+        elif data.req == 'submit':
             # 验证数据有效性
             web.header('Content-Type', 'application/json')
             try:
-                print "before verify"
-                print data.student_id
-                print data.student_name
                 status =  self.checkMatch(data.student_id, data.student_name)
                 if status == -3:
                     return json.dumps({'errinfo' : "抱歉，系统出现错误."})
@@ -247,24 +229,21 @@ class add_order(StuAuth):
                     return json.dumps({'errinfo' : "您的账户被锁定，请检查是否您是否有未完成的订单!"})
                 elif status == 3:
                     return json.dumps({'errinfo' : "此账户尚未注册，请先注册", 'action':'signup'})
-                print "after verify"
 
-                db.insert('foodcenter_orders',
-                        user_id = self.getUID(),
-                        canteen_id = data.canteen,
-                        package_id = data.package,
-                        location  = data.location,
-                        description = data.message,
-                        student_name = data.student_name,
-                        student_id = data.student_id,
-                        phone = data.phone,
-                        sex = self.getSexId(data.sex),
-                        birthday = data.birthday,
-                        token = self.generateToken(),
-                        wish = data.message,
-                        addtime = web.SQLLiteral("NOW()"),
-                        active = '1'
-                        )
+                user = User.getBy(studentId = data.student_id, studentName = data.student_name)
+                Order(userId = user.id,
+                    canteenId = data.canteen,
+                    mealId = data.package,
+                    studentId = data.student_id,
+                    studentName = data.student_name,
+                    phone = data.phone,
+                    sex = self.getSexId(data.sex),
+                    birthday = data.birthday,
+                    token = self.generateToken(),
+                    wish = data.message,
+                    addTime = web.SQLLiteral("NOW()"),
+                    isActive = True
+                    ).insert()
                 return json.dumps({'successinfo' : "添加成功!"})
             except Exception as err:
                 return json.dumps({'errinfo' : "出现错误: " + str(err)})
@@ -290,18 +269,15 @@ class add_order(StuAuth):
         if name == '':
             return -2
         try:
-            sql = "SELECT * FROM foodcenter_students WHERE student_id=$sid AND student_name=$name"
-            result = list(db.query(sql, vars={'sid' : sid, 'name' : name}))
-
-            if len(result) > 0:       #是学生
-                sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
-                result = list(db.query(sql, vars={'sid' : sid, 'name' : name}))
-                if len(result) > 0: # 已注册
-                    if result[0].isLock == 0: # 有效
-                        return 1
-                    else:  # 账户被锁定
+            student = Student.getBy(studentId = sid, studentName = name)
+            if student:  # 学生身份验证通过
+                user = User.getBy(studentId = sid, studentName = name)
+                if user:   # 已注册
+                    if user.isLock:   # 被锁定
                         return 2
-                else: #  没有注册
+                    else:               # 有效
+                        return 1
+                else:      # 没有注册
                     return 3
             else:
                 return 0 # 验证出错
@@ -310,19 +286,8 @@ class add_order(StuAuth):
             return -3  # 系统出现错误
 
     def generateToken(self):
-        return "1234"
+        return "123456"
 
-    def getUID(self):
-        try:
-            sql = "SELECT * FROM foodcenter_users WHERE student_id=$sid"
-            result = list(db.query(sql, vars={'sid' : self.session.sid}))
-            if len(result) > 0:
-                return result[0].number
-            else:
-                return self.session.sid
-        except Exception as err:
-            print err
-            return self.session.sid
 
 class get_info(StuAuth):
     """
@@ -336,28 +301,22 @@ class get_info(StuAuth):
     def GET(self):
         # 获取用户信息
         try:
-            sql        = "SELECT * FROM foodcenter_users WHERE student_id=$sid AND student_name=$name"
-            stu_info   = list(db.query(sql, vars={'sid' : self.session.sid, 'name' : self.session.name}))
+            user = User.getBy(studentId = self.session.sid, studentName = self.session.name)
             # 获取订单信息
-            if len(stu_info) <= 0:
+            if user == None:
                 return self.error("没有找到您的信息")
-            sql        = "SELECT * FROM foodcenter_orders WHERE student_id=$sid AND active='1'"
-            order_info = list(db.query(sql, vars={'sid' : self.session.sid}))
+            orders = Order.getAll(studentId = self.session.sid)
 
-            for order in order_info:
+            for order in orders:
                 order.canteen = get_canteen_name(str(order.canteen_id))
             data = web.storage (
-                    user  = stu_info[0],
-                    orders = order_info
+                    user  = user,
+                    orders = orders
                     )
-            print "hello"
             return render.order.orderinfo(page = self.page, data = data)
         except Exception as err:
             return self.error(err)
 
-    @StuAuth.sessionChecker
-    def POST(self):
-        pass
 
 class get_help(StuAuth):
     """
@@ -367,5 +326,3 @@ class get_help(StuAuth):
         StuAuth.__init__(self, "order", "订餐帮助 - 哈工大饮食中心")
     def GET(self):
         return render.order.orderhelp(page = self.page)
-    def POST(self):
-        pass

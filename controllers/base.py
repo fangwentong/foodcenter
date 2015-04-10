@@ -2,7 +2,12 @@
 #coding=utf-8
 
 import web
-from config import db, render, site
+import os, sys
+app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+sys.path.insert(0, app_root)
+
+from config import render, site
+from models import User
 
 class BasePage:
     """网站页面基类"""
@@ -32,9 +37,6 @@ class StuAuth:
     用于身份验证的工具类
     """
     def __init__(self, page_name="", page_title=""):
-        """
-        __init__
-        """
         self.session = web.config._session
         self.page    = web.storage(
                 name  = page_name,
@@ -50,27 +52,21 @@ class StuAuth:
         """
         def _decoder(*args, **kwargs):
             print ("Before {} is called.".format(func.__name__))
-
-            data = web.input(wid='-')
+            data = web.input(wid='')
             if StuAuth.isValid(data.wid):
                 try:         # 通过URL编码方式登陆
-                    sql = "SELECT * FROM foodcenter_users WHERE weixinId = $wx_id" #验证微信账户信息
-                    result = list(db.query(sql, vars={'wx_id':data.wid}))
+                    result = User.getBy(weixinId = data.wid)
 
-                    if len(result) > 0:
-                        web.config._session.name   = result[0].student_name
-                        web.config._session.sid    = result[0].student_id
+                    if result:
+                        web.config._session.name   = result.studentName
+                        web.config._session.sid    = result.studentId
                         web.config._session.role   = "student"
                         web.config._session.logged = True
                     else:
-                        if hasattr(web.config._session, "logged") and web.config._session.logged == True \
-                            and web.config._session.role == "student":
-                            sql = "SELECT * FROM foodcenter_users WHERE student_name=$name"
-                            print web.config._session.name
-                            result = list(db.query(sql, vars={'name' : web.config._session.name}))
-                            if len(result) > 0 and result[0].weixinId == "":
-                                db.update('foodcenter_users', web.db.sqlwhere({'student_name' : web.config._session.name}),
-                                        weixinId = data.wid)
+                        if web.config._session.logged and web.config._session.role == "student":
+                            person = User.getBy(studentId = web.config._session.sid)
+                            person.weixinId = data.wid
+                            person.update()
                         else:
                             web.config._session.wid = data.wid
                     return web.seeother("")
@@ -78,7 +74,6 @@ class StuAuth:
                     return StuAuth.error(err)
             else:
                 ret = func(*args, **kwargs)
-
             print ("After {} is called.".format(func.__name__))
             return ret
         return _decoder
@@ -93,7 +88,7 @@ class StuAuth:
             try:
                 #尚未登录
                 if not web.config._session.logged or web.config._session.role != "student":
-                    return web.seeother("/order/signup")
+                    return web.seeother("/order")
                 #已经登录且为学生
                 else:
                     ret = func(*args, **kwargs)
@@ -127,7 +122,7 @@ class StuAuth:
         """
         简单地判断OpenID是否有效
         """
-        if len(weixinId) <= 20:
+        if len(weixinId) <= 15:
             return False
         else:
             return True
