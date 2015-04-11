@@ -36,25 +36,24 @@
 <script>
 $(function() {
 	/* $('#student-id').bind('change', check_valid); */
-	function check_valid() {
+	function check_valid(callback) {
 		var student_id = $('#student-id').val();
 		return $.post('signin?req=check', {"sid": student_id},
 			function(data) {
-				console.log(data);
-				console.log(data.valid);
 				if(data.valid == '0') {
 					/*学号无效*/
 					alert("您输入的学号无效!");
-					return false;
+                    callback(false);
 				}
 				if(data.valid == '1') {
 					/*是学生但尚未注册*/
 					alert("您尚未注册，请先注册");
 					location.href = "signup";
+                    callback(false);
 				}
 				else if(data.valid == '2') {
 					/*已注册学号*/
-					return true;
+                    callback(true);
 				}
 			}, "json");
 	}
@@ -72,20 +71,21 @@ $(function() {
             alert("请输入姓名");
             return false;
         }
-        if (check_valid()) {
-        	console.log("submit");
-	        $.post('signin?req=submit', {"sid" : sid,  "name" : name},
-	        	function(data) {
-	        		if (data.successinfo) {
-	        			/*登陆成功*/
-	        			location.href = "info";
-	        		}
-	                if (data.errinfo) {
-	                    alert(data.errinfo);
-	                }
-	                return false;
-	            }, "json");
-        }
+        check_valid(function(isValid) {
+            if (isValid) {
+                $.post('signin?req=submit', {"sid" : sid,  "name" : name},
+                    function(data) {
+                        if (data.successinfo) {
+                            /*登陆成功*/
+                            location.href = "info";
+                        }
+                        if (data.errinfo) {
+                            alert(data.errinfo);
+                        }
+                        return false;
+                    }, "json");
+            }
+        });
         return false;
 	}
 });

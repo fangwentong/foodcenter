@@ -9,19 +9,20 @@
 <div class="content">
 	<div class="col-md-12">
 		<div class="col-md-12 stu-info">
-			<p class="h5"><span class="text-primary">$data.user.student_name</span> , 您的订单如下:</p>
+            <p class="h5"><span class="text-primary">{{ user.studentName }}</span> , 您的订单如下:</p>
 		</div>
 		<div class="col-md-12 order-list">
-      {% for order in data.orders %}
-				<div class="order-item">
-          {% block loop_item scoped %}
-            <li class="">使用人姓名 : {{ order.student_name }}</li>
-            <li class="">使用人学号 : {{ order.student_id }}</li>
-            <li class=""> 领取时间 : {{ order.birthday 11:00-12:30 }}</li>
-            <li class=""> 领取地点 : {{ order.canteen }}</li>
-          {% endblock %}
-				</div>
-      {% endfor %}
+        {% for order in orders %}
+            <div class="order-item">
+            {% block loop_item scoped %}
+            <li class="">使用人姓名 : {{ order.studentName }}</li>
+            <li class="">使用人学号 : {{ order.studentId }}</li>
+            <li class="">生日餐名 : {{ order.mealName }}</li>
+            <li class=""> 领取时间 : {{ order.birthday  }} 11:00-12:30</li>
+            <li class=""> 领取地点 : {{ order.canteenName }}</li>
+            {% endblock %}
+            </div>
+        {% endfor %}
 		</div>
 		<div class="col-md-12">
 			<p class="h5 text-info">* 请注意时间，按时领取.</p>

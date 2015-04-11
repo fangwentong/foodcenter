@@ -6,32 +6,10 @@ import os, sys
 app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
 sys.path.insert(0, app_root)
 
-from config import render, db
+from config import render
 from models import User, Order, Student, Canteen, Meal
 from base import StuAuth
 
-
-def get_package_name(package_id):
-    try:
-        sql = "SELECT * FROM foodcenter_meals WHERE id=$id"
-        result = list(db.query(sql, vars={'id' : str(package_id)}))
-        if len(result) > 0:
-            return result[0].name
-        else:
-            return "没有找到匹配的套餐"
-    except Exception as err:
-        return "出现错误: " + str(err)
-
-def get_canteen_name(canteen_id):
-    try:
-        sql = "SELECT * FROM foodcenter_canteen WHERE cid=$cid"
-        result = list(db.query(sql, vars={'cid' : canteen_id}))
-        if len(result) > 0:
-            return result[0].name
-        else:
-            return "没有找到匹配的餐厅"
-    except Exception as err:
-        return "出现错误: " + str(err)
 
 class index(StuAuth):
     """
@@ -75,6 +53,10 @@ class signup(StuAuth):
             """
             TODO : 给出过渡页面,提示用户已经注册
             """
+            self.session.name   = person.studentName
+            self.session.sid    = person.studentId
+            self.session.role   = "student"
+            self.session.logged = True
             raise web.seeother("/order/info")
         else:      #未注册
             student = Student.getBy(studentId = data.sid, studentName = data.name)
@@ -88,21 +70,22 @@ class signup(StuAuth):
                 weixinId = self.session.weixinId
                 del self.session.weixinId
 
-            try:                 # 插入新用户信息
-                User(dict(
-                    studentId    = data.sid,
-                    studentName  = data.name,
-                    sex          = self.getSexId(data.name),
-                    birthday     = data.birthday,
-                    phone        = data.phone,
-                    shortMessage = data.message,
-                    weixinId     = weixinId,
-                    addTime      = web.SQLLiteral("NOW()"),
-                    isLock       = False
-                )).insert()
-                return web.seeother("/order/info")
-            except Exception as err:
-                return self.error(err)
+            User(dict(
+                studentId    = data.sid,
+                studentName  = data.name,
+                sex          = self.getSexId(data.sex),
+                birthday     = data.birthday,
+                phone        = data.phone,
+                shortMessage = data.message,
+                weixinId     = weixinId,
+                addTime      = web.SQLLiteral("NOW()"),
+                isLock       = False
+            )).insert()
+            self.session.name   = data.name
+            self.session.sid    = data.sid
+            self.session.role   = "student"
+            self.session.logged = True
+            return web.seeother("/order/info")
 
     def getSexId(self, sex):
         if sex == "boy":
@@ -158,6 +141,10 @@ class signin(StuAuth):
                     self.session.sid    = user.studentId
                     self.session.role   = "student"
                     self.session.logged = True
+                    if hasattr(self.session, 'weixinId'):
+                        user.weixinId = self.session.weixinId
+                        user.update()
+                        del self.session.weixinId
                     return json.dumps({'successinfo' : '登陆成功，正在跳转'})
             except Exception as err:
                 return json.dumps({'errinfo' : '出现错误: ' + err})
@@ -206,7 +193,7 @@ class add_order(StuAuth):
         elif data.req == 'package':
             web.header('Content-Type', 'application/json')
             try:
-                meals = Meal.getAll(canteenId = data.canteen)
+                meals = Meal.getAll(canteenId = data.canteen, active=1)
                 result = [dict(id = item.id, name = item.name) for item in meals]
                 return json.dumps(result)
             except Exception:
@@ -215,38 +202,36 @@ class add_order(StuAuth):
         elif data.req == 'submit':
             # 验证数据有效性
             web.header('Content-Type', 'application/json')
-            try:
-                status =  self.checkMatch(data.student_id, data.student_name)
-                if status == -3:
-                    return json.dumps({'errinfo' : "抱歉，系统出现错误."})
-                elif status == -2:
-                    return json.dumps({'errinfo' : "姓名不能为空"})
-                elif status == -1:
-                    return json.dumps({'errinfo' : "学号不能为空"})
-                elif status == 0:
-                    return json.dumps({'errinfo' : "学号与姓名不匹配!"})
-                elif status == 2:
-                    return json.dumps({'errinfo' : "您的账户被锁定，请检查是否您是否有未完成的订单!"})
-                elif status == 3:
-                    return json.dumps({'errinfo' : "此账户尚未注册，请先注册", 'action':'signup'})
 
-                user = User.getBy(studentId = data.student_id, studentName = data.student_name)
-                Order(userId = user.id,
-                    canteenId = data.canteen,
-                    mealId = data.package,
-                    studentId = data.student_id,
-                    studentName = data.student_name,
-                    phone = data.phone,
-                    sex = self.getSexId(data.sex),
-                    birthday = data.birthday,
-                    token = self.generateToken(),
-                    wish = data.message,
-                    addTime = web.SQLLiteral("NOW()"),
-                    isActive = True
-                    ).insert()
-                return json.dumps({'successinfo' : "添加成功!"})
-            except Exception as err:
-                return json.dumps({'errinfo' : "出现错误: " + str(err)})
+            status =  self.checkMatch(data.student_id, data.student_name)
+            if status == -3:
+                return json.dumps({'errinfo' : "抱歉，系统出现错误."})
+            elif status == -2:
+                return json.dumps({'errinfo' : "姓名不能为空"})
+            elif status == -1:
+                return json.dumps({'errinfo' : "学号不能为空"})
+            elif status == 0:
+                return json.dumps({'errinfo' : "学号与姓名不匹配!"})
+            elif status == 2:
+                return json.dumps({'errinfo' : "您的账户被锁定，请检查是否您是否有未完成的订单!"})
+            elif status == 3:
+                return json.dumps({'errinfo' : "此账户尚未注册，请先注册", 'action':'signup'})
+
+            user = User.getBy(studentId = data.student_id, studentName = data.student_name)
+            Order(dict(userId = user.id,
+                canteenId = data.canteen,
+                mealId = data.package,
+                studentId = data.student_id,
+                studentName = data.student_name,
+                phone = data.phone,
+                sex = self.getSexId(data.sex),
+                birthday = data.birthday,
+                token = self.generateToken(),
+                wish = data.message,
+                addTime = web.SQLLiteral("NOW()"),
+                isActive = True
+                )).insert()
+            return json.dumps({'successinfo' : "添加成功!"})
 
         else:
             raise web.Forbidden()
@@ -308,12 +293,9 @@ class get_info(StuAuth):
             orders = Order.getAll(studentId = self.session.sid)
 
             for order in orders:
-                order.canteen = get_canteen_name(str(order.canteen_id))
-            data = web.storage (
-                    user  = user,
-                    orders = orders
-                    )
-            return render.order.orderinfo(page = self.page, data = data)
+                order.canteenName = Canteen.getBy(id = order.canteenId).name
+                order.mealName = Meal.getBy(id = order.mealId).name
+            return render.order.orderinfo(page = self.page, user = user, orders = orders)
         except Exception as err:
             return self.error(err)
 

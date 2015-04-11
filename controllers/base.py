@@ -53,25 +53,22 @@ class StuAuth:
         def _decoder(*args, **kwargs):
             print ("Before {} is called.".format(func.__name__))
             data = web.input(wid='')
-            if StuAuth.isValid(data.wid):
-                try:         # 通过URL编码方式登陆
-                    result = User.getBy(weixinId = data.wid)
+            if StuAuth.isValid(data.wid): # 通过URL编码方式登陆
+                result = User.getBy(weixinId = data.wid)
 
-                    if result:
-                        web.config._session.name   = result.studentName
-                        web.config._session.sid    = result.studentId
-                        web.config._session.role   = "student"
-                        web.config._session.logged = True
+                if result:
+                    web.config._session.name   = result.studentName
+                    web.config._session.sid    = result.studentId
+                    web.config._session.role   = "student"
+                    web.config._session.logged = True
+                else:
+                    if web.config._session.logged and web.config._session.role == "student":
+                        person = User.getBy(studentId = web.config._session.sid)
+                        person.weixinId = data.wid
+                        person.update()
                     else:
-                        if web.config._session.logged and web.config._session.role == "student":
-                            person = User.getBy(studentId = web.config._session.sid)
-                            person.weixinId = data.wid
-                            person.update()
-                        else:
-                            web.config._session.wid = data.wid
-                    return web.seeother("")
-                except Exception as err:
-                    return StuAuth.error(err)
+                        web.config._session.weixinId = data.wid
+                return web.seeother("")
             else:
                 ret = func(*args, **kwargs)
             print ("After {} is called.".format(func.__name__))

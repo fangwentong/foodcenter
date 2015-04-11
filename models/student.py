@@ -17,3 +17,6 @@ class Student(Model):
     add_year    = StringField(ddl="year(4)")                         # 入学年份
 
 
+if __name__ == '__main__':
+    fangwentong = Student.getBy(studentId = '1120310318', studentName = '房文同')
+    print fangwentong
