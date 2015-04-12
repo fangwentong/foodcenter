@@ -36,7 +36,7 @@ class Order(Model):
         """
         now = datetime.datetime.now()
         deltatime = datetime.timedelta(days = 7)
-        start = kw.get('start', datetime.datetime.strftime(now-deltatime, "%Y-%m-%d"))
+        start = kw.get('start', datetime.datetime.strftime(now - deltatime, "%Y-%m-%d"))
         end = kw.get('end', datetime.datetime.strftime(now, "%Y-%m-%d"))
         results = list(db.query('select * from %s where birthday between "%s" and "%s"' % (
             cls.__table__,  start, end)))
@@ -62,6 +62,7 @@ class Order(Model):
         studentName: 领餐人姓名
         studentId:领餐人学号
         birthday: 生日
+        token : 返回码
         """
         now = datetime.datetime.now()
         orders =  cls.get_bewteen(start = datetime.datetime.strftime(now, "%Y-%m-%d"))
@@ -70,9 +71,28 @@ class Order(Model):
             canteen     = Canteen.get(each_order.canteenId).name,
             studentName = each_order.studentName,
             studentId   = each_order.studentId,
-            birthday    = each_order.birthday
+            birthday    = each_order.birthday,
+            token       = each_order.token
             ) for each_order in orders]
 
+    @classmethod
+    def get_my_order_history(cls, **kw):
+        """
+        获取个人订单历史
+        """
+        L = []
+        for k, v in kw.iteritems():
+            L.append('`%s`="%s"' % (k, v))
+        d = list(db.query('select * from %s where %s' % (cls.__table__, ' and '.join(L))))
+        return [cls(item) for item in d]
+
+    @classmethod
+    def get_my_active_orders(cls, sid):
+        """
+        获取个人有效订单
+        """
+        d = list(db.query('select * from %s where studentId=%s and isActive=1 order by birthday desc' % (cls.__table__, sid)))
+        return [cls(item) for item in d]
 
 
 if __name__ == "__main__":

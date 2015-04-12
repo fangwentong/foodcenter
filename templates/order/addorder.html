@@ -18,12 +18,6 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="birthday" class="col-sm-2 control-label">* 生日</label>
-				<div class="col-sm-10">
-					<input type="date" class="form-control" id="birthday" name="birthday" placeholder="19890904" required>
-				</div>
-			</div>
-			<div class="form-group">
 				<label for="phone" class="col-sm-2 control-label">* 手机号码</label>
 				<div class="col-sm-10">
 					<input type="tel" class="form-control" id="phone" name="phone" placeholder="18056050000" required>
@@ -36,6 +30,12 @@
 						<option value="boy" selected>帅哥</option>
 						<option value="girl">美女</option>
 					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="birthday" class="col-sm-2 control-label">* 领餐日期</label>
+				<div class="col-sm-10">
+					<input type="date" class="form-control" id="birthday" name="birthday" placeholder="1991-09-04" required>
 				</div>
 			</div>
 
@@ -95,15 +95,15 @@ $(function() {
 	/*根据地点选择餐厅*/
 	$('#location').change(get_canteen);
 	function get_canteen() {
-		var location_id = $('#location').find(':selected').val();
-		$.post('add?req=canteen', {"location":location_id},
+		var locationId = $('#location').find(':selected').val();
+		$.post('add?req=canteen', {"location":locationId},
 			function(data) {
 				var options = "<option value=''>请选择</option>";
 				console.log(data);
 				for(var i = data.length-1; i >= 0; i--) {
 					options += "<option value=" + data[i].cid + ">" + data[i].name + "</option>";
 				}
-				if(location_id == '') {
+				if(locationId == '') {
 					options = "<option value=''>请先选择校区</option>"
 				}
 				$('#canteen').html(options);
@@ -138,21 +138,21 @@ $(function() {
 	$('#order-btn').bind('click', checkValid);
 
 	function checkValid() {
-		var student_id = $('#student-id').val();
-		var student_name = $('#student-name').val();
+		var studentId = $('#student-id').val();
+		var studentName = $('#student-name').val();
 		var birthday = $('#birthday').val();
 		var phone = $('#phone').val();
 		var sex = $('#sex').val();
-		var location_id = $('#location').find(':selected').val();
+		var locationId = $('#location').find(':selected').val();
 		var canteen = $('#canteen').find(':selected').val();
-		var package_id = $('#package').find(':selected').val();
+		var packageId = $('#package').find(':selected').val();
 		var message = $('#message').val();
 
-		if(student_id == '') {
+		if(studentId == '') {
 			alert("请填写学号");
 			return false;
 		}
-		if(student_name == '') {
+		if(studentName == '') {
 			alert("请填写姓名");
 			return false;
 		}
@@ -169,7 +169,7 @@ $(function() {
 			alert('请选择性别！');
 			return false;
 		}
-		if (location_id == '') {
+		if (locationId == '') {
 			alert('请选择校区！');
 			return false;
 		}
@@ -177,13 +177,13 @@ $(function() {
 			alert('请选择领餐地点!');
 			return false;
 		}
-		if(package_id == '') {
+		if(packageId == '') {
 			alert('请选择生日餐!');
 			return false;
 		}
 
-		if (!/^\d{2}\d+$$/g.test($('#student-id').val())) {
-			if ("sSbB".indexOf($('#student-id').val().split('')[2]) === -1) {
+		if (!/^\d{2}\d+$$/g.test(studentId)) {
+			if ("sSbB".indexOf(studentId.split('')[2]) === -1) {
 				alert("对不起，您不在我们的订餐人群内。");
 				return false;
 			}
@@ -196,16 +196,15 @@ $(function() {
 			return false;
 		}
 
-		console.log("I am posting data now");
 		$.post('add?req=submit',
-			{ "student_id" : student_id,
-				"student_name": student_name,
+			{ "studentId" : studentId,
+				"studentName": studentName,
 				"birthday": birthday,
 				"phone": phone,
 				"sex" : sex,
-				"location" : location_id,
+				"location" : locationId,
 				"canteen"  : canteen,
-				"package"  : package_id,
+				"package"  : packageId,
 				"message"  : message
 			},
 			function(data) {
@@ -219,7 +218,6 @@ $(function() {
 	            }
 			}, "json");
 		return false;
-
 	};
 
 });
