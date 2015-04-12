@@ -10,12 +10,23 @@ app_root = os.path.join(current_path, os.path.pardir, os.path.pardir)
 sys.path.insert(0, app_root)             # 网站根目录加入搜索路径
 
 import template
-from models import CmdAdmin
+from models import CmdAdmin, Order, Canteen, User
 
 ############## Models ##################
 def print_orders(order):
     return template.orderinfo.format(order.name, order.canteen,
-                order.studentName, order.studentId, order.birthday)
+                order.studentName, order.studentId, order.birthday, order.token)
+
+def print_my_order(weixinId):
+    user = User.getBy(weixinId = weixinId)
+    my_order = Order.getBy(userId = user.id)
+    return template.myorder.format(
+        my_order.name,
+        my_order.studentName,
+        my_order.studentId,
+        my_order.birthday,
+        Canteen.get(my_order.canteen).name,
+        my_order.token)
 
 def authchecker(func):
     """

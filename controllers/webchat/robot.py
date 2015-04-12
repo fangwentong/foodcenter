@@ -61,12 +61,7 @@ def add_order(message):
 @robot.key_click("MYORDER")
 def get_my_order(message):
     try:
-        return [[
-            template.page["info"].title,
-            template.page["info"].description,
-            site.image_url + "/thumbnail/" + template.page["info"].img,
-            site.root + template.page["info"].url + "?wid=" + str(message.source)
-            ]]
+        return model.print_my_order(message.source)
     except Exception as err:
         return str(err)
 

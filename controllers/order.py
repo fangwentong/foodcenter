@@ -2,7 +2,9 @@
 #coding=utf-8
 
 import web, json
+import datetime
 import os, sys
+import re
 app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
 sys.path.insert(0, app_root)
 
@@ -203,7 +205,7 @@ class add_order(StuAuth):
             # 验证数据有效性
             web.header('Content-Type', 'application/json')
 
-            status =  self.checkMatch(data.student_id, data.student_name)
+            status =  self.checkMatch(data.studentId, data.studentName)
             if status == -3:
                 return json.dumps({'errinfo' : "抱歉，系统出现错误."})
             elif status == -2:
@@ -217,12 +219,36 @@ class add_order(StuAuth):
             elif status == 3:
                 return json.dumps({'errinfo' : "此账户尚未注册，请先注册", 'action':'signup'})
 
-            user = User.getBy(studentId = data.student_id, studentName = data.student_name)
+            # 检查 餐品是否有效是否有效
+            meal = Meal.get(data.package)
+            if meal == None or str(meal.canteenId) != str(data.canteen):
+                return json.dumps({'errinfo' : "请不要伪造请求"})
+
+            # 检查订餐日期是否有效
+            if not re.match(r'^\d{4}-\d{2}-\d{2}$', data.birthday):
+                return json.dumps({'errinfo' : '请输入正确的时间!'})
+            max_deltatime = datetime.timedelta(days = 7)
+            min_deltatime = datetime.timedelta(days = 0)
+            order_time = datetime.datetime.strptime(data.birthday, "%Y-%m-%d")
+            now = datetime.datetime.now()
+
+            # 提前 1 - 7 天订餐
+            if order_time > now+max_deltatime or order_time < now + min_deltatime:
+                return json.dumps({'errinfo' : '请提前1-7天订餐!'})
+
+            user = User.getBy(studentId = data.studentId, studentName = data.studentName)
+            if user.lastOrderTime:
+                last_order_time = datetime.datetime.strptime(user.lastOrderTime, "%Y-%m-%d")
+                deltatime = datetime.timedelta(days = 300)
+                # 判断订餐间隔
+                if last_order_time + deltatime > datetime.datetime.now():
+                    return json.dumps({'errinfo': "订餐时间间隔过短， 一年内只能免费订餐一次!"})
+
             Order(dict(userId = user.id,
                 canteenId = data.canteen,
                 mealId = data.package,
-                studentId = data.student_id,
-                studentName = data.student_name,
+                studentId = data.studentId,
+                studentName = data.studentName,
                 phone = data.phone,
                 sex = self.getSexId(data.sex),
                 birthday = data.birthday,
@@ -231,6 +257,8 @@ class add_order(StuAuth):
                 addTime = web.SQLLiteral("NOW()"),
                 isActive = True
                 )).insert()
+            user.isLock = 1
+            user.update()
             return json.dumps({'successinfo' : "添加成功!"})
 
         else:
@@ -259,7 +287,17 @@ class add_order(StuAuth):
                 user = User.getBy(studentId = sid, studentName = name)
                 if user:   # 已注册
                     if user.isLock:   # 被锁定
-                        return 2
+                        # 之前的订单已经完成, 应该取消锁定
+                        flag = 1
+                        active_orders = Order.get_my_active_orders(sid)
+                        for each_order in active_orders:
+                            print type(each_order.birthday)
+                            if datetime.datetime.strptime(str(each_order.birthday), '%Y-%m-%d') < datetime.datetime.now():
+                                each_order.isActive = 0
+                                each_order.update()
+                            else:
+                                flag = 2
+                        return flag
                     else:               # 有效
                         return 1
                 else:      # 没有注册
