@@ -18,7 +18,7 @@ import werobot
 from config import weconf
 from config import site
 import template
-from models import Order, Article
+from models import Order, Article, User
 import model
 
 robot = werobot.WeRoBot(token = weconf.token, enable_session = False)
@@ -61,7 +61,14 @@ def add_order(message):
 @robot.key_click("MYORDER")
 def get_my_order(message):
     try:
-        return model.print_my_order(message.source)
+        user = User.getBy(weixinId = message.source)
+        if user == None:
+            return "您尚未注册, 请先注册."
+        my_orders = Order.get_my_active_orders(user.id)
+        if len(my_orders) == 0:
+            return "您当前没有未处理订单."
+        msg = [model.print_my_orders(order) for order in my_orders]
+        return "\n------\n".join(msg)
     except Exception as err:
         return str(err)
 
@@ -106,7 +113,7 @@ def get_all_order(message):
             return "今日没有未处理的订单."
         else:
             msg = [model.print_orders(order) for order in result]
-            return "\n\n".join(msg)
+            return "\n------\n".join(msg)
     except Exception as err:
         return str(err)
 

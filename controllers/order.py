@@ -35,7 +35,7 @@ class signup(StuAuth):
 
     @StuAuth.decoder
     def GET(self):
-        return render.order.signup(page = self.page)
+        return render.order.signup(page = self.page, session = self.session)
 
     def POST(self):
         data = web.input(
@@ -80,11 +80,13 @@ class signup(StuAuth):
                 phone        = data.phone,
                 shortMessage = data.message,
                 weixinId     = weixinId,
+                lastOrderTime= "0000-00-00",
                 addTime      = web.SQLLiteral("NOW()"),
                 isLock       = False
             )).insert()
             self.session.name   = data.name
             self.session.sid    = data.sid
+            self.session.phone  = data.phone
             self.session.role   = "student"
             self.session.logged = True
             return web.seeother("/order/info")
@@ -108,7 +110,7 @@ class signin(StuAuth):
 
     @StuAuth.decoder
     def GET(self):
-        return render.order.signin(page = self.page)
+        return render.order.signin(page = self.page, session = self.session)
 
     def POST(self):
         data = web.input(req = '', sid = '', name = '')
@@ -141,6 +143,7 @@ class signin(StuAuth):
                 else:
                     self.session.name   = user.studentName
                     self.session.sid    = user.studentId
+                    self.session.phone  = user.phone
                     self.session.role   = "student"
                     self.session.logged = True
                     if hasattr(self.session, 'weixinId'):
@@ -177,7 +180,7 @@ class add_order(StuAuth):
     @StuAuth.decoder
     @StuAuth.sessionChecker
     def GET(self):
-        return render.order.addorder(page = self.page)
+        return render.order.addorder(page = self.page, session = self.session)
 
     @StuAuth.sessionChecker
     def POST(self):
@@ -238,7 +241,7 @@ class add_order(StuAuth):
 
             user = User.getBy(studentId = data.studentId, studentName = data.studentName)
             if user.lastOrderTime:
-                last_order_time = datetime.datetime.strptime(user.lastOrderTime, "%Y-%m-%d")
+                last_order_time = datetime.datetime.strptime(str(user.lastOrderTime), "%Y-%m-%d")
                 deltatime = datetime.timedelta(days = 300)
                 # 判断订餐间隔
                 if last_order_time + deltatime > datetime.datetime.now():
@@ -284,20 +287,11 @@ class add_order(StuAuth):
         try:
             student = Student.getBy(studentId = sid, studentName = name)
             if student:  # 学生身份验证通过
+                Order.refresh_orders()
                 user = User.getBy(studentId = sid, studentName = name)
                 if user:   # 已注册
                     if user.isLock:   # 被锁定
-                        # 之前的订单已经完成, 应该取消锁定
-                        flag = 1
-                        active_orders = Order.get_my_active_orders(sid)
-                        for each_order in active_orders:
-                            print type(each_order.birthday)
-                            if datetime.datetime.strptime(str(each_order.birthday), '%Y-%m-%d') < datetime.datetime.now():
-                                each_order.isActive = 0
-                                each_order.update()
-                            else:
-                                flag = 2
-                        return flag
+                        return 2
                     else:               # 有效
                         return 1
                 else:      # 没有注册
@@ -345,4 +339,4 @@ class get_help(StuAuth):
     def __init__(self):
         StuAuth.__init__(self, "order", "订餐帮助 - 哈工大饮食中心")
     def GET(self):
-        return render.order.orderhelp(page = self.page)
+        return render.order.orderhelp(page = self.page, session = self.session)

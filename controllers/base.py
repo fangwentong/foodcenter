@@ -59,6 +59,7 @@ class StuAuth:
                 if result:
                     web.config._session.name   = result.studentName
                     web.config._session.sid    = result.studentId
+                    web.config._session.phone  = result.phone
                     web.config._session.role   = "student"
                     web.config._session.logged = True
                 else:

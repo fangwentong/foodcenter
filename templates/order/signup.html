@@ -5,12 +5,12 @@
 	<div class="col-md-8 col-md-offset-2">
 		<h3 class="text-center text-primary">注册新用户</h3>
 
-    {% if page.errinfo %}
-		    <div class="alert alert-danger fade in col-sm-10 col-sm-offset-2">
-		        <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
+        {% if page.errinfo %}
+        <div class="alert alert-danger fade in col-sm-10 col-sm-offset-2">
+            <a class="close" data-dismiss="alert" href="#" aria-hidden="true">×</a>
             <strong>{{ page.errinfo }}</strong>
-		    </div>
-    {% endif %}
+        </div>
+        {% endif %}
 
 		<div class="form-link">
 			<p class="pull-right"><a href="/order/signin">已经注册?</a></p>
@@ -19,7 +19,7 @@
 			<div class="form-group">
 				<label for="student-id" class="col-sm-2 control-label">* 学号</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="student-id" name="sid" placeholder="1110100101" autofocus required>
+					<input type="text" class="form-control" id="student-id" name="sid" placeholder="etc. 1110100101" autofocus required>
 				</div>
 			</div>
 			<div class="form-group">
@@ -31,13 +31,13 @@
 			<div class="form-group">
 				<label for="birthday" class="col-sm-2 control-label">* 生日</label>
 				<div class="col-sm-10">
-					<input type="date" class="form-control" id="birthday" name="birthday" placeholder="1990-10-04" required>
+					<input type="text" size="10" class="form-control" id="birthday" name="birthday" value="1993-10-04" data-date-format="yyyy-mm-dd" required>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="phone" class="col-sm-2 control-label">* 手机号码</label>
 				<div class="col-sm-10">
-					<input type="number" class="form-control" id="phone" name="phone" placeholder="18056050000" required>
+					<input type="number" class="form-control" id="phone" name="phone" placeholder="etc. 18056050000" required>
 				</div>
 			</div>
 			<div class="form-group">
@@ -68,8 +68,15 @@
 
 {% block content %}
 {{ super() }}
+<link rel="stylesheet" href="{{ asset_path }}/css/bootstrap-datepicker.min.css">
+<script src="{{ asset_path }}/js/bootstrap-datepicker.min.js"></script>
+<script src="{{ asset_path }}/js/bootstrap-datepicker.zh-CN.min.js" charset="utf-8"></script>
 <script>
 $(function() {
+    $("#birthday").datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN'
+    });
     $('#signup-btn').on('click', signup);
     function signup() {
         if($('#student-id').val() == '') {

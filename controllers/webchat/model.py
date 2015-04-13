@@ -10,16 +10,14 @@ app_root = os.path.join(current_path, os.path.pardir, os.path.pardir)
 sys.path.insert(0, app_root)             # 网站根目录加入搜索路径
 
 import template
-from models import CmdAdmin, Order, Canteen, User, Meal
+from models import CmdAdmin, Canteen, Meal
 
 ############## Models ##################
 def print_orders(order):
     return template.orderinfo.format(order.name, order.canteen,
                 order.studentName, order.studentId, order.birthday, order.token)
 
-def print_my_order(weixinId):
-    user = User.getBy(weixinId = weixinId)
-    my_order = Order.getBy(userId = user.id)
+def print_my_orders(my_order):
     return template.myorder.format(
         Meal.get(my_order.mealId).name,
         my_order.studentName,
