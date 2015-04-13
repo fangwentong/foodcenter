@@ -114,6 +114,14 @@ class DateField(Field):
             kw['ddl'] = 'date'
         super(DateField, self).__init__(**kw)
 
+class YearField(Field):
+    def __init__(self, **kw):
+        if not 'default' in kw:
+            kw['default'] = time.strftime("%Y")
+        if not 'ddl' in kw:
+            kw['ddl'] = 'year(4)'
+        super(YearField, self).__init__(**kw)
+
 class VersionField(Field):
     def __init__(self, name=None):
         super(VersionField, self).__init__(name=name, default=0, ddl='bigint')

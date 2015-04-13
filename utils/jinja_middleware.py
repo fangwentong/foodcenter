@@ -6,9 +6,11 @@ __all__ = ["JinjaRender"]
 import os
 
 class JinjaRender:
-    """Rendering interface to Jinja2 Templates
+    """
+    Rendering interface to Jinja2 Templates
     Example:
-        render= render_jinja('templates')
+        import JinjaRender
+        render = JinjaRender('templates')
         render.path.hello(name='jinja2')
     """
     def __init__(self, *a, **kwargs):

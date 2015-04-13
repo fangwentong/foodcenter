@@ -19,7 +19,7 @@ class User(Model):
     avatar        = StringField(ddl='varchar(255)')   # 头像
     weixinId      = StringField(ddl='varchar(255)')   # 微信 OpenId
     nickname      = StringField(ddl='varchar(255)')   # 昵称
-    lastOrderTime = StringField(ddl='date')           # 上一订单时间
+    lastOrderTime = DateField()                       # 上一订单时间
     addTime       = TimeField(ddl='timestamp')        # 注册日期
     isLock        = BooleanField(ddl='boolean')       # 是否被锁定
 

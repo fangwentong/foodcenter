@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #coding=utf-8
 
-from orm import Model, StringField, IntegerField
+from orm import Model, StringField, IntegerField, YearField
 
 class Student(Model):
     """
@@ -14,7 +14,7 @@ class Student(Model):
     studentName = StringField(ddl="varchar(255)", updatable=False)   # 姓名
     sex         = StringField(ddl="varchar(10)");                    # 性别
     identity    = StringField(ddl="varchar(20)", updatable=False);   # 身份证号码
-    add_year    = StringField(ddl="year(4)")                         # 入学年份
+    add_year    = YearField(ddl="year(4)")                         # 入学年份
 
 
 if __name__ == '__main__':
