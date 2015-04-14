@@ -31,7 +31,6 @@ class Order(Model):
 
     def __init__(self, *args, **kwargs):
         Model.__init__(self, *args, **kwargs)
-        # 订餐
         self.deletable = self.isActive == 1 and\
         datetime.datetime.strptime(str(self.birthday), "%Y-%m-%d") > datetime.datetime.now()
 
@@ -84,9 +83,9 @@ class Order(Model):
             ) for each_order in orders]
 
     @classmethod
-    def get_my_order_history(cls, **kw):
+    def getAll(cls, **kw):
         """
-        获取个人订单历史
+        Override: 根据条件 获取所有订单
         """
         Order.refresh_orders() # 刷新
         L = []
@@ -129,6 +128,19 @@ class Order(Model):
                 order.isActive = 0
                 order.update()
 
+    def delete(self):
+        """
+        删除订单， 并解锁用户
+        """
+        self.pre_delete and self.pre_delete()
+        pk = self.__primary_key__.name
+        args = getattr(self, pk)
+        db.query('delete from `%s` where `%s`=$value' % (self.__table__, pk), vars={'value':args})
+        user = User.getBy(studentId = self.studentId)
+        if user:
+            user.isLock = 0                           # 解锁某学号用户
+            user.update()
+
 if __name__ == "__main__":
     # A = Order(dict(userId = "01"))
     # B = Order(dict(userId = "02"))
@@ -143,3 +155,4 @@ if __name__ == "__main__":
     # E.insert()
     result = Order.get_today()
     print [item.userId for item in result]
+    print Order.get(11).deletable

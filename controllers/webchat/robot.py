@@ -64,11 +64,16 @@ def get_my_order(message):
         user = User.getBy(weixinId = message.source)
         if user == None:
             return "您尚未注册, 请先注册."
-        my_orders = Order.get_my_active_orders(user.id)
+        my_orders = sorted(Order.get_my_active_orders(user.id), key = lambda x:str(x.birthday))
         if len(my_orders) == 0:
             return "您当前没有未处理订单."
         msg = [model.print_my_orders(order) for order in my_orders]
-        return "\n------\n".join(msg)
+        return [[
+            template.page["info"].title,
+            "\n\n------\n\n".join(msg),
+            "",
+            site.root + template.page["info"].url + "?wid=" + str(message.source)
+        ]]
     except Exception as err:
         return str(err)
 
@@ -108,7 +113,7 @@ def get_news(message):
 @model.authchecker
 def get_all_order(message):
     try:
-        result = Order.get_today()
+        result = sorted(Order.get_today(), key = lambda order:str(order.canteen))
         if len(result) == 0:
             return "今日没有未处理的订单."
         else:

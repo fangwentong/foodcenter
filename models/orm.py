@@ -259,7 +259,7 @@ class Model(web.Storage):
     def delete(self):
         self.pre_delete and self.pre_delete()
         pk = self.__primary_key__.name
-        args = (getattr(self, pk), )
+        args = getattr(self, pk)
         db.query('delete from `%s` where `%s`=$value' % (self.__table__, pk), vars={'value':args})
         return self
 

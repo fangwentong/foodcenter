@@ -13,20 +13,70 @@
 		</div>
 		<div class="col-md-12 order-list">
         {% for order in orders %}
-            <div class="order-item">
             {% block loop_item scoped %}
-            <li class="">使用人姓名 : {{ order.studentName }}</li>
-            <li class="">使用人学号 : {{ order.studentId }}</li>
-            <li class="">生日餐名 : {{ order.mealName }}</li>
-            <li class=""> 领取时间 : {{ order.birthday  }} 11:00-12:30</li>
-            <li class=""> 领取地点 : {{ order.canteenName }}</li>
+                {% if order.isActive %}
+                <div class="order-item">
+                <li class="">使用人姓名 : {{ order.studentName }}</li>
+                <li class="">使用人学号 : {{ order.studentId }}</li>
+                <li class=""> 生日餐名 : {{ order.mealName }}</li>
+                <li class=""> 领取时间 : {{ order.birthday  }} 11:00-12:30</li>
+                <li class=""> 领取地点 : {{ order.canteenName }}</li>
+                <li class=""> Token  : {{ order.token }}</li>
+                <form action="?req=delete" >
+                    <input type="hidden" name="id" value="{{ order.id }}">
+                    {% if order.deletable %}
+                    <button class="btn btn-primary" type="submit">删除</button>
+                    {% endif %}
+                    {% if not order.deletable %}
+                    <button class="btn btn-default disabled">删除</button>
+                    {% endif %}
+                </form>
+                </div>
+                {% endif %}
             {% endblock %}
-            </div>
         {% endfor %}
 		</div>
+		<div class="col-md-12 order-list oder-history">
+        {% for order in orders %}
+            {% block order_history scoped %}
+                {% if not order.isActive %}
+                <div class="order-item">
+                <li class="">使用人姓名 : {{ order.studentName }}</li>
+                <li class="">使用人学号 : {{ order.studentId }}</li>
+                <li class=""> 生日餐名 : {{ order.mealName }}</li>
+                <li class=""> 领取时间 : {{ order.birthday  }} 11:00-12:30</li>
+                <li class=""> 领取地点 : {{ order.canteenName }}</li>
+                </div>
+                {% endif %}
+            {% endblock %}
+        {% endfor %}
+		</div>
+
 		<div class="col-md-12">
 			<p class="h5 text-info">* 请注意时间，按时领取.</p>
 		</div>
 	</div>
 </div>
 {% endblock section %}
+{% block content %}
+{{ super() }}
+<script>
+$(function() {
+    $('.btn-primary').bind('click', function(event){
+        $.post('info?req=delete',
+            {
+                "id": $(event.target).prev().val()
+            },
+            function(res) {
+                if(res.err) {
+                    alert(res.err);
+                } else if (res.success) {
+                    alert(res.success);
+                    $(event.target).parent().parent().slideUp('slow');
+                }
+            }, "json");
+        return false;
+    });
+});
+</script>
+{% endblock content %}

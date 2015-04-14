@@ -350,23 +350,30 @@ class get_info(StuAuth):
             # 获取订单信息
             if user == None:
                 return self.error("没有找到您的信息")
-            orders = Order.getAll(studentId = self.session.sid)
+            orders = Order.getAll(userId = user.id)
 
             for order in orders:
                 order.canteenName = Canteen.getBy(id = order.canteenId).name
                 order.mealName    = Meal.getBy(id = order.mealId).name
+            orders = sorted(orders, key = lambda order:str(order.birthday))
             return render.order.orderinfo(page = self.page, user = user, orders = orders)
         except Exception as err:
             return self.error(err)
 
     def POST(self):
         data = web.input(
+            req = '',
+            id  = ''
         )
-
-        if data.action == "delete":
+        if data.req == "delete":
+            if not data.id:
+                return json.dumps({'err': '请求出错'})
             order = Order.get(data.id)
-            if order.isActive == 1 and datetime.datetime.strptime(str(order.birthday), "%Y-%m-%d") > datetime.datetime.now():
+            if order == None:
+                return json.dumps({'err': '没有找到有效订单!'})
+            if order.deletable:
                 order.delete()
+                return json.dumps({'success': '成功删除订单'})
             else:
                 return json.dumps({'err': '请至少提前一天取消订单'})
 
