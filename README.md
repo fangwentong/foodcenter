@@ -7,3 +7,5 @@
 
 演示地址 :  http://food.wentong.me
 
+
+![hitfoodcenter](static/image/show/qrcode.jpg)
