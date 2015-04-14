@@ -25,7 +25,6 @@ class index(StuAuth):
         return render.order.index(page = self.page, session = self.session)
 
 
-
 class signup(StuAuth):
     """
     用户注册
@@ -39,12 +38,12 @@ class signup(StuAuth):
 
     def POST(self):
         data = web.input(
-            sid = "",
-            name = "",
+            sid      = "",
+            name     = "",
             birthday = "",
-            phone = "",
-            sex = "",
-            message = ""
+            phone    = "",
+            sex      = "",
+            message  = ""
         )
 
         if data.sid:
@@ -184,7 +183,18 @@ class add_order(StuAuth):
 
     @StuAuth.sessionChecker
     def POST(self):
-        data = web.input(req="")
+        data = web.input(
+            req         = "",
+            studentId   = "",
+            studentName = "",
+            birthday    = "",
+            phone       = "",
+            sex         = "",
+            location    = "",
+            canteen     = "",
+            package     = "",
+            message     = ""
+        )
 
         if data.req == 'canteen':
             web.header('Content-Type', 'application/json')
@@ -219,8 +229,18 @@ class add_order(StuAuth):
                 return json.dumps({'errinfo' : "学号与姓名不匹配!"})
             elif status == 2:
                 return json.dumps({'errinfo' : "您的账户被锁定，请检查是否您是否有未完成的订单!"})
-            elif status == 3:
-                return json.dumps({'errinfo' : "此账户尚未注册，请先注册", 'action':'signup'})
+            elif status == 3: # 先注册
+                User(dict(
+                    studentId    = data.studentId,
+                    studentName  = data.studentName,
+                    sex          = self.getSexId(data.sex),
+                    birthday     = data.birthday,
+                    phone        = data.phone,
+                    shortMessage = data.message,
+                    lastOrderTime= "0000-00-00",
+                    addTime      = web.SQLLiteral("NOW()"),
+                    isLock       = False
+                )).insert();
 
             # 检查 餐品是否有效是否有效
             meal = Meal.get(data.package)
@@ -229,7 +249,7 @@ class add_order(StuAuth):
 
             # 检查订餐日期是否有效
             if not re.match(r'^\d{4}-\d{2}-\d{2}$', data.birthday):
-                return json.dumps({'errinfo' : '请输入正确的时间!'})
+                return json.dumps({'errinfo' : '请输入正确的日期, 如 1990-10-01'})
             max_deltatime = datetime.timedelta(days = 7)
             min_deltatime = datetime.timedelta(days = 0)
             order_time = datetime.datetime.strptime(data.birthday, "%Y-%m-%d")
@@ -239,6 +259,7 @@ class add_order(StuAuth):
             if order_time > now+max_deltatime or order_time < now + min_deltatime:
                 return json.dumps({'errinfo' : '请提前1-7天订餐!'})
 
+            # 获取领餐人信息
             user = User.getBy(studentId = data.studentId, studentName = data.studentName)
             if user.lastOrderTime:
                 last_order_time = datetime.datetime.strptime(str(user.lastOrderTime), "%Y-%m-%d")
@@ -247,18 +268,21 @@ class add_order(StuAuth):
                 if last_order_time + deltatime > datetime.datetime.now():
                     return json.dumps({'errinfo': "订餐时间间隔过短， 一年内只能免费订餐一次!"})
 
-            Order(dict(userId = user.id,
-                canteenId = data.canteen,
-                mealId = data.package,
-                studentId = data.studentId,
-                studentName = data.studentName,
-                phone = data.phone,
-                sex = self.getSexId(data.sex),
-                birthday = data.birthday,
-                token = self.generateToken(),
-                wish = data.message,
-                addTime = web.SQLLiteral("NOW()"),
-                isActive = True
+            # 获取订餐人(当前操作者信息)
+            adder = User.getBy(studentId = self.session.sid)
+
+            Order(dict(userId = adder.id,
+                canteenId     = data.canteen,
+                mealId        = data.package,
+                studentId     = data.studentId,
+                studentName   = data.studentName,
+                phone         = data.phone,
+                sex           = self.getSexId(data.sex),
+                birthday      = data.birthday,
+                token         = self.generateToken(),
+                wish          = data.message,
+                addTime       = web.SQLLiteral("NOW()"),
+                isActive      = True
                 )).insert()
             user.isLock = 1
             user.update()
@@ -303,7 +327,11 @@ class add_order(StuAuth):
             return -3  # 系统出现错误
 
     def generateToken(self):
-        return "123456"
+        """
+        生成随机6位整数
+        """
+        import random
+        return random.randint(100000, 999999)
 
 
 class get_info(StuAuth):
@@ -326,10 +354,21 @@ class get_info(StuAuth):
 
             for order in orders:
                 order.canteenName = Canteen.getBy(id = order.canteenId).name
-                order.mealName = Meal.getBy(id = order.mealId).name
+                order.mealName    = Meal.getBy(id = order.mealId).name
             return render.order.orderinfo(page = self.page, user = user, orders = orders)
         except Exception as err:
             return self.error(err)
+
+    def POST(self):
+        data = web.input(
+        )
+
+        if data.action == "delete":
+            order = Order.get(data.id)
+            if order.isActive == 1 and datetime.datetime.strptime(str(order.birthday), "%Y-%m-%d") > datetime.datetime.now():
+                order.delete()
+            else:
+                return json.dumps({'err': '请至少提前一天取消订单'})
 
 
 class get_help(StuAuth):

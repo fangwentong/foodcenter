@@ -31,6 +31,9 @@ class Order(Model):
 
     def __init__(self, *args, **kwargs):
         Model.__init__(self, *args, **kwargs)
+        # 订餐
+        self.deletable = self.isActive == 1 and\
+        datetime.datetime.strptime(str(self.birthday), "%Y-%m-%d") > datetime.datetime.now()
 
     @classmethod
     def get_bewteen(cls, **kw):
@@ -112,8 +115,10 @@ class Order(Model):
             L.append('`%s`="%s"' % (k, v))
         active_orders = list(db.query('select * from %s where %s' % (cls.__table__, ' and '.join(L))))
 
+        deltatime = datetime.timedelta(hours = 18)
         for each_order in active_orders:
-            if datetime.datetime.strptime(str(each_order.birthday), '%Y-%m-%d') < datetime.datetime.now():
+            # 当天18:00 失效
+            if datetime.datetime.strptime(str(each_order.birthday), '%Y-%m-%d')+deltatime < datetime.datetime.now():
                 # 生日订餐时， 每个学号每次最多只有一个活动订单, 当该订单失效时， 解锁该用户
                 user = User.getBy(studentId = each_order.studentId)
                 if user != None:

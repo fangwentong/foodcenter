@@ -28,6 +28,7 @@ site = web.storage (
             year  = time.strftime('%Y',time.localtime(time.time())),
             month = time.strftime('%m',time.localtime(time.time())),
             day   = time.strftime('%d',time.localtime(time.time())),
+            today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
             ),
 
         owner = web.storage (
