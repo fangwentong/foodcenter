@@ -21,25 +21,40 @@
 				<table></table>
 			</div>
 			<div class="fixed-table-body">
-				<table data-toggle="table" class="table table-hover">
+				<table data-toggle="table" class="table table-hover table-center">
 				    <thead>
 				    	<tr>
-				    		<th style="text-align: center;">
+				    		<th>
 				    			<div class="th-inner ">用户名</div>
 				    		</th>
-				    		<th style="text-align: center;">
+				    		<th>
 				    			<div class="th-inner">权限</div>
 				    		</th>
-				    		<th style="text-align: center;">
+				    		<th>
 				    			<div class="th-inner ">管理</div>
-				    			<div class="fht-cell"></div>
 				    		</th>
 				    	</tr>
 				    </thead>
 					<tbody>
-						<tr class="no-records-found">
-							<td colspan="3">No matching records found</td>
+                        {% for person in admins %}
+                        <tr class="">
+                            <td>{{ person.username }}</td>
+                            <td>{{ person.role }}</td>
+                            {% if person.deletable %}
+                            <td data-userid="{{ person.id }}" class="management-group">
+                                <a class="btn">修改密码</a>
+                                <a class="btn">删除</a>
+                            </td>
+                            {% else %}
+                            <td><i>无权限</i></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        {% if not admins %}
+						<tr>
+							<td colspan="3">没有找到其他用户</td>
 						</tr>
+                        {% endif %}
 					</tbody>
 				</table>
 			</div>
@@ -187,6 +202,28 @@ $(function() {
             }, "json");
         return false;
     }
+    /*修改密码*/
+    $('.management-group>a:even').bind('click', function(event) {
+        // 弹出模态框
+        alert("hi");
+    });
+    /*删除用户*/
+    $('.management-group>a:odd').bind('click', function(event) {
+        if (confirm("确定删除该用户?")) {
+            $.post('?req=delete',
+                   {
+                       "id": $(event.target).parent().attr('data-userid')
+                   },
+                   function (res) {
+                       if (res.err) {
+                           alert(res.err);
+                       } else if (res.success) {
+                           $(event.target).parent().parent().slideUp('slow');
+                       }
+                   }, 'json');
+        }
+        return false;
+    });
 })
 </script>
 {% endblock content %}

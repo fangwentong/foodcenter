@@ -66,7 +66,12 @@ def get_my_order(message):
             return "您尚未注册, 请先注册."
         my_orders = sorted(Order.get_my_active_orders(user.id), key = lambda x:str(x.birthday))
         if len(my_orders) == 0:
-            return "您当前没有未处理订单."
+            return [[
+                template.page["info"].title,
+                "您当前没有未处理订单.",
+                site.image_url + "/thumbnail/" + template.page["info"].img,
+                site.root + template.page["info"].url + "?wid=" + str(message.source)
+            ]]
         msg = [model.print_my_orders(order) for order in my_orders]
         return [[
             template.page["info"].title,

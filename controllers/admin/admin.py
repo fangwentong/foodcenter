@@ -9,7 +9,7 @@ sys.path.insert(0, app_root)
 
 from config import render
 from Auth import AdminAuth
-from models import Admin
+from models import Admin, Order, Canteen, FeedBack, Meal, Order
 
 class Index(AdminAuth):
     """
@@ -47,17 +47,18 @@ class LogIn(AdminAuth):
                 )
 
             if result == None:    #身份验证失败
-                self.page.errinfo = "您输入的用户名和密码不匹配，请检查后重试."
-                print self.page.errinfo
-                return render.admin.login(page = self.page)
+                # self.page.errinfo = "您输入的用户名和密码不匹配，请检查后重试."
+                # print self.page.errinfo
+                # return render.admin.login(page = self.page)
+                return json.dumps({'err': '您输入的用户名和密码不匹配，请检查后重试'})
             else:
-                self.session.name     = result.username
+                self.session.username     = result.username
                 self.session.nickname = result.nickname
                 self.session.role     = "admin"
                 self.session.logged   = True
                 if data.remeber:      #记住密码
                     web.config.session_parameters['ignore_expiry'] = True
-                raise web.seeother("/dashboard")
+                return json.dumps({'success': '登录成功!'})
 
         except Exception as err:
             self.page.title   = "出错啦!"
@@ -73,10 +74,6 @@ class LogOut(AdminAuth):
     def GET(self):
         self.session.kill()
         return web.seeother('/')
-
-    @AdminAuth.sessionChecker
-    def POST(self):
-        pass
 
 
 class GetProfile(AdminAuth):
@@ -94,7 +91,7 @@ class GetProfile(AdminAuth):
 
         if req == "email":
             try:
-                result = Admin.getBy(username = self.session.name)
+                result = Admin.getBy(username = self.session.username)
                 web.header('Content-Type', 'application/json')
                 if result:
                     return json.dumps({'email' : result.email})
@@ -112,7 +109,7 @@ class GetProfile(AdminAuth):
                 if data.email == "email":
                     return json.dumps({'err', "请输入邮箱"})
 
-                person = Admin.getBy(username = self.session.name)
+                person = Admin.getBy(username = self.session.username)
                 person.nickname = data.nickname
                 person.email = data.email
                 person.update()
@@ -141,7 +138,7 @@ class ChgPasswd(AdminAuth):
         if req == "check":
             try:
                 person = Admin.getBy(
-                    username = self.session.name,
+                    username = self.session.username,
                     password = hashlib.new("md5", data.oldp).hexdigest()
                 )
 
@@ -157,7 +154,7 @@ class ChgPasswd(AdminAuth):
         elif req == "submit":
             try:
                 person = Admin.getBy(
-                    username = self.session.name,
+                    username = self.session.username,
                     password = hashlib.new("md5", data.oldp).hexdigest()
                 )
                 web.header('Content-Type', 'application/json')
@@ -271,14 +268,23 @@ class Users(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.users(page = self.page, session = self.session)
+        admins = Admin.getAll()
+        operator = Admin.getBy(username = self.session.username)
+        print admins
+        for i in range(len(admins)): # role = 0 为最高权限， role越大， 权限越低
+            if admins[i].username == operator.username:
+                index = i
+            admins[i].deletable = (admins[i].role > operator.role)
+        admins.pop(index)
+        print admins
+        return render.admin.users(page = self.page, session = self.session, admins = admins)
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input(req='', username = '')
+        data = web.input(req='', username = '', id='')
         req = data.req
 
-        if req == "check":
+        if req == 'check':
             try:
                 person = Admin.getBy(username = data.username)
                 web.header('Content-Type', 'application/json')
@@ -291,7 +297,7 @@ class Users(AdminAuth):
                 raise err
                 return json.dumps({'err' : '出现错误: ' + str(err)})
 
-        elif req == "submit":
+        elif req == 'submit':
             try:
                 person = Admin.getBy(username = data.username)
                 web.header('Content-Type', 'application/json')
@@ -300,14 +306,28 @@ class Users(AdminAuth):
                 else: # 更新密码
                     Admin(dict(
                         username = data.username,
-                        password = hashlib.new("md5", data.newp).hexdigest(),
+                        password = hashlib.new('md5', data.newp).hexdigest(),
                         role  = data.role,
                     )).insert()
                     return json.dumps({'success' : '成功添加用户'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                raise err
                 return json.dumps({'err':'出现错误: '+ str(err)})
+
+        elif req == 'delete':
+            if not data.id:
+                return json.dumps({'err': '请求出错'})
+            person = Admin.get(data.id)
+            operator = Admin.getBy(username = self.session.username)
+            if not person:
+                return json.dumps({'err': '用户不存在'})
+            if operator.role >= person.role:
+                return json.dumps({'err': '无权限'})
+            person.delete()
+            return json.dumps({'success': '已删除'})
+
+        elif req == '':
+            pass
         else:
             return web.Forbidden()
 

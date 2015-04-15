@@ -236,7 +236,10 @@ class Model(web.Storage):
         L = []
         for k, v in kw.iteritems():
             L.append('`%s`="%s"' % (k, v))
-        d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
+        if L:
+            d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
+        else:
+            d = list(db.query('select * from %s' % (cls.__table__)))
         return [cls(item) for item in d]
 
     def update(self):

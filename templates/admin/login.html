@@ -10,7 +10,7 @@
             <strong>{{ page.errinfo }}</strong>
         </div>
       {% endif %}
-      <form class="form-horizontal" role="form" action="" method="post">
+      <form class="form-horizontal" role="form" id="login-form" action="" method="post">
           <div class="form-group">
               <label for="username" class="col-sm-2 control-label">* 用户名</label>
               <div class="col-sm-10">
@@ -53,17 +53,31 @@
         //
         $('#login-btn').on('click', login);
         function login() {
-            if($('#username').val() == '') {
-                //用户名为空
-                alert("请输入用户名");
-                return false;
-            }
-            if($('#password').val() == '') {
-                //密码为空
-                alert("请输入密码");
-                return false;
-            }
-            $.post
+          var username = $('#username').val();
+          var password = $('#password').val();
+          if($('#username').val() == '') {
+            //用户名为空
+            alert("请输入用户名");
+            return false;
+          }
+          if($('#password').val() == '') {
+            //密码为空
+            alert("请输入密码");
+            return false;
+          }
+          $.post('login',
+                  {
+                    'username': username,
+                    'password': password
+                  },
+                  function(res) {
+                    if (res.err) {
+                      alert(res.err);
+                    } else if (res.success) {
+                      location.replace('dashboard');
+                    }
+                  }, 'json');
+          return false;
         }
     })
 </script>
