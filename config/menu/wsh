@@ -4,12 +4,15 @@
 """
 简单微信操作命令行
 """
+import os, sys
+app_root = os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)
+sys.path.insert(0, app_root)
 from config.setting import weconf
 import werobot.client
 import json
 Client = werobot.client.Client(weconf.appID, weconf.appsecret)
 
-menu_path = "config/menu/"
+menu_path = ""
 
 options = """
 ****** Menu ********
@@ -30,9 +33,9 @@ if __name__ == "__main__":
         if selection == '0':
             break
         if selection == '1':
-            # print "please input json file name"
-            # filename = raw_input()
-            filename = "menu20141225.json"
+            print "please input json file name"
+            filename = raw_input()
+            # filename = "menu20141225.json"
             try:
                 fp = open(menu_path + filename)
                 menu = fp.read()

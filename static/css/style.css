@@ -22,9 +22,6 @@ article .content h3.header {
   padding-bottom: 15px;
 }
 /*订单样式*/
-.stu-info {
-  padding-left: 30px;
-}
 .order-list {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -34,6 +31,9 @@ article .content h3.header {
   border-radius: 4px;
   padding: 15px;
   margin-bottom: 10px;
+}
+.order-item > form > button {
+  margin-top: 10px;
 }
 /*表单样式*/
 form > .form-group > div > p {

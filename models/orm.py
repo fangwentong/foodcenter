@@ -197,7 +197,7 @@ class ModelMetaclass(type):
             attrs['__table__'] = name.lower()
         attrs['__mappings__'] = mappings
         attrs['__primary_key__'] = primary_key
-        attrs['__sql__'] = lambda self: _gen_sql(attrs['__table__'], mappings)
+        attrs['__sql__'] =  _gen_sql(attrs['__table__'], mappings)
         for trigger in _triggers:
             if not trigger in attrs:
                 attrs[trigger] = None

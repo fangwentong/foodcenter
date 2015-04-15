@@ -71,7 +71,7 @@ def get_my_order(message):
         return [[
             template.page["info"].title,
             "\n\n------\n\n".join(msg),
-            "",
+            site.image_url + "/thumbnail/" + template.page["info"].img,
             site.root + template.page["info"].url + "?wid=" + str(message.source)
         ]]
     except Exception as err:
@@ -90,7 +90,7 @@ def consume_history(message):
 def get_news(message):
     page_list = []
     try:
-        result = Article.get_lastest(5)
+        result = Article.get_lastest(4)
 
         if len(result) <= 0:
             return "最近没有新公告"

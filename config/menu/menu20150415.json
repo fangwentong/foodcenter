@@ -1,0 +1,72 @@
+{
+    "button":[
+        {
+            "name" : "生日订餐",
+            "sub_button":[
+                {
+                    "type" : "click",
+                    "name" : "订餐注册",
+                    "key"  : "SIGNUP"
+                },
+                {
+                    "type" : "click",
+                    "name" : "添加订单",
+                    "key"  : "ADDORDER"
+                },
+                {
+                    "type" : "click",
+                    "name" : "我的订单",
+                    "key"  : "MYORDER"
+                },
+                {
+                    "type" : "view",
+                    "name" : "操作帮助",
+                    "url"  : "http://foodcenter.sinaapp.com/order"
+                }]
+        },
+        {
+            "name" : "饮食服务",
+            "sub_button": [
+                {
+                    "type" : "view",
+                    "name" : "微官网",
+                    "url"  : "http://foodcenter.sinaapp.com"
+                },
+                {
+                    "type" : "view",
+                    "name" : "中心简介",
+                    "url"  : "http://foodcenter.sinaapp.com/about"
+                },
+                {
+                    "type" : "click",
+                    "name" : "消费记录",
+                    "key"  : "CONSUME_HISTORY"
+                },
+                {
+                    "type" : "click",
+                    "name" : "最新活动",
+                    "key"  : "LATEST_ACTIVITY"
+                }]
+
+        },
+
+        {
+            "name" : "信息反馈",
+            "sub_button" : [
+            {
+                "type" : "view",
+                "name" : "在线建议",
+                "url"  : "http://foodcenter.sinaapp.com/feedback"
+            },
+            {
+                "type" : "view",
+                "name" : "常见问题",
+                "url"  : "http://foodcenter.sinaapp.com/help"
+            },
+            {
+                "type" : "view",
+                "name" : "联系我们",
+                "url"  : "http://foodcenter.sinaapp.com/contact"
+            }]
+        }]
+}

@@ -9,10 +9,13 @@
 <div class="content">
 	<div class="col-md-12">
 		<div class="col-md-12 stu-info">
-            <p class="h5"><span class="text-primary">{{ user.studentName }}</span> , 您的订单如下:</p>
+            <p class="text-bold"><strong class="text-primary">{{ user.studentName }}</strong> 同学, 您的订单如下:</p>
 		</div>
+
+        {% if active_orders %}
 		<div class="col-md-12 order-list">
-        {% for order in orders %}
+            <h4 class="text-primary">未完成订单</h4>
+        {% for order in active_orders %}
             {% block loop_item scoped %}
                 {% if order.isActive %}
                 <div class="order-item">
@@ -25,19 +28,23 @@
                 <form action="?req=delete" >
                     <input type="hidden" name="id" value="{{ order.id }}">
                     {% if order.deletable %}
-                    <button class="btn btn-primary" type="submit">删除</button>
-                    {% endif %}
-                    {% if not order.deletable %}
-                    <button class="btn btn-default disabled">删除</button>
+                    <button class="btn btn-info btn-delete btn-block" type="submit" data-loading-text="正在删除...">取消订单</button>
                     {% endif %}
                 </form>
                 </div>
                 {% endif %}
             {% endblock %}
         {% endfor %}
+            <div class="col-md-12">
+                <p class="h5 text-danger">* 请注意时间，按时领取.</p>
+            </div>
 		</div>
+        {% endif %}
+
+        {% if history_orders %}
 		<div class="col-md-12 order-list oder-history">
-        {% for order in orders %}
+            <h4 class="text-primary">历史订单</h4>
+        {% for order in history_orders %}
             {% block order_history scoped %}
                 {% if not order.isActive %}
                 <div class="order-item">
@@ -51,10 +58,11 @@
             {% endblock %}
         {% endfor %}
 		</div>
+        {% endif %}
 
-		<div class="col-md-12">
-			<p class="h5 text-info">* 请注意时间，按时领取.</p>
-		</div>
+        <div class="col-sm-6 col-sm-offset-3">
+            <a href="/order/add" class="btn btn-lg btn-primary btn-block">添加订单</a>
+        </div>
 	</div>
 </div>
 {% endblock section %}
@@ -62,12 +70,14 @@
 {{ super() }}
 <script>
 $(function() {
-    $('.btn-primary').bind('click', function(event){
+    $('.btn-delete').bind('click', function(event){
+        var $btn = $(this).button('loading');
         $.post('info?req=delete',
             {
                 "id": $(event.target).prev().val()
             },
             function(res) {
+                $btn.button('reset');
                 if(res.err) {
                     alert(res.err);
                 } else if (res.success) {

@@ -33,6 +33,8 @@ class Order(Model):
         Model.__init__(self, *args, **kwargs)
         self.deletable = self.isActive == 1 and\
         datetime.datetime.strptime(str(self.birthday), "%Y-%m-%d") > datetime.datetime.now()
+        self.canteenName = Canteen.get(self.canteenId).name
+        self.mealName = Meal.get(self.mealId).name
 
     @classmethod
     def get_bewteen(cls, **kw):
@@ -100,7 +102,16 @@ class Order(Model):
         获取个人有效订单
         """
         Order.refresh_orders() # 刷新
-        d = list(db.query('select * from %s where userId=%s and isActive=1 order by birthday desc' % (cls.__table__, userId)))
+        d = list(db.query('select * from %s where userId=%s and isActive=1 order by birthday asc' % (cls.__table__, userId)))
+        return [cls(item) for item in d]
+
+    @classmethod
+    def get_my_history_orders(cls, userId):
+        """
+        获取个人失效订单(历史订单)
+        """
+        Order.refresh_orders() # 刷新
+        d = list(db.query('select * from %s where userId=%s and isActive=0 order by birthday asc' % (cls.__table__, userId)))
         return [cls(item) for item in d]
 
     @classmethod

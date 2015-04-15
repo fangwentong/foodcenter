@@ -17,15 +17,15 @@ create table foodcenter_sessions (
     `data` text
 );"""]
 
-SQLS.append(Admin().__sql__())
-SQLS.append(Article().__sql__())
-SQLS.append(Canteen().__sql__())
-SQLS.append(CmdAdmin().__sql__())
-SQLS.append(FeedBack().__sql__())
-SQLS.append(Meal().__sql__())
-SQLS.append(Order().__sql__())
-SQLS.append(Student().__sql__())
-SQLS.append(User().__sql__())
+SQLS.append(Admin.__sql__)
+SQLS.append(Article.__sql__)
+SQLS.append(Canteen.__sql__)
+SQLS.append(CmdAdmin.__sql__)
+SQLS.append(FeedBack.__sql__)
+SQLS.append(Meal.__sql__)
+SQLS.append(Order.__sql__)
+SQLS.append(Student.__sql__)
+SQLS.append(User.__sql__)
 
 sql_file_name = os.path.join(os.path.dirname(__file__), 'foodcenter.sql')
 fp = open(sql_file_name, 'w')

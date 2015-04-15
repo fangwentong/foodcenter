@@ -46,26 +46,26 @@ class signup(StuAuth):
             message  = ""
         )
 
-        if data.sid:
-            person = User.getBy(studentId = data.sid)
+        if not data.sid:
+            return json.dumps({'err': '请输入学号!'})
+        if not data.name:
+            return json.dumps({'err': '请输入姓名!'})
+        person = User.getBy(studentId = data.sid, studentName = data.name)
 
         if person:
             print("Already Registerd!")
             """
             TODO : 给出过渡页面,提示用户已经注册
             """
-            self.session.name   = person.studentName
-            self.session.sid    = person.studentId
-            self.session.role   = "student"
-            self.session.logged = True
-            raise web.seeother("/order/info")
+            return json.dumps({'success': '已经注册, 请直接登录', 'action': 'signin'})
         else:      #未注册
             student = Student.getBy(studentId = data.sid, studentName = data.name)
 
             if student == None:    # 学号&姓名无效
-                self.page.errinfo = "学生身份验证出错，请输入正确的学生信息."
-                print self.page.errinfo
-                return render.order.signup(page = self.page)
+                # self.page.errinfo = "学生身份验证出错，请输入正确的学生信息."
+                # print self.page.errinfo
+                # return render.order.signup(page = self.page)
+                return json.dumps({'err': '学生身份验证出错，请输入正确的学生信息.'})
             weixinId = ""
             if hasattr(self.session, 'weixinId'):
                 weixinId = self.session.weixinId
@@ -88,7 +88,7 @@ class signup(StuAuth):
             self.session.phone  = data.phone
             self.session.role   = "student"
             self.session.logged = True
-            return web.seeother("/order/info")
+            return json.dumps({'success': '注册成功', 'action': 'info'})
 
     def getSexId(self, sex):
         if sex == "boy":
@@ -350,13 +350,11 @@ class get_info(StuAuth):
             # 获取订单信息
             if user == None:
                 return self.error("没有找到您的信息")
-            orders = Order.getAll(userId = user.id)
+            history_orders = Order.get_my_history_orders(user.id)
+            active_orders = Order.get_my_active_orders(user.id)
 
-            for order in orders:
-                order.canteenName = Canteen.getBy(id = order.canteenId).name
-                order.mealName    = Meal.getBy(id = order.mealId).name
-            orders = sorted(orders, key = lambda order:str(order.birthday))
-            return render.order.orderinfo(page = self.page, user = user, orders = orders)
+            return render.order.orderinfo(page = self.page, user = user,
+                    history_orders = history_orders, active_orders = active_orders)
         except Exception as err:
             return self.error(err)
 

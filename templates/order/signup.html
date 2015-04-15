@@ -15,7 +15,7 @@
 		<div class="form-link">
 			<p class="pull-right"><a href="/order/signin">已经注册?</a></p>
 		</div>
-		<form class="form-horizontal" role="form" action="" method="post">
+		<form class="form-horizontal" id="signup-form" role="form" action="" method="post">
 			<div class="form-group">
 				<label for="student-id" class="col-sm-2 control-label">* 学号</label>
 				<div class="col-sm-10">
@@ -57,7 +57,7 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-6 col-sm-offset-3">
-					<button type="submit" id="signup-btn" class="btn btn-lg btn-primary btn-block">提交信息</button>
+					<button type="submit" id="signup-btn" class="btn btn-lg btn-primary btn-block" data-loading-text="正在提交...">提交信息</button>
 				</div>
 			</div>
 		</form>
@@ -99,6 +99,19 @@ $(function() {
             alert('请输入手机号码');
             return false;
         }
+        var $btn = $(this).button('loading');
+        $.post('',
+               $('#signup-form').serialize(),
+               function (res) {
+                   $btn.button('reset');
+                   if (res.err) {
+                       alert(res.err);
+                   } else if (res.success) {
+                       alert(res.success);
+                       location.replace(res.action);
+                   }
+               }, 'json');
+        return false;
     }
 });
 </script>
