@@ -91,6 +91,11 @@ class signup(StuAuth):
             return json.dumps({'success': '注册成功', 'action': 'info'})
 
     def getSexId(self, sex):
+        """
+        定义性别:
+            0 : male
+            1 : female
+        """
         if sex == "boy":
             return 0
         elif sex == "girl":

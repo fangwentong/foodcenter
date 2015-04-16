@@ -281,7 +281,7 @@ class Users(AdminAuth):
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input(req='', username = '', id='')
+        data = web.input(req='', username = '', id='', newp='')
         req = data.req
 
         if req == 'check':
@@ -326,8 +326,16 @@ class Users(AdminAuth):
             person.delete()
             return json.dumps({'success': '已删除'})
 
-        elif req == '':
-            pass
+        elif req == 'update':
+            person = Admin.getBy(username = data.username)
+            operator = Admin.getBy(username = self.session.username)
+            if not person:
+                return json.dumps({'err': '用户不存在'})
+            if operator.role >= person.role:
+                return json.dumps({'err': '无权限'})
+            person.password =  hashlib.new('md5', data.newp).hexdigest()
+            person.update()
+            return json.dumps({'success': '修改成功!'})
         else:
             return web.Forbidden()
 

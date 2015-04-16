@@ -38,11 +38,11 @@
 					<tbody>
                         {% for person in admins %}
                         <tr class="">
-                            <td>{{ person.username }}</td>
+                            <td class="username">{{ person.username }}</td>
                             <td>{{ person.role }}</td>
                             {% if person.deletable %}
                             <td data-userid="{{ person.id }}" class="management-group">
-                                <a class="btn">修改密码</a>
+                                <a class="btn" data-toggle="modal" data-target="#myModal">修改密码</a>
                                 <a class="btn">删除</a>
                             </td>
                             {% else %}
@@ -121,6 +121,54 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="chpasswd-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel1">修改密码</h4>
+            </div> <!-- modal-header -->
+
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" method="post">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-offset-2 col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-4 ">
+                            <input class="form-control" type="text" name="username" placeholer="用户名" required disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newp" class="col-sm-offset-2 col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="password" name="newp" placeholer="请输入密码" autofocus required>
+                        </div>
+                        <div class="col-sm-4">
+                            <p id="newp3-alert" class="text-danger" >
+                                </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newp2" class="col-sm-offset-2 col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="password" name="newp2" placeholer="请确认密码" required>
+                        </div>
+                        <div class="col-sm-4">
+                            <p id="newp4-alert" class="text-danger">
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div> <!-- modal-body -->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" id="update-btn" class="btn btn-primary">修改密码</button>
+            </div> <!-- modal-footer -->
+        </div> <!-- modal-content -->
+    </div>
+</div>
+
 {% endblock section %}
 
 
@@ -204,8 +252,11 @@ $(function() {
     }
     /*修改密码*/
     $('.management-group>a:even').bind('click', function(event) {
-        // 弹出模态框
-        alert("hi");
+        $('#chpasswd-modal').find("input").val("");
+        console.log($(event.target).parent().siblings(".username").val());
+        $('#chpasswd-modal').find("input:first").val($(event.target).parent().siblings(".username").text());
+        $('#chpasswd-modal').modal('show');
+        return false;
     });
     /*删除用户*/
     $('.management-group>a:odd').bind('click', function(event) {
@@ -224,6 +275,41 @@ $(function() {
         }
         return false;
     });
+
+    $('#update-btn').bind('click', submitData);
+    function submitData(event) {
+        var modal = $(event.target).parents('#chpasswd-modal');
+        var username = modal.find('[name="username"]').val();
+        var newp = modal.find('[name="newp"]').val();
+        var newp2= modal.find('[name="newp2"]').val();
+        if(username == '') {
+            //
+            alert("请输入用户名.");
+            return false;
+        }
+        if(newp == '' || newp2 == '') {
+            //
+            alert("请输入密码.");
+            return false;
+        }
+        if(newp != newp2) {
+            //
+            alert("密码输入不一致!");
+            return false;
+        }
+
+        $.post('users?req=update', {"username" : username, "newp" : newp},
+            function(data) {
+                if (data.success) {
+                    alert(data.success);
+                    $('#chpasswd-modal').modal('hide');
+                }
+                if (data.err) {
+                    alert(data.err);
+                }
+            }, "json");
+        return false;
+    }
 })
 </script>
 {% endblock content %}
