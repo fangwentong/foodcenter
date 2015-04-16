@@ -71,20 +71,21 @@
 <script>
 $(function() {
     $('.btn-delete').bind('click', function(event){
-        var $btn = $(this).button('loading');
-        $.post('info?req=delete',
-            {
-                "id": $(event.target).prev().val()
-            },
-            function(res) {
-                $btn.button('reset');
-                if(res.err) {
-                    alert(res.err);
-                } else if (res.success) {
-                    alert(res.success);
-                    $(event.target).parent().parent().slideUp('slow');
-                }
-            }, "json");
+        if (confirm("确定删除该订单?")) {
+            var $btn = $(this).button('loading');
+            $.post('info?req=delete',
+                {
+                    "id": $(event.target).prev().val()
+                },
+                function(res) {
+                    $btn.button('reset');
+                    if(res.err) {
+                        alert(res.err);
+                    } else if (res.success) {
+                        $(event.target).parent().parent().slideUp('slow');
+                    }
+                }, "json");
+        }
         return false;
     });
 });
