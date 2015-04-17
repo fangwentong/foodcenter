@@ -1,13 +1,15 @@
 #!/usr/bin/env python2
 #coding=utf-8
 
+import sys, os
+app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
+sys.path.insert(0, app_root)
 from config import setting
 from base import BasePage
 from models import FeedBack, Article
 import web, json
 
 render = setting.render
-db = setting.db
 
 def notfound():
     return web.notfound(render.err404(page = web.storage(name="err404", title=U"链接不存在")))
