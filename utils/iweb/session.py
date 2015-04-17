@@ -8,7 +8,9 @@ class Session(web.session.Session):
         web.session.Session.__init__(self, app, store, initializer)
 
     def expired(self):
-        """Called when an expired session is atime
+        """
+        Called when an expired session is atime
+        重写session失效处理，取代默认行为
         """
         self._killed = True
         self._save()

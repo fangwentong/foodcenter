@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # coding= utf-8
 
+"""
+为Webpy编写的一个简单的ORM
+"""
+
 __all__ = [
     "StringField",
     "IntegerField",

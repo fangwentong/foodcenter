@@ -8,6 +8,7 @@ import os
 class JinjaRender:
     """
     Rendering interface to Jinja2 Templates
+    为webpy编写的简单Jinja2接口，替代官方库中的第三方版本
     Example:
         import JinjaRender
         render = JinjaRender('templates')
