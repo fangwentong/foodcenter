@@ -26,7 +26,7 @@ class Article(Model):
         """
         获取最近几篇文章
         """
-        results =  list(db.query('select * from %s where isDraft=False order by postTime desc limit %d' % (cls.__table__, n)))
+        results =  list(db.query('select * from %s where isDraft=False order by postTime desc limit $num' % (cls.__table__), vars = { 'num': n}))
         return [cls(item) for item in results]
 
     @classmethod
@@ -36,8 +36,8 @@ class Article(Model):
         """
         offset = kw.get('offset', 0)
         limit  = kw.get('limit', 10)
-        results = list(db.query('select * from %s order by %s asc limit %d offset %d' % (
-            cls.__table__, cls.__primary_key__.name, limit, offset)))
+        results = list(db.query('select * from %s order by %s asc limit $limit offset $offset' % (
+            cls.__table__, cls.__primary_key__.name), vars = { 'limit': limit, 'offset': offset}))
         return [cls(item) for item in results]
 
 if __name__ == "__main__":

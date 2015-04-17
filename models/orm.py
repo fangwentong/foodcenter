@@ -218,7 +218,7 @@ class Model(web.Storage):
         '''
         Get by primary key.
         '''
-        d = list(db.query('select * from %s where %s=%s' % (cls.__table__, cls.__primary_key__.name, pk)))
+        d = list(db.select(cls.__table__, { "value": pk }, where = "%s=$value" % cls.__primary_key__.name))
         return cls(d[0]) if len(d)>0 else None
 
     @classmethod
@@ -227,9 +227,11 @@ class Model(web.Storage):
         Get by condition
         '''
         L = []
+        args = {}
         for k, v in kw.iteritems():
-            L.append('`%s`="%s"' % (k, v))
-        d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
+            L.append('`{}`=${}'.format(k, k))
+            args[k] = v
+        d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
         return cls(d[0]) if len(d)>0 else None
 
     @classmethod
@@ -238,18 +240,16 @@ class Model(web.Storage):
         Get All by condition
         '''
         L = []
+        args = {}
         for k, v in kw.iteritems():
-            L.append('`%s`="%s"' % (k, v))
-        if L:
-            d = list(db.query('select * from %s where %s' % (cls.__table__, " and ".join(L))))
-        else:
-            d = list(db.query('select * from %s' % (cls.__table__)))
+            L.append('`{}`=${}'.format(k, k))
+            args[k] = v
+        d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
         return [cls(item) for item in d]
 
     def update(self):
         self.pre_update and self.pre_update()
-        L = []
-        args = []
+        D = {}
         for k, v in self.__mappings__.iteritems():
             if v.updatable:
                 if hasattr(self, k):
@@ -257,17 +257,17 @@ class Model(web.Storage):
                 else:
                     arg = v.default
                     setattr(self, k, arg)
-                L.append('`%s`="%s"' % (k, arg))
+                D[k] = arg
         pk = self.__primary_key__.name
-        args.append(getattr(self, pk))
-        db.query('update `%s` set %s where %s=$value' % (self.__table__, ','.join(L), pk), vars={'value':args})
+        value = getattr(self, pk)
+        db.update(self.__table__, where = "{}=$value".format(pk), vars = { 'value': value }, **D)
         return self
 
     def delete(self):
         self.pre_delete and self.pre_delete()
         pk = self.__primary_key__.name
-        args = getattr(self, pk)
-        db.query('delete from `%s` where `%s`=$value' % (self.__table__, pk), vars={'value':args})
+        value = getattr(self, pk)
+        db.delete(self.__table, where = '`{}`=$value'.format(pk), vars={ 'value': value })
         return self
 
     def insert(self):
@@ -278,6 +278,6 @@ class Model(web.Storage):
                 if not hasattr(self, k):
                     setattr(self, k, v.default)
                 params[v.name] = getattr(self, k)
-        db.insert('%s' % self.__table__, **params)
+        db.insert(self.__table__, **params)
         return self
 

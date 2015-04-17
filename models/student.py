@@ -18,5 +18,7 @@ class Student(Model):
 
 
 if __name__ == '__main__':
-    fangwentong = Student.getBy(studentId = '1120310318', studentName = '房文同')
-    print fangwentong
+    student = Student.getBy(id = 26)
+    student.sex = "123456"
+    student.update()
+    print student

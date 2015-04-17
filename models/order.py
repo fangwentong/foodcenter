@@ -45,8 +45,8 @@ class Order(Model):
         deltatime = datetime.timedelta(days = 7)
         start = kw.get('start', datetime.datetime.strftime(now - deltatime, "%Y-%m-%d"))
         end = kw.get('end', datetime.datetime.strftime(now, "%Y-%m-%d"))
-        results = list(db.query('select * from %s where birthday between "%s" and "%s"' % (
-            cls.__table__,  start, end)))
+        results = list(db.query('select * from %s where birthday between $start and $end' % (
+            cls.__table__), vars = { 'start': start, 'end':end }))
         return [cls(item) for item in results]
 
     @classmethod
@@ -57,8 +57,8 @@ class Order(Model):
         Order.refresh_orders() # 刷新
         offset = kw.get('offset', 0)
         limit  = kw.get('limit', 10)
-        results = list(db.query('select * from %s order by %s asc limit %d offset %d' % (
-            cls.__table__, cls.__primary_key__.name, limit, offset)))
+        results = list(db.query('select * from %s order by %s asc limit $limit offset $offset' % (
+            cls.__table__, cls.__primary_key__.name), vars = { 'limit': limit, 'offset': offset }))
         return [cls(item) for item in results]
 
     @classmethod
@@ -91,9 +91,11 @@ class Order(Model):
         """
         Order.refresh_orders() # 刷新
         L = []
+        args = {}
         for k, v in kw.iteritems():
-            L.append('`%s`="%s"' % (k, v))
-        d = list(db.query('select * from %s where %s' % (cls.__table__, ' and '.join(L))))
+            L.append('`{}`=${}'.format(k, k))
+            args[k] = v
+        d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
         return [cls(item) for item in d]
 
     @classmethod
@@ -102,7 +104,7 @@ class Order(Model):
         获取个人有效订单
         """
         Order.refresh_orders() # 刷新
-        d = list(db.query('select * from %s where userId=%s and isActive=1 order by birthday asc' % (cls.__table__, userId)))
+        d = list(db.query('select * from %s where userId=$userId and isActive=1 order by birthday asc' % (cls.__table__), vars = { 'userId': userId}))
         return [cls(item) for item in d]
 
     @classmethod
@@ -111,7 +113,7 @@ class Order(Model):
         获取个人失效订单(历史订单)
         """
         Order.refresh_orders() # 刷新
-        d = list(db.query('select * from %s where userId=%s and isActive=0 order by birthday asc' % (cls.__table__, userId)))
+        d = list(db.query('select * from %s where userId=$userId and isActive=0 order by birthday asc' % (cls.__table__), vars={'userId': userId}))
         return [cls(item) for item in d]
 
     @classmethod
@@ -120,10 +122,13 @@ class Order(Model):
         被动刷新订单信息, 更改过期订单状态，
         并同步解锁相关用户
         """
-        L = ['`isActive`=1']
+        kw['isActive'] = 1
+        L = []
+        args = {}
         for k, v in kw.iteritems():
-            L.append('`%s`="%s"' % (k, v))
-        active_orders = list(db.query('select * from %s where %s' % (cls.__table__, ' and '.join(L))))
+            L.append('`{}`=${}'.format(k, k))
+            args[k] = v
+        active_orders = list(db.select(cls.__table__, args, where = ' and '.join(L)))
 
         deltatime = datetime.timedelta(hours = 18)
         for each_order in active_orders:
