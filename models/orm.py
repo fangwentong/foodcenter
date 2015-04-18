@@ -244,7 +244,10 @@ class Model(web.Storage):
         for k, v in kw.iteritems():
             L.append('`{}`=${}'.format(k, k))
             args[k] = v
-        d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
+        if len(L) > 0:
+            d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
+        else:
+            d = list(db.query('select * from `{}`'.format(cls.__table__)))
         return [cls(item) for item in d]
 
     def update(self):
