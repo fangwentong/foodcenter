@@ -5,7 +5,7 @@
             "sub_button":[
                 {
                     "type" : "click",
-                    "name" : "订餐注册",
+                    "name" : "用户注册",
                     "key"  : "SIGNUP"
                 },
                 {

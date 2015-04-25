@@ -55,7 +55,7 @@ if 'SERVER_SOFTWARE' in os.environ:
     site.asset_path = site.root + "/static"
     # image_url = "http://hitfoodcenter.qiniudn.com/image"
     site.image_url = site.root + "/static/image"
-    web.config.debug = True
+    web.config.debug = False
 else:
     site.asset_path = "/static"
     site.image_url = "/static/image"

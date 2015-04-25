@@ -65,10 +65,10 @@ class StuAuth:
                 else:
                     if web.config._session.logged and web.config._session.role == "student":
                         person = User.getBy(studentId = web.config._session.sid)
-                        person.weixinId = data.wid
-                        person.update()
-                    else:
-                        web.config._session.weixinId = data.wid
+                        if not person.weixinId:
+                            person.weixinId = data.wid
+                            person.update()
+                    web.config._session.weixinId = data.wid
                 return web.seeother("")
             else:
                 ret = func(*args, **kwargs)
