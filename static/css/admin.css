@@ -700,3 +700,8 @@ div.fixed-table-scroll-outer {
 .fixed-table-pagination .pagination-detail {
   margin-top: 20px;
 }
+
+#selector {
+  margin-top: 50px;
+  z-index: 999;
+}

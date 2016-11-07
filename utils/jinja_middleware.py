@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 __all__ = ["JinjaRender"]
 
 import os
+
 
 class JinjaRender:
     """
@@ -14,11 +15,12 @@ class JinjaRender:
         render = JinjaRender('templates')
         render.path.hello(name='jinja2')
     """
+
     def __init__(self, *a, **kwargs):
         extensions = kwargs.pop('extensions', [])
         globals = kwargs.pop('globals', {})
 
-        from jinja2 import Environment,FileSystemLoader
+        from jinja2 import Environment, FileSystemLoader
         self._lookup = Environment(loader=FileSystemLoader(*a, **kwargs), extensions=extensions)
         self._lookup.globals.update(globals)
         self.dirname = a[0]

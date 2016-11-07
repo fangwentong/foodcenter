@@ -9,7 +9,13 @@
 <div class="content">
 	<div class="col-md-12">
 		<div class="col-md-12 stu-info">
-            <p class="text-bold"><strong class="text-primary">{{ user.studentName }}</strong> 同学, 您的订单如下:</p>
+      <p class="text-bold"><strong class="text-primary">{{ user.studentName }}</strong> 同学, 
+        {% if active_orders or history_orders %}
+          您的订餐记录如下:
+        {% else %}
+          没有找到您的订餐记录, 请点击下面的订餐按钮订餐:
+        {% endif %}
+      </p>
 		</div>
 
         {% if active_orders %}

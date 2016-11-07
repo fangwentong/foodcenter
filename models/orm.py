@@ -18,17 +18,20 @@ __all__ = [
 ]
 
 import logging, time
-import os,sys
+import os, sys
+
 app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
-sys.path.insert(0, app_root)             # 网站根目录加入搜索路径
+sys.path.insert(0, app_root)  # 网站根目录加入搜索路径
 from config import db
 import web
 
+
 class Field(object):
-    '''
+    """
     Basic Field Class
-    '''
+    """
     _count = 0
+
     def __init__(self, **kw):
         self.name = kw.get('name', None)
         self._default = kw.get('default', None)
@@ -38,8 +41,9 @@ class Field(object):
         self.auto_increment = kw.get('ai', False)
         self.insertable = kw.get('insertable', True)
         self.ddl = kw.get('ddl', '')
+        self.comment = kw.get('comment', '')
         self._order = Field._count
-        Field._count = Field._count + 1
+        Field._count += 1
 
     @property
     def default(self):
@@ -54,6 +58,7 @@ class Field(object):
         s.append('>')
         return ''.join(s)
 
+
 class StringField(Field):
     def __init__(self, **kw):
         if not 'default' in kw:
@@ -61,6 +66,7 @@ class StringField(Field):
         if not 'ddl' in kw:
             kw['ddl'] = 'varchar(255)'
         super(StringField, self).__init__(**kw)
+
 
 class IntegerField(Field):
     def __init__(self, **kw):
@@ -70,6 +76,7 @@ class IntegerField(Field):
             kw['ddl'] = 'bigint'
         super(IntegerField, self).__init__(**kw)
 
+
 class FloatField(Field):
     def __init__(self, **kw):
         if not 'default' in kw:
@@ -77,6 +84,7 @@ class FloatField(Field):
         if not 'ddl' in kw:
             kw['ddl'] = 'real'
         super(FloatField, self).__init__(**kw)
+
 
 class BooleanField(Field):
     def __init__(self, **kw):
@@ -86,6 +94,7 @@ class BooleanField(Field):
             kw['ddl'] = 'boolean'
         super(BooleanField, self).__init__(**kw)
 
+
 class TextField(Field):
     def __init__(self, **kw):
         if not 'default' in kw:
@@ -93,6 +102,7 @@ class TextField(Field):
         if not 'ddl' in kw:
             kw['ddl'] = 'text'
         super(TextField, self).__init__(**kw)
+
 
 class BlobField(Field):
     def __init__(self, **kw):
@@ -102,6 +112,7 @@ class BlobField(Field):
             kw['ddl'] = 'blob'
         super(BlobField, self).__init__(**kw)
 
+
 class TimeField(Field):
     def __init__(self, **kw):
         if not 'default' in kw:
@@ -109,6 +120,7 @@ class TimeField(Field):
         if not 'ddl' in kw:
             kw['ddl'] = 'timestamp'
         super(TimeField, self).__init__(**kw)
+
 
 class DateField(Field):
     def __init__(self, **kw):
@@ -118,6 +130,7 @@ class DateField(Field):
             kw['ddl'] = 'date'
         super(DateField, self).__init__(**kw)
 
+
 class YearField(Field):
     def __init__(self, **kw):
         if not 'default' in kw:
@@ -126,18 +139,21 @@ class YearField(Field):
             kw['ddl'] = 'year(4)'
         super(YearField, self).__init__(**kw)
 
+
 class VersionField(Field):
     def __init__(self, name=None):
         super(VersionField, self).__init__(name=name, default=0, ddl='bigint')
 
+
 _triggers = frozenset(['pre_insert', 'pre_update', 'pre_delete'])
 
+
 def _gen_sql(table_name, mappings):
-    '''
+    """
     Generate SQL sentences
-    '''
+    """
     pk = None
-    sql = ['-- generating SQL for %s:' % table_name, 'create table `%s` (' % table_name]
+    sql = ['-- generating SQL for %s:' % table_name, 'create table if not exists `%s` (' % table_name]
     for f in sorted(mappings.values(), lambda x, y: cmp(x._order, y._order)):
         if not hasattr(f, 'ddl'):
             raise StandardError('no ddl in field "%s".' % f.name)
@@ -149,19 +165,22 @@ def _gen_sql(table_name, mappings):
         statement = '  `%s` %s' % (f.name, ddl)
         statement += nullable and '' or ' not null'
         statement += auto_increment and ' auto_increment' or ''
+        statement += " COMMENT '{comment}'".format(comment=f.comment)
         statement += ','
         sql.append(statement)
     sql.append('  primary key(`%s`)' % pk)
     sql.append(');')
     return '\n'.join(sql)
 
+
 class ModelMetaclass(type):
-    '''
+    """
     Metaclass for model objects.
-    '''
+    """
+
     def __new__(cls, name, bases, attrs):
         # skip base Model class:
-        if name=='Model':
+        if name == 'Model':
             return type.__new__(cls, name, bases, attrs)
 
         # store all subclasses info:
@@ -201,11 +220,12 @@ class ModelMetaclass(type):
             attrs['__table__'] = name.lower()
         attrs['__mappings__'] = mappings
         attrs['__primary_key__'] = primary_key
-        attrs['__sql__'] =  _gen_sql(attrs['__table__'], mappings)
+        attrs['__sql__'] = _gen_sql(attrs['__table__'], mappings)
         for trigger in _triggers:
             if not trigger in attrs:
                 attrs[trigger] = None
         return type.__new__(cls, name, bases, attrs)
+
 
 class Model(web.Storage):
     __metaclass__ = ModelMetaclass
@@ -215,37 +235,37 @@ class Model(web.Storage):
 
     @classmethod
     def get(cls, pk):
-        '''
+        """
         Get by primary key.
-        '''
-        d = list(db.select(cls.__table__, { "value": pk }, where = "%s=$value" % cls.__primary_key__.name))
-        return cls(d[0]) if len(d)>0 else None
+        """
+        d = list(db.select(cls.__table__, {"value": pk}, where="%s=$value" % cls.__primary_key__.name))
+        return cls(d[0]) if len(d) > 0 else None
 
     @classmethod
     def getBy(cls, **kw):
-        '''
+        """
         Get by condition
-        '''
+        """
         L = []
         args = {}
         for k, v in kw.iteritems():
             L.append('`{}`=${}'.format(k, k))
             args[k] = v
-        d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
-        return cls(d[0]) if len(d)>0 else None
+        d = list(db.select(cls.__table__, args, where=' and '.join(L)))
+        return cls(d[0]) if len(d) > 0 else None
 
     @classmethod
     def getAll(cls, **kw):
-        '''
+        """
         Get All by condition
-        '''
+        """
         L = []
         args = {}
         for k, v in kw.iteritems():
             L.append('`{}`=${}'.format(k, k))
             args[k] = v
         if len(L) > 0:
-            d = list(db.select(cls.__table__, args, where = ' and '.join(L)))
+            d = list(db.select(cls.__table__, args, where=' and '.join(L)))
         else:
             d = list(db.query('select * from `{}`'.format(cls.__table__)))
         return [cls(item) for item in d]
@@ -263,14 +283,14 @@ class Model(web.Storage):
                 D[k] = arg
         pk = self.__primary_key__.name
         value = getattr(self, pk)
-        db.update(self.__table__, where = "{}=$value".format(pk), vars = { 'value': value }, **D)
+        db.update(self.__table__, where="{}=$value".format(pk), vars={'value': value}, **D)
         return self
 
     def delete(self):
         self.pre_delete and self.pre_delete()
         pk = self.__primary_key__.name
         value = getattr(self, pk)
-        db.delete(self.__table, where = '`{}`=$value'.format(pk), vars={ 'value': value })
+        db.delete(self.__table, where='`{}`=$value'.format(pk), vars={'value': value})
         return self
 
     def insert(self):
@@ -283,4 +303,3 @@ class Model(web.Storage):
                 params[v.name] = getattr(self, k)
         db.insert(self.__table__, **params)
         return self
-

@@ -60,3 +60,4 @@ target/
 index.wsgic
 config/secret.py
 config.codekit
+.idea

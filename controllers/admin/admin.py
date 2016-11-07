@@ -1,20 +1,27 @@
 #!/usr/local/env python2
-#coding=utf-8
+# coding=utf-8
+
+import datetime
+import hashlib
+import json
+import os
+import sys
 
 import web
-import hashlib, json
-import sys, os
+
 app_root = os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir)
 sys.path.insert(0, app_root)
 
 from config import render
 from Auth import AdminAuth
-from models import Admin, Order, Canteen, FeedBack, Meal, Order
+from models import Admin, FeedBack, Order
+
 
 class Index(AdminAuth):
     """
     主页, 重定向值Dashboard
     """
+
     def __init__(self):
         AdminAuth.__init__(self)
 
@@ -26,44 +33,46 @@ class Index(AdminAuth):
     def POST(self):
         pass
 
+
 class LogIn(AdminAuth):
     """
     管理员登陆
     """
+
     def __init__(self):
         AdminAuth.__init__(self, "admin", "管理员登陆 - 哈工大饮食中心")
 
     # 切莫添加sessionChecker, 否则包含循环重定向
     def GET(self):
-        return render.admin.login(page = self.page)
+        return render.admin.login(page=self.page)
 
     def POST(self):
         # username password remeber
-        data = web.input(username = "", password = "", remeber = "")
+        data = web.input(username="", password="", remeber="")
         try:
             result = Admin.getBy(
-                username = data.username,
-                password = hashlib.new("md5", data.password).hexdigest()
-                )
+                username=data.username,
+                password=hashlib.new("md5", data.password).hexdigest()
+            )
 
-            if result == None:    #身份验证失败
+            if result == None:  # 身份验证失败
                 # self.page.errinfo = "您输入的用户名和密码不匹配，请检查后重试."
                 # print self.page.errinfo
                 # return render.admin.login(page = self.page)
                 return json.dumps({'err': '您输入的用户名和密码不匹配，请检查后重试'})
             else:
-                self.session.username     = result.username
+                self.session.username = result.username
                 self.session.nickname = result.nickname
-                self.session.role     = "admin"
-                self.session.logged   = True
-                if data.remeber:      #记住密码
+                self.session.role = "admin"
+                self.session.logged = True
+                if data.remeber:  # 记住密码
                     web.config.session_parameters['ignore_expiry'] = True
                 return json.dumps({'success': '登录成功!'})
 
         except Exception as err:
-            self.page.title   = "出错啦!"
-            self.page.errinfo  = err
-            return render.errinfo(page = self.page)
+            self.page.title = "出错啦!"
+            self.page.errinfo = err
+            return render.errinfo(page=self.page)
 
 
 class LogOut(AdminAuth):
@@ -82,7 +91,7 @@ class GetProfile(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.profiles(page = self.page, session = self.session)
+        return render.admin.profiles(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -91,15 +100,15 @@ class GetProfile(AdminAuth):
 
         if req == "email":
             try:
-                result = Admin.getBy(username = self.session.username)
+                result = Admin.getBy(username=self.session.username)
                 web.header('Content-Type', 'application/json')
                 if result:
-                    return json.dumps({'email' : result.email})
+                    return json.dumps({'email': result.email})
                 else:
-                    return json.dumps({'err' : '没有找到匹配的用户'})
+                    return json.dumps({'err': '没有找到匹配的用户'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'err' : '出现错误: ' + str(err)})
+                return json.dumps({'err': '出现错误: ' + str(err)})
 
         elif req == "submit":
             web.header('Content-Type', 'application/json')
@@ -109,7 +118,7 @@ class GetProfile(AdminAuth):
                 if data.email == "email":
                     return json.dumps({'err', "请输入邮箱"})
 
-                person = Admin.getBy(username = self.session.username)
+                person = Admin.getBy(username=self.session.username)
                 person.nickname = data.nickname
                 person.email = data.email
                 person.update()
@@ -117,7 +126,7 @@ class GetProfile(AdminAuth):
                 self.session.nickname = data.nickname
                 return json.dumps({'success': "个人资料更新成功"})
             except Exception as err:
-                return json.dumps({'err' : "出现错误: " + str(err)})
+                return json.dumps({'err': "出现错误: " + str(err)})
         else:
             return web.Forbidden()
 
@@ -128,7 +137,7 @@ class ChgPasswd(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.settings(page = self.page, session = self.session)
+        return render.admin.settings(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -138,35 +147,35 @@ class ChgPasswd(AdminAuth):
         if req == "check":
             try:
                 person = Admin.getBy(
-                    username = self.session.username,
-                    password = hashlib.new("md5", data.oldp).hexdigest()
+                    username=self.session.username,
+                    password=hashlib.new("md5", data.oldp).hexdigest()
                 )
 
                 web.header('Content-Type', 'application/json')
                 if person:
-                    return json.dumps({'is_valid' : '1'})
+                    return json.dumps({'is_valid': '1'})
                 else:
-                    return json.dumps({'is_valid' : '0'})
+                    return json.dumps({'is_valid': '0'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'err' : '出现错误: ' + str(err)})
+                return json.dumps({'err': '出现错误: ' + str(err)})
 
         elif req == "submit":
             try:
                 person = Admin.getBy(
-                    username = self.session.username,
-                    password = hashlib.new("md5", data.oldp).hexdigest()
+                    username=self.session.username,
+                    password=hashlib.new("md5", data.oldp).hexdigest()
                 )
                 web.header('Content-Type', 'application/json')
-                if person == None: # 旧密码输错
+                if person is None:  # 旧密码输错
                     return json.dumps({'err': '旧密码输入错误!'})
-                else: # 更新密码
+                else:  # 更新密码
                     person.password = hashlib.new("md5", data.newp).hexdigest()
                     person.update()
-                    return json.dumps({'success' : '密码修改成功'})
+                    return json.dumps({'success': '密码修改成功'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'err':'出现错误: '+ str(err)})
+                return json.dumps({'err': '出现错误: ' + str(err)})
         else:
             return web.Forbidden()
 
@@ -177,7 +186,7 @@ class DashBoard(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.dashboard(page = self.page, session = self.session)
+        return render.admin.dashboard(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -190,11 +199,35 @@ class Orderings(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.orderings(page = self.page, session = self.session)
+        now = datetime.datetime.now()
+        today = datetime.datetime.strftime(now, "%Y-%m-%d")
+
+        deltatime = datetime.timedelta(days=7)
+        end = datetime.datetime.strftime(now + deltatime, "%Y-%m-%d")
+        orders = Order.get_bewteen(start=today, end=end)
+
+        return render.admin.orderings(page=self.page, session=self.session, orders=orders)
 
     @AdminAuth.sessionChecker
     def POST(self):
-        pass
+        data = web.input(req='')
+
+        try:
+            start = data.start
+            end = data.end
+            canteen = data.canteen
+            meal = data.meal
+            if start > end:
+                return json.dumps({'err': '请输入合法的时间区间'})
+            result = Order.get_bewteen(start=start, end=end)
+            if canteen != 'all':
+                result = [item for item in result if item.canteenName == canteen]
+            if meal != 'all':
+                result = [item for item in result if item.mealName == meal]
+            return json.dumps({'orders': result})
+        except Exception as err:
+            web.header('Content-Type', 'application/json')
+            return json.dumps({'err': '出现错误: ' + str(err)})
 
 
 class ArticleManagement(AdminAuth):
@@ -203,7 +236,7 @@ class ArticleManagement(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.articles(page = self.page, session = self.session)
+        return render.admin.articles(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -229,7 +262,7 @@ class GetMeals(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.meals(page = self.page, session = self.session)
+        return render.admin.meals(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -242,24 +275,42 @@ class AddMeal(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.meals(page = self.page, session = self.session)
+        return render.admin.meals(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
         pass
 
 
-class Feedback(AdminAuth):
+class FeedbackManagement(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "feedback", "反馈处理")
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.feedback(page = self.page, session = self.session)
+        now = datetime.datetime.now()
+
+        deltatime = datetime.timedelta(days=90)
+        start = datetime.datetime.strftime(now - deltatime, "%Y-%m-%d")
+        feedbacks = FeedBack.get_bewteen(start=start, end=now)
+
+        return render.admin.feedback(page=self.page, session=self.session, feedbacks=feedbacks)
 
     @AdminAuth.sessionChecker
     def POST(self):
-        pass
+        data = web.input(req='')
+
+        try:
+            start = data.start
+            end = data.end
+            if start > end:
+                return json.dumps({'err': '请输入合法的时间区间'})
+            result = FeedBack.get_bewteen(start=start, end=end)
+            return json.dumps({'feedbacks': result}, cls=DatetimeEncoder)
+        except Exception as err:
+            web.header('Content-Type', 'application/json')
+            print err.message
+            return json.dumps({'err': '出现错误: ' + str(err)})
 
 
 class Users(AdminAuth):
@@ -269,56 +320,56 @@ class Users(AdminAuth):
     @AdminAuth.sessionChecker
     def GET(self):
         admins = Admin.getAll()
-        operator = Admin.getBy(username = self.session.username)
+        operator = Admin.getBy(username=self.session.username)
         print admins
-        for i in range(len(admins)): # role = 0 为最高权限， role越大， 权限越低
+        for i in range(len(admins)):  # role = 0 为最高权限， role越大， 权限越低
             if admins[i].username == operator.username:
                 index = i
             admins[i].deletable = (admins[i].role > operator.role)
         admins.pop(index)
         print admins
-        return render.admin.users(page = self.page, session = self.session, admins = admins)
+        return render.admin.users(page=self.page, session=self.session, admins=admins)
 
     @AdminAuth.sessionChecker
     def POST(self):
-        data = web.input(req='', username = '', id='', newp='')
+        data = web.input(req='', username='', id='', newp='')
         req = data.req
 
         if req == 'check':
             try:
-                person = Admin.getBy(username = data.username)
+                person = Admin.getBy(username=data.username)
                 web.header('Content-Type', 'application/json')
                 if person == None:
-                    return json.dumps({'is_valid' : '1'})
+                    return json.dumps({'is_valid': '1'})
                 else:
-                    return json.dumps({'is_valid' : '0'})
+                    return json.dumps({'is_valid': '0'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
                 raise err
-                return json.dumps({'err' : '出现错误: ' + str(err)})
+                return json.dumps({'err': '出现错误: ' + str(err)})
 
         elif req == 'submit':
             try:
-                person = Admin.getBy(username = data.username)
+                person = Admin.getBy(username=data.username)
                 web.header('Content-Type', 'application/json')
-                if person: # 用户名已被占用
+                if person:  # 用户名已被占用
                     return json.dumps({'err': '用户名已被占用!'})
-                else: # 更新密码
+                else:  # 更新密码
                     Admin(dict(
-                        username = data.username,
-                        password = hashlib.new('md5', data.newp).hexdigest(),
-                        role  = data.role,
+                        username=data.username,
+                        password=hashlib.new('md5', data.newp).hexdigest(),
+                        role=data.role,
                     )).insert()
-                    return json.dumps({'success' : '成功添加用户'})
+                    return json.dumps({'success': '成功添加用户'})
             except Exception as err:
                 web.header('Content-Type', 'application/json')
-                return json.dumps({'err':'出现错误: '+ str(err)})
+                return json.dumps({'err': '出现错误: ' + str(err)})
 
         elif req == 'delete':
             if not data.id:
                 return json.dumps({'err': '请求出错'})
             person = Admin.get(data.id)
-            operator = Admin.getBy(username = self.session.username)
+            operator = Admin.getBy(username=self.session.username)
             if not person:
                 return json.dumps({'err': '用户不存在'})
             if operator.role >= person.role:
@@ -327,13 +378,13 @@ class Users(AdminAuth):
             return json.dumps({'success': '已删除'})
 
         elif req == 'update':
-            person = Admin.getBy(username = data.username)
-            operator = Admin.getBy(username = self.session.username)
+            person = Admin.getBy(username=data.username)
+            operator = Admin.getBy(username=self.session.username)
             if not person:
                 return json.dumps({'err': '用户不存在'})
             if operator.role >= person.role:
                 return json.dumps({'err': '无权限'})
-            person.password =  hashlib.new('md5', data.newp).hexdigest()
+            person.password = hashlib.new('md5', data.newp).hexdigest()
             person.update()
             return json.dumps({'success': '修改成功!'})
         else:
@@ -343,9 +394,10 @@ class Users(AdminAuth):
 class ToolsList(AdminAuth):
     def __init__(self):
         AdminAuth.__init__(self, "tools", "小工具")
+
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.tools(page = self.page, session = self.session)
+        return render.admin.tools(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST(self):
@@ -358,7 +410,7 @@ class DrawPrize(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.drawprize(page = self.page, session = self.session)
+        return render.admin.drawprize(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST():
@@ -371,7 +423,7 @@ class AddOrder(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.addordering(page = self.page, session = self.session)
+        return render.admin.addordering(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST():
@@ -384,8 +436,15 @@ class SearchOrder(AdminAuth):
 
     @AdminAuth.sessionChecker
     def GET(self):
-        return render.admin.searchordering(page = self.page, session = self.session)
+        return render.admin.searchordering(page=self.page, session=self.session)
 
     @AdminAuth.sessionChecker
     def POST():
         pass
+
+
+class DatetimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        return json.JSONEncoder.default(self, obj)

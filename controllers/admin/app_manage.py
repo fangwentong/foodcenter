@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-#coding=utf-8
+# coding=utf-8
 
 import web
 import sys, os
@@ -16,6 +16,7 @@ management_app = web.application(urls, locals())
 if __name__ == "__main__":
     if 'SERVER_SOFTWARE' in os.environ:
         import sae
+
         sae.create_wsgi_app(management_app.wsgifunc())
     else:
         management_app.run()

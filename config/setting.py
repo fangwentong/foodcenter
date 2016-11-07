@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 import web
 import os
@@ -10,46 +10,47 @@ try:
 except ImportError:
     import secret_sample as secret
 db = secret.db
-weconf =secret.webchat
+weconf = secret.webchat
 
 from utils import JinjaRender
+
 render = JinjaRender('templates', encoding='utf-8')
 # render = web.template.render('templates', cache=False)
 
 web.config.debug = True
 
 # 站点信息
-site = web.storage (
-        title  = U"哈工大饮食中心",
-        brand  = U"哈工大饮食中心",
-        root   = "http://foodcenter.sinaapp.com",
+site = web.storage(
+    title=U"哈工大饮食中心",
+    brand=U"哈工大饮食中心",
+    root="http://foodcenter.sinaapp.com",
 
-        date   = web.storage (
-            year  = time.strftime('%Y',time.localtime(time.time())),
-            month = time.strftime('%m',time.localtime(time.time())),
-            day   = time.strftime('%d',time.localtime(time.time())),
-            today = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-            ),
+    date=web.storage(
+        year=time.strftime('%Y', time.localtime(time.time())),
+        month=time.strftime('%m', time.localtime(time.time())),
+        day=time.strftime('%d', time.localtime(time.time())),
+        today=time.strftime('%Y-%m-%d', time.localtime(time.time()))
+    ),
 
-        owner = web.storage (
-            name = U"哈尔滨工业大学 饮食中心",
-            site = "#",
-            ),
+    owner=web.storage(
+        name=U"哈尔滨工业大学 饮食中心",
+        site="#",
+    ),
 
-        author = web.storage (
-            name     = "fangwentong",
-            email    = "fangwentong2012@gmail.com",
-            home     = "http://wentong.me",
-            org      = "Pureweber",
-            org_site = "http://www.pureweber.com",
-            ),
-        )
+    author=web.storage(
+        name="fangwentong",
+        email="fangwentong2012@gmail.com",
+        home="http://wentong.me",
+        org="Pureweber",
+        org_site="http://www.pureweber.com",
+    ),
+)
 
 # 后台管理系统配置
-admin = web.storage (
-        title = U"Food",
-        tagline = U"Center",
-        )
+admin = web.storage(
+    title=U"Food",
+    tagline=U"Center",
+)
 
 if 'SERVER_SOFTWARE' in os.environ:
     site.asset_path = site.root + "/static"
@@ -62,8 +63,8 @@ else:
 
 # Jinja2 globals
 render._lookup.globals.update(
-    site = site,
-    admin = admin,
-    asset_path = site.asset_path,
-    image_url = site.image_url
+    site=site,
+    admin=admin,
+    asset_path=site.asset_path,
+    image_url=site.image_url
 )

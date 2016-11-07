@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-#coding=utf-8
+# coding=utf-8
 
 import os
 from app import app
@@ -13,6 +13,7 @@ import web
 if 'SERVER_SOFTWARE' in os.environ:
     # sae部署
     import sae
+
     application = sae.create_wsgi_app(app.wsgifunc())
 else:
     # Nginx with Fastcgi 部署

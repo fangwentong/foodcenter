@@ -1,34 +1,92 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
-__all__ =['welcome_message', 'help_message', 'consume_message']
+__all__ = ['welcome_message', 'help_message', 'consume_message']
 
 import web
 
+page = {
+    "signup": web.storage(
+        title="订单注册",
+        description="注册帐号，即刻免费优享生日面; 生日餐品以餐厅实际供应为准!",
+        img="/register.jpg",
+        url="/order/signup"
+    ),
+    "add": web.storage(
+        title="添加订单",
+        description="优享生日美味，分享欢乐心情！",
+        img="/add.jpg",
+        url="/order/add"
+    ),
+    "info": web.storage(
+        title="我的订单",
+        description="点击尝鲜~",
+        img="/info.jpg",
+        url="/order/info"
+    ),
+    "consume_today": web.storage(
+        title="今日消费",
+        description="您今日消费 {today} 元, 余额 {balance} .",
+        img="",
+        url="",
+    ),
+}
+activities = {
+    "20160308": web.storage(
+        title="美食展1-9折优惠电子券大派送",
+        description="美食展1-9折优惠电子券大派送（限女士，男士莫入）",
+        img="20160308.jpg",
+        url="/activities/20160308"
+    ),
+}
 
-page = { "signup" : web.storage(
-            title       = "订单注册",
-            description = "注册帐号，即刻免费优享生日面; 生日餐品以餐厅实际供应为准!",
-            img         = "/register.jpg",
-            url         = "/order/signup"
-            ),
-        "add"    : web.storage(
-            title       = "添加订单",
-            description = "优享生日美味，分享欢乐心情！",
-            img         = "/add.jpg",
-            url         = "/order/add"
-            ),
-        "info"   : web.storage(
-            title       = "我的订单",
-            description = "点击尝鲜~",
-            img         = "/info.jpg",
-            url         = "/order/info"
-            ) }
+# 管理员帮助信息
+admin_help = """\
+1. 输入 [ 添加 password username ]  添加管理员绑定, 请提前向超级管理员索要密码
+2. 输入 [ 所有订单 ]  获取当日订单
+3. 输入 [ 明日订单 ]  获取明日订单
+4. 输入 [ yszx ] 显示管理员帮助
+5. 输入 [ 管理 ] 获取后台管理地址
+6. 输入 [ 修改密码 password ] 修改密码
+"""
 
+# 饭卡帮助信息
+help_message = \
+    """ 欢迎关注饮食中心微信平台, 请直接键入问题或者拨打045186418706^_^ """
+
+card_help = """\
+欢迎关注饮食中心微信平台
+------
+
+1. 输入 [ 绑定 用户名 密码 ]  绑定校园卡, 其中用户名为学号, 默认密码为身份证后6位数字, 字段中间用 空格 分隔
+2. 输入 [ 挂失饭卡 ]  临时挂失饭卡
+3. 输入 [ 绑定查询 ]  查询当前绑定状态
+4. 输入 [ 帮助 ] 查询帮助信息
+5. 如需解挂失饭卡, 请到服务窗口解挂失
+
+------
+
+如遇到问题，请联系我们：045186418706，或添加个人微信号：YMDTXWR 为您解决
+
+"""
+
+bind_help = """\
+请输入 "绑定", 学号和密码，用 空格 分隔, 来绑定校园卡吧
+
+例如:学号123, 密码021131,
+则请输入  绑定 123 021131
+
+------
+友情提示:
+
+默认密码为身份证最后的6位数字, 如果您身份证最后一位是X, 则默认密码是最后7-2位
+
+千万记住字段之间用空格分隔哦.
+"""
 
 # 消费信息
 consume_message = \
-"""尚未发布，敬请期待. """
+    """您今日消费 {today} 元"""
 
 """ 您上月共消费 180.20 元, 超过全校 25% 的用户.
 
@@ -46,15 +104,11 @@ consume_message = \
 
 # 欢迎提示
 welcome_message = \
-""" 我肥来啦~~你真有眼光，关注吃很重要，做一个有爱的吃货！ """
-
-# 帮助信息
-help_message = \
-""" 欢迎关注饮食中心微信平台, 请直接键入问题或者拨打86418706^_^ """
+    """ 我肥来啦~~你真有眼光，关注吃很重要，做一个有爱的吃货！ """
 
 # 所有订单
 orderinfo = \
-"""套餐名: {}
+    """套餐名: {}
 领取地点: {}
 领餐人: {}
 学号: {}
@@ -62,10 +116,9 @@ orderinfo = \
 返回码: {}"""
 
 myorder = \
-"""套餐名:  {}
+    """套餐名:  {}
 领餐人:  {}
 学号:     {}
 领取时间: {} 11:00 - 12.30
 领取地点: {}
 返回码:   {}"""
-

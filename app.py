@@ -1,11 +1,13 @@
 #!/usr/bin/env python2
-#coding=utf-8
+# coding=utf-8
 
-import sys, os
-try:
-    import utils.iweb.web as web
-except ImportError:
-    import web
+import os
+import sys
+
+
+import utils.iweb
+import web
+
 
 from config import db, urls
 import controllers.home
@@ -27,8 +29,8 @@ app.notfound = controllers.home.notfound
 # Session
 if web.config.get('_session') is None:
     web.config.session_parameters['cookie_name'] = 'foodcenter_sid'
-    store = web.session.DBStore(db, 'foodcenter_sessions')
-    web.config._session = web.session.Session(app, store, initializer={'logged':False, 'role':'guest'})
+    store = web.session.DBStore(db, 'hitfd_sessions')
+    web.config._session = web.session.Session(app, store, initializer={'logged': False, 'role': 'guest'})
 
 if __name__ == "__main__":
     if 'SERVER_SOFTWARE' in os.environ:

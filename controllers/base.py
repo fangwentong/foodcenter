@@ -1,48 +1,58 @@
 #!/usr/bin/env python
-#coding=utf-8
+# coding=utf-8
 
 import web
 import os, sys
+
 app_root = os.path.join(os.path.dirname(__file__), os.path.pardir)
 sys.path.insert(0, app_root)
 
 from config import render, site
 from models import User
 
+
 class BasePage:
     """网站页面基类"""
+
     def __init__(self, page_name, page_title):
         self.page = web.storage(
-                name = page_name,
-                title = page_title,
-                errinfo = ""
-                )
+            name=page_name,
+            title=page_title,
+            errinfo=""
+        )
+        self.session = web.config._session
+
     def POST(self):
         pass
 
+
 class Article:
     """新闻页面基类"""
+
     def __init__(self, page_name="", page_title="", page_url="", page_id=100):
         self.page = web.storage(
-                name    = page_name,
-                title   = page_title,
-                url     = site.root + page_url,
-                page_id = page_id
-                )
+            name=page_name,
+            title=page_title,
+            url=site.root + page_url,
+            page_id=page_id
+        )
+
     def POST(self):
         pass
+
 
 class StuAuth:
     """
     用于身份验证的工具类
     """
+
     def __init__(self, page_name="", page_title=""):
         self.session = web.config._session
-        self.page    = web.storage(
-                name  = page_name,
-                title = page_title,
-                errinfo = ""
-                )
+        self.page = web.storage(
+            name=page_name,
+            title=page_title,
+            errinfo=""
+        )
         # print("An Object was created, which id {}".format(id(self)))
 
     @staticmethod
@@ -50,21 +60,22 @@ class StuAuth:
         """
         URL解编码装饰器, 提供URL参数登陆支持
         """
+
         def _decoder(*args, **kwargs):
             print ("Before {} is called.".format(func.__name__))
             data = web.input(wid='')
-            if StuAuth.isValid(data.wid): # 通过URL编码方式登陆
-                result = User.getBy(weixinId = data.wid)
+            if StuAuth.isValid(data.wid):  # 通过URL编码方式登陆
+                result = User.getBy(weixinId=data.wid)
 
                 if result:
-                    web.config._session.name   = result.studentName
-                    web.config._session.sid    = result.studentId
-                    web.config._session.phone  = result.phone
-                    web.config._session.role   = "student"
+                    web.config._session.name = result.studentName
+                    web.config._session.sid = result.studentId
+                    web.config._session.phone = result.phone
+                    web.config._session.role = "student"
                     web.config._session.logged = True
                 else:
                     if web.config._session.logged and web.config._session.role == "student":
-                        person = User.getBy(studentId = web.config._session.sid)
+                        person = User.getBy(studentId=web.config._session.sid)
                         if not person.weixinId:
                             person.weixinId = data.wid
                             person.update()
@@ -74,6 +85,7 @@ class StuAuth:
                 ret = func(*args, **kwargs)
             print ("After {} is called.".format(func.__name__))
             return ret
+
         return _decoder
 
     @staticmethod
@@ -81,19 +93,21 @@ class StuAuth:
         """
         session 检查装饰器
         """
+
         def _sessionChecker(*args, **kwargs):
             print ("Before {} is called.".format(func.__name__))
             try:
-                #尚未登录
+                # 尚未登录
                 if not web.config._session.logged or web.config._session.role != "student":
                     return web.seeother("/order")
-                #已经登录且为学生
+                # 已经登录且为学生
                 else:
                     ret = func(*args, **kwargs)
             except Exception as err:
                 return StuAuth.error(err)
             print ("After {} is called.".format(func.__name__))
             return ret
+
         return _sessionChecker
 
     @staticmethod
@@ -102,11 +116,11 @@ class StuAuth:
         返回错误页面
         """
         print msg
-        return render.errinfo(page = web.storage(
-                name    = page_name,
-                title   = page_title,
-                errinfo = msg
-            ))
+        return render.errinfo(page=web.storage(
+            name=page_name,
+            title=page_title,
+            errinfo=msg
+        ))
 
     @staticmethod
     def success(msg):

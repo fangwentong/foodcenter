@@ -1,6 +1,7 @@
 {% extends 'admin/admin.html'%}
 
 {% block section %}
+
 <div class="row">
 	<ol class="breadcrumb">
 		<li><a href="/admin"><span class="fa fa-home"></span></a></li>
@@ -9,257 +10,186 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-12">
-        <h2>未完成订单</h2>
-    </div>
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-body tabs">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1" data-toggle="tab"> 今日订单</a></li>
-                    <li class=""><a href="#tab2" data-toggle="tab">三日内订单</a></li>
-                    <li class=""><a href="#tab3" data-toggle="tab">七日内订单</a></li>
-                </ul>
+  <div class="col-lg-12">
+    <h1>订单详情</h1>
+  </div>
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body tabs">
 
-                <div class="tab-content">
-                    <div class="tab-pane fade active in" id="tab1">
-                        <div class="fixed-table-container">
-                            <div class="fixed-table-header">
-                                <table></table>
-                            </div>
-                            <div class="fixed-table-body">
-                                <table data-toggle="table" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">领取日期</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner">餐厅</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">餐品</div>
-                                                <div class="fht-cell"></div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">学号</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">姓名</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-records-found">
-                                            <td colspan="5">No matching records found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab2">
-                        <div class="fixed-table-container">
-                            <div class="fixed-table-header">
-                                <table></table>
-                            </div>
-                            <div class="fixed-table-body">
-                                <table data-toggle="table" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">领取日期</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner">餐厅</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">餐品</div>
-                                                <div class="fht-cell"></div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">学号</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">姓名</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-records-found">
-                                            <td colspan="5">No matching records found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab3">
-                        <div class="fixed-table-container">
-                            <div class="fixed-table-header">
-                                <table></table>
-                            </div>
-                            <div class="fixed-table-body">
-                                <table data-toggle="table" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">领取日期</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner">餐厅</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">餐品</div>
-                                                <div class="fht-cell"></div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">学号</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">姓名</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-records-found">
-                                            <td colspan="5">No matching records found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+        <div class="tab-content">
+          <div class="fixed-table-container">
+              <div class="fixed-table-header">
+                  <table></table>
+              </div>
+              <div class="fixed-table-body">
+                  <table data-toggle="table" class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th style="text-align: center;">
+                                  <div class="th-inner ">#</div>
+                              </th>
+                              <th style="text-align: center;">
+                                  <div class="th-inner ">领取日期</div>
+                              </th>
+                              <th style="text-align: center;">
+                                  <div class="th-inner">餐厅</div>
+                              </th>
+                              <th style="text-align: center;">
+                                  <div class="th-inner ">餐品</div>
+                              </th>
+                              <th style="text-align: center;">
+                                  <div class="th-inner ">学号</div>
+                              </th>
+                              <th style="text-align: center;">
+                                  <div class="th-inner ">姓名</div>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody id="tbody">
+                        {% if orders %}
+                          {% for each_order in orders %}
+                            <tr>
+                              <td>{{ loop.index }}</td>
+                              <td>{{ each_order.birthday }}</td>
+                              <td>{{ each_order.canteenName }}</td>
+                              <td>{{ each_order.mealName }}</td>
+                              <td>{{ each_order.studentId }}</td>
+                              <td>{{ each_order.studentName }}</td>
+                            </tr>
+                          {% endfor %}
+                        {% else %}
+                          <tr class="no-records-found">
+                              <td colspan="5">没有找到匹配的订单</td>
+                          </tr>
+                        {% endif %}
+                      </tbody>
+                  </table>
+              </div>
             </div>
-        </div><!--/.panel-->
-    </div>
+          </div>
 
-    <div class="col-lg-12">
-        <h2>历史订单</h2>
-    </div>
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-body tabs">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#history1" data-toggle="tab"> 昨日订单</a></li>
-                    <li class=""><a href="#history2" data-toggle="tab"> 一周内</a></li>
-                    <li class=""><a href="#history3" data-toggle="tab"> 一个月</a></li>
-                </ul>
+          <div id="selector">
+            <form id="query-form" class="form-inline" method="post">
+              <div class="form-group">
+                <label for="start">开始日期</label>
+                <input type="text" size="10" class="form-control" id="start" name="start" value="{{ site.date.today }}" data-date-format="yyyy-mm-dd" required readonly>
+              </div>
+              <div class="form-group">
+                <label for="end">结束日期</label>
+                <input type="text" size="10" class="form-control" id="end" name="end" value="{{ site.date.today }}" data-date-format="yyyy-mm-dd" required readonly>
+              </div>
 
-                <div class="tab-content">
-                    <div class="tab-pane fade active in" id="history1">
-                        <div class="fixed-table-container">
-                            <div class="fixed-table-header">
-                                <table></table>
-                            </div>
-                            <div class="fixed-table-body">
-                                <table data-toggle="table" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">领取日期</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner">餐厅</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">餐品</div>
-                                                <div class="fht-cell"></div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">学号</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">姓名</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-records-found">
-                                            <td colspan="5">No matching records found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="history2">
-                        <div class="fixed-table-container">
-                            <div class="fixed-table-header">
-                                <table></table>
-                            </div>
-                            <div class="fixed-table-body">
-                                <table data-toggle="table" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">领取日期</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner">餐厅</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">餐品</div>
-                                                <div class="fht-cell"></div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">学号</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">姓名</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-records-found">
-                                            <td colspan="5">No matching records found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="history3">
-                        <div class="fixed-table-container">
-                            <div class="fixed-table-header">
-                                <table></table>
-                            </div>
-                            <div class="fixed-table-body">
-                                <table data-toggle="table" class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">领取日期</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner">餐厅</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">餐品</div>
-                                                <div class="fht-cell"></div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">学号</div>
-                                            </th>
-                                            <th style="text-align: center;">
-                                                <div class="th-inner ">姓名</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="no-records-found">
-                                            <td colspan="5">No matching records found</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+              <div class="form-group">
+                <label for="canteen" class="control-label">餐厅</label>
+                <select class="form-control" id="canteen" name="canteen">
+                  <option value="all" selected>所有餐厅</option>
+                  <option value="百味佳餐厅">百味佳餐厅</option>
+                  <option value="阳光餐厅">阳光餐厅</option>
+                  <option value="天香餐厅">天香餐厅</option>
+                  <option value="丁香餐厅">丁香餐厅</option>
+                  <option value="南苑餐厅">南苑餐厅</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="meal" class="control-label">餐品</label>
+                <select class="form-control" id="meal" name="meal">
+                  <option value="all" selected>不限</option>
+                  <option value="牛肉面" >牛肉面</option>
+                  <option value="蔬菜面">蔬菜面</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="page_size" class="control-label">每页显示</label>
+                <select class="form-control" id="page_size" name="page_size">
+                  <option value="0">10</option>
+                  <option value="1" selected>20</option>
+                  <option value="2">50</option>
+                  <option value="3">100</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <div class="pull-right pagination">
+                  <ul class="pagination">
+                    <li class="page-first disabled"><a href="javascript:void(0)">&lt;&lt;</a></li>
+                    <li class="page-pre disabled"><a href="javascript:void(0)">&lt;</a></li>
+                    <li class="active"><a href="javascript:void(0)">1</a></li>
+                    <li class="page-next disabled"><a href="javascript:void(0)">&gt;</a></li>
+                    <li class="page-last disabled"><a href="javascript:void(0)">&gt;&gt;</a></li>
+                  </ul>
                 </div>
-            </div>
-        </div><!--/.panel-->
-    </div>
+              </div>
+
+              <button type="submit" id="submit-btn" class="btn btn-primary">查询</button>
+            </form>
+        </div>
+
+      </div>
+    </div><!--/.panel-->
+  </div>
 </div>
 {% endblock section %}
+
+{% block content %}
+{{ super() }}
+<link rel="stylesheet" href="{{ asset_path }}/css/bootstrap-datepicker.min.css">
+<script src="{{ asset_path }}/js/bootstrap-datepicker.min.js"></script>
+<script src="{{ asset_path }}/js/bootstrap-datepicker.zh-CN.min.js" charset="utf-8"></script>
+<script>
+$(function() {
+    $("#start").datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        todayHighlight: true,
+        orientation: 'bottom',
+    });
+    $("#end").datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        todayHighlight: true,
+    });
+
+
+    $('#submit-btn').on('click', submit);
+    function submit() {
+      var start = $('#start').val();
+      var end = $('#end').val();
+
+      if (start > end) {
+        alert('请输入正确的时间区间');
+        return false;
+      }
+
+      $.post('',
+             $('#query-form').serialize(),
+             function (res) {
+                 if (res.err) {
+                     alert(res.err);
+                 } else {
+                   var html = '';
+                   if (res.orders.length > 0) {
+                     for (var i = 0; i< res.orders.length; i++) {
+                      html += '<tr>' +
+                              '<td>' +  (i+1) + '</td>' +
+                              '<td>' +  res.orders[i].birthday + '</td>' +
+                              '<td>' +  res.orders[i].canteenName + '</td>' +
+                              '<td>' +  res.orders[i].mealName + '</td>' +
+                              '<td>' +  res.orders[i].studentName + '</td>' +
+                              '<td>' + res.orders[i].studentId + '</td></tr>';
+                     }
+                   } else {
+                      html += '<tr class="no-records-found"><td colspan="5">没有找到匹配的订单</td></tr>'
+                   }
+                   $('#tbody').html(html);
+                 }
+             }, 'json');
+      return false;
+    }
+});
+</script>
+{% endblock content %}
 

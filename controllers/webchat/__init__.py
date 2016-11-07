@@ -1,6 +1,6 @@
 # coding: utf-8
 
-__all__    =  ["WeixinHandler"]
+__all__ = ["WeixinHandler"]
 
 try:
     from bridge import WeixinHandler

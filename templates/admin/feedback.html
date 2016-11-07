@@ -25,10 +25,16 @@
 				    <thead>
 				    	<tr>
 				    		<th style="text-align: center;">
+				    			<div class="th-inner ">#</div>
+				    		</th>
+				    		<th style="text-align: center;">
 				    			<div class="th-inner ">反馈人昵称</div>
 				    		</th>
 				    		<th style="text-align: center;">
 				    			<div class="th-inner">邮箱</div>
+				    		</th>
+				    		<th style="text-align: center;">
+				    			<div class="th-inner">电话</div>
 				    		</th>
 				    		<th style="text-align: center;">
 				    			<div class="th-inner ">内容</div>
@@ -42,15 +48,135 @@
 				    		</th>
 				    	</tr>
 				    </thead>
-					<tbody>
-						<tr class="no-records-found">
-							<td colspan="5">No matching records found</td>
-						</tr>
-					</tbody>
+            <tbody id="tbody">
+              {% if feedbacks %}
+                {% for feedback in feedbacks %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ feedback.name }}</td>
+                    <td>{{ feedback.email }}</td>
+                    <td>{{ feedback.phone }}</td>
+                    <td>{{ feedback.content }}</td>
+                    <td>{{ feedback.addTime }}</td>
+                    {% if feedback.solved == 1%}
+                    <td>已解决</td>
+                    {% else %}
+                    <td>未解决</td>
+                    {% endif%}
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr class="no-records-found">
+                    <td colspan="5">没有找到匹配的订单</td>
+                </tr>
+              {% endif %}
+            </tbody>
 				</table>
 			</div>
-		</div>
+    </div>
+          <div id="selector">
+            <form id="query-form" class="form-inline" method="post">
+              <div class="form-group">
+                <label for="start">开始日期</label>
+                <input type="text" size="10" class="form-control" id="start" name="start" value="{{ site.date.today }}" data-date-format="yyyy-mm-dd" required readonly>
+              </div>
+              <div class="form-group">
+                <label for="end">结束日期</label>
+                <input type="text" size="10" class="form-control" id="end" name="end" value="{{ site.date.today }}" data-date-format="yyyy-mm-dd" required readonly>
+              </div>
+
+              <div class="form-group">
+                <label for="page_size" class="control-label">每页显示</label>
+                <select class="form-control" id="page_size" name="page_size">
+                  <option value="0">10</option>
+                  <option value="1" selected>20</option>
+                  <option value="2">50</option>
+                  <option value="3">100</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <div class="pull-right pagination">
+                  <ul class="pagination">
+                    <li class="page-first disabled"><a href="javascript:void(0)">&lt;&lt;</a></li>
+                    <li class="page-pre disabled"><a href="javascript:void(0)">&lt;</a></li>
+                    <li class="active"><a href="javascript:void(0)">1</a></li>
+                    <li class="page-next disabled"><a href="javascript:void(0)">&gt;</a></li>
+                    <li class="page-last disabled"><a href="javascript:void(0)">&gt;&gt;</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <button type="submit" id="submit-btn" class="btn btn-primary">查询</button>
+            </form>
+        </div>
 	</div>
 </div>
 {% endblock section %}
+
+{% block content %}
+{{ super() }}
+<link rel="stylesheet" href="{{ asset_path }}/css/bootstrap-datepicker.min.css">
+<script src="{{ asset_path }}/js/bootstrap-datepicker.min.js"></script>
+<script src="{{ asset_path }}/js/bootstrap-datepicker.zh-CN.min.js" charset="utf-8"></script>
+<script>
+$(function() {
+    $("#start").datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        todayHighlight: true,
+        orientation: 'bottom',
+    });
+    $("#end").datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        todayHighlight: true,
+    });
+
+
+    $('#submit-btn').on('click', submit);
+    function submit() {
+      var start = $('#start').val();
+      var end = $('#end').val();
+
+      if (start > end) {
+        alert('请输入正确的时间区间');
+        return false;
+      }
+
+      $.post('',
+             $('#query-form').serialize(),
+             function (res) {
+                 if (res.err) {
+                     alert(res.err);
+                 } else {
+                   var html = '';
+                   if (res.feedbacks.length > 0) {
+                     for (var i = 0; i< res.feedbacks.length; i++) {
+                      html += '<tr>' +
+                              '<td>' +  (i+1) + '</td>' +
+                              '<td>' +  res.feedbacks[i].name + '</td>' +
+                              '<td>' +  res.feedbacks[i].email + '</td>' +
+                              '<td>' +  res.feedbacks[i].phone + '</td>' +
+                              '<td>' +  res.feedbacks[i].content + '</td>' +
+                              '<td>' +  res.feedbacks[i].addTime + '</td>' +
+                              '';
+
+                      if (res.feedbacks[i].solved == 1) {
+                        html += "<td>已解决</td></tr>";
+                      } else {
+                        html += "<td>未解决</td></tr>";
+                      }
+                     }
+                   } else {
+                      html += '<tr class="no-records-found"><td colspan="5">没有找到匹配的订单</td></tr>'
+                   }
+                   $('#tbody').html(html);
+                 }
+             }, 'json');
+      return false;
+    }
+});
+</script>
+{% endblock content %}
 
